@@ -3,7 +3,7 @@
 		"name": "Ms Leaf Adventure",
 		"url": "https://go.KIBI.family/"
 	},
-	"bugs": "https://github.com/marrus-sh/Kico/issues",
+	"bugs": "https://github.com/leaf-adventure/Kico/issues",
 	"description": "🍂📖 KIBI Codices",
 	"devDependencies": {
 		"chai": "^4.2.0",
@@ -13,13 +13,13 @@
 	"directories": {
 		"test": "./!TESTS!"
 	},
-	"homepage": "https://github.com/marrus-sh/Kico#readme",
+	"homepage": "https://github.com/leaf-adventure/Kico#readme",
 	"license": "Unlicense",
 	"main": "Kico.mjs",
 	"name": "kico",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/marrus-sh/Kico.git"
+		"url": "git+https://github.com/leaf-adventure/Kico.git"
 	},
 	"scripts": {
 		"test": "mocha --require coffeescript/register './!TEST!/*/*.coffee'"
