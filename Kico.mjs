@@ -895,7 +895,8 @@ export default (( ) => { // strict IIFE, though unnecessary
 					&& this.predicate.equals(other.predicate)
 					&& this.object.equals(other.object) }
 			toNT ( ) { return `${ this.subject.toNT() } ${ this.predicate.toNT() } ${ this.object.toNT() } .` }
-			toString ( ) { return S͢(this.toNT()) } }
+			toString ( ) { return S͢(this.toNT()) }
+			toTurtle ( ) { return S͢(this.toNT()) } }
 		, ꞰꝾ = class Graph {
 			constructor ( actions ) {
 				const
@@ -903,8 +904,8 @@ export default (( ) => { // strict IIFE, though unnecessary
 						: A͢(actions).map(({ action, test }) => new Ʞ3A (action, test))
 					, rsrcM = { }
 				return $℘s(this,
-					{ actions: { [ꝴ]: 1, get: () =>
-						actns.map(({ action, test }) => new Ʞ3A (action, test)) }
+					{ actions: { [ꝴ]: 1, get: ( ) =>
+						actns.map(( { action, test } ) => new Ʞ3A (action, test)) }
 					, add: { [Ꝟ]: triple => {
 						const { subject, predicate, object } = triple
 						add3.call(rsrcM, subject, predicate, object)
@@ -956,13 +957,13 @@ export default (( ) => { // strict IIFE, though unnecessary
 			getResource ( resource ) {
 				return this[𝒫]("getResource") ? this.getResource(resource) : Ꝋ }
 			hasResource ( resource ) {
-				return this[𝒫]("hasResource") ? this.getResource(resource) : false }
+				return this[𝒫]("hasResource") ? this.hasResource(resource) : false }
 			isomorphic ( other ) { // this is not solvable in polynomial time
 				const
-					$3s = A͢(other.triples).map($ => $℘(Ʞ3[Ꝕ].clone.call($), "matched",
+					$3s = other.toArray().map($ => $℘(Ʞ3[Ꝕ].clone.call($), "matched",
 						{ [Ꝟ]: false, [ꝶ]: 1 }))
 					, bidM = { }
-					, ðˢ3s = A͢(this.triples).map($ => $℘(Ʞ3[Ꝕ].clone.call($), "matched",
+					, ðˢ3s = this.toArray().map($ => $℘(Ʞ3[Ꝕ].clone.call($), "matched",
 						{ [Ꝟ]: false, [ꝶ]: 1 }))
 				for ( const $3 of $3s ) {
 					const { subject: $sbj, object: $obj } = $3
@@ -1037,18 +1038,71 @@ export default (( ) => { // strict IIFE, though unnecessary
 				return A͢(this.triples)
 					.map(Function[Ꝕ].call.bind(Ʞ3[Ꝕ].toNT))
 					.join("\n") }
-			toString ( ) { return this.toNT() } }
-		, ꞰꝾV = class GraphView {
-			constructor ( graph, subject ) {
-				const ꝿ = graph instanceof Graph ? graph : (new ꞰꝾ).addAll(graph)
-				return $℘s(this,
-					{ graph: { [ꝴ]: 1, [Ꝟ]: ꝿ }
-					, resource: { [ꝴ]: 1, [Ꝟ]: ꞰꝾ[Ꝕ].getResource.bind(ꝿ, nSbj(subject)) } }) }
-			view ( predicate ) {
+			toTurtle ( ) { return this.toNT() }
+			view ( subject ) {
+				return this.hasResource(subject) ? new ꞰꝾV (this, subject) : null } }
+		, ꞰꝾV = class GraphView extends ꞰꝾ {
+			constructor ( parent, subject ) {
+				const ꝿ = parent instanceof ꞰꝾV ? parent.parent
+					: parent instanceof ꞰꝾ ? parent
+					: (new ꞰꝾ).addAll(parent)
+				return Object.create(ꞰꝾ[Ꝕ],
+					{ actions: { [ꝴ]: 1, get ( ) { return this.parent.actions } }
+					, parent: { [ꝴ]: 1, [Ꝟ]: ꝿ }
+					, resource: { [ꝴ]: 1, [Ꝟ]: ꞰꝾ[Ꝕ].getResource.bind(ꝿ, nSbj(resource)) }
+					, resources: { [ꝴ]: 1, get ( ) {
+						return A͢(this.triples).map(({ subject }) =>
+							this.getResource(subject))[Symbol.iterator]() } }
+					, triples: { [ꝴ]: 1, get ( ) {
+						return this.parent.triples.filter(( { subject } ) => {
+							this.hasResource(subject) })[Symbol.iterator]() } } }) }
+			add ( triple ) {
+				const parent = this.parent
+				return parent == Ꝋ || !nSbj(triple.subject).equals(this.subject) ? this
+					: (parent.add(triple), this) }
+			addAction ( action, run ) {
+				const parent = this.parent
+				return parent == Ꝋ ? this : (parent.addAction(action, run), this) }
+			following ( predicate ) {
 				const rsrc = this.resource
 				return rsrc == Ꝋ ? new Set : new Set (A͢(rsrc.getPredicate(predicate))
 					.filter($ => [ ꞰBN, ꞰNN ].some(tꞆ => hasꞆ.call($, tꞆ)) >= 0)
-					.map($ => new ꞰꝾV (this.graph, $))) } }
+					.map($ => new ꞰꝾV (this.parent, $))) }
+			getResource ( subject ) {
+				const parent = this.parent
+				return parent == Ꝋ || !this.hasResource(subject) ? Ꝋ
+					: parent.getResource(subject) }
+			hasResource ( subject ) {
+				const
+					$rsrc = this.resource
+					, rsrc = $rsrc == Ꝋ ? Ꝋ : ꞰR[Ꝕ].clone.call($rsrc)
+					, sbj = nSbj(subject)
+					, parent = this.parent
+				if ( rsrc == Ꝋ || parent == Ꝋ ) return false
+				else if ( rsrc.equals(sbj) || rsrc.hasPredicate(sbj) ) return true
+				else {
+					const
+						rsrcCks = [ S͢(rsrc) ]
+						, Ↄ⃪ = ( { triples } ) => {
+							for ( const { object } of triples ) {
+								const s = S͢(object)
+								if ( rsrcCks.indexOf(s) >= 0
+									|| [ ꞰÑN, ꞰBN ].some(tꞆ => hasꞆ.call(object, tꞆ)))
+									continue
+								const _rsrc = ꞰR[Ꝕ].clone.call(parent.getResource(object))
+								rsrcCks.push(s)
+								if ( _rsrc.hasPredicate(sbj) || Ↄ⃪(_rsrc) ) return true }
+							return false }
+					return Ↄ⃪(rsrc) } }
+			removeMatches ( subject, predicate, object ) {
+				const parent = this.parent
+				if ( parent == Ꝋ || subject != Ꝋ && !this.hasResource(subject) )
+					return this
+				else if ( subject == Ꝋ )
+					for ( { subject: _subject } of this.triples ) {
+						parent.removeMatches(_subject, predicate, object) }
+				else parent.removeMatches(subject, predicate, object)
+				return this } }
 		, Ʞ3F = class TripleFilter { // cannot modify passed triple
 			constructor ( test ) {
 				const $tester = test.test
@@ -1072,13 +1126,7 @@ export default (( ) => { // strict IIFE, though unnecessary
 			run ( triple, graph ) { if ( this.test(triple) ) this.action(triple, graph) } }
 		, ꞰCX = class Codex extends ꞰꝾV { // codex resource
 			constructor ( graph, subject ) {
-				super(graph, subject) }
-			toHTML ( doc ) { // get HTML text
-				const html = htm4ÐˢDoc.bind(doc == Ꝋ ? document : doc)
-				return html`${
-					{ localName: "div"
-					, attributes: { "class": "CODEX" }
-					, content: html`${ this.makeLabel( doc ) }` } }` } }
+				super(graph, subject) } }
 		, _nT = Function[Ꝕ].call.bind(ꞰT[Ꝕ].clone)
 		, _ꝯ = Object.freeze(
 			{ as: ℹ`https://www.w3.org/ns/activitystreams#`
