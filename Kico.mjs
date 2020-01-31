@@ -110,6 +110,11 @@ export default (( ) => { // strict IIFE, though unnecessary
 			return exists ? nObj(ꝺ[$ℹ]) : Ꝋ }
 		, hasP = function hasPredicate ( ꝺ, p ) { // check existence of predicate on data
 			return ꝺ[𝒫](new ꞰÑN (p)) }
+		, hasꞆ = function ( $ ) {
+			if ( this == Ꝋ ) return false
+			else {
+				const tꞆ = this.termType
+				return S͢(tꞆ == Ꝋ ? this.interfaceName : tꞆ) == $ } }
 		, htm4ÐˢDoc = function html ( strs, ...elts ) { // must be bound to a document
 			const fm̃t = this.createDocumentFragment()
 			let ꝟndx
@@ -270,11 +275,6 @@ export default (( ) => { // strict IIFE, though unnecessary
 				? S͢(new ꞰL ($, __PN`xsd:double`))
 				: `"${ String[Ꝕ].replace.call($, /["\\\n\r]/g, $$ =>
 					({ "\"": $ꝛ`\"`, "\\": $ꝛ`\\`, "\n": $ꝛ`\n`, "\r": $ꝛ`\r` }[$$])) }"` }
-		, hasꞆ = function ( $ ) {
-			if ( this == Ꝋ ) return false
-			else {
-				const tꞆ = this.termType
-				return S͢(tꞆ == Ꝋ ? this.interfaceName : tꞆ) == $ } }
 		, unpack = $ => $ == Ꝋ ? [ ] // Turn an object into a flat array
 			: typeof $[Symbol.iterator] == "function"
 			? A͢($).reduce((ꝵ, ĩ) => ꝵ.concat(unpack(ĩ)), [ ])
@@ -828,12 +828,6 @@ export default (( ) => { // strict IIFE, though unnecessary
 				return this[𝒫]("getPredicate") ? this.getPredicate(p, obj) : Ꝋ }
 			hasPredicate ( p, obj ) {
 				return this[𝒫]("hasPredicate") ? this.hasPredicate(p, obj) : false } }
-		, ꞰV = class Variable extends ꞰT { // Provided by RDF/JS
-			constructor ( value ) {
-				super("Variable")
-				return $℘(this, "value", { [Ꝯ]: 0, [Ꝟ]: S͢(value) }) }
-			equals ( other ) {
-				return ꞰT[Ꝕ].equals.call(this, other) && this.value === other.value } }
 		, ꞰDG = class DefaultGraph extends ꞰT { // Provided by RDF/JS
 			constructor ( ) {
 				super("DefaultGraph")
@@ -845,19 +839,23 @@ export default (( ) => { // strict IIFE, though unnecessary
 					gr = ["DefaultGraph", "NamedNode", "BlankNode", "Variable"]
 						.some(tꞆ => hasꞆ.call(graph, tꞆ))
 						? _nT(graph)
-						: new ꞰV (graph)
+						: Ꝋ
 					, obj = ["NamedNode", "Literal", "BlankNode", "Variable"]
 						.some(tꞆ => hasꞆ.call(object, tꞆ))
 						? _nT(object)
-						: new ꞰV (object)
+						: Ꝋ
 					, p = ["NamedNode", "Variable"]
 						.some(tꞆ => hasꞆ.call(predicate, tꞆ))
 						? _nT(predicate)
-						: new ꞰV (predicate)
+						: Ꝋ
 					, sbj = ["NamedNode", "BlankNode", "Variable"]
 						.some(tꞆ => hasꞆ.call(subject, tꞆ))
 						? _nT(subject)
-						: new ꞰV (subject)
+						: Ꝋ
+				if ( sbj == Ꝋ ) throw ꞆƐ͢(l10n`INVALID_QUAD_NODE${ "Subject "}${ subject }`)
+				if ( p == Ꝋ ) throw ꞆƐ͢(l10n`INVALID_QUAD_NODE${ "Predicate "}${ predicate }`)
+				if ( obj == Ꝋ ) throw ꞆƐ͢(l10n`INVALID_QUAD_NODE${ "Object "}${ object }`)
+				if ( gr == Ꝋ ) throw ꞆƐ͢(l10n`INVALID_QUAD_NODE${ "Graph "}${ graph }`)
 				return $℘s(this,
 					{ graph: { [ꝴ]: 1, [Ꝟ]: gr }
 					, object: { [ꝴ]: 1, [Ꝟ]: obj }
@@ -868,12 +866,9 @@ export default (( ) => { // strict IIFE, though unnecessary
 				if ( this == Ꝋ ) return Ꝋ
 				else {
 					const gr = this.graph
-					return O͢.create(ꝯﬆʞr.call(this,
-						gr == Ꝋ || hasꞆ.call(gr, "DefaultGraph") ? Ʞ3 : Ʞ4)[Ꝕ],
-						{ graph: { [ꝴ]: 1, [Ꝟ]: _nT(this.graph) }
-						, object: { [ꝴ]: 1, [Ꝟ]: _nT(this.object) }
-						, predicate: { [ꝴ]: 1, [Ꝟ]: _nT(this.predicate) }
-						, subject: { [ꝴ]: 1, [Ꝟ]: _nT(this.subject) } }) } }
+					return ꝯﬆʞ(Ʞ4,
+						[ this.subject, this.predicate, this.object, gr ],
+						ꝯﬆʞr.call(this, gr == Ꝋ || hasꞆ.call(gr, "DefaultGraph") ? Ʞ3 : Ʞ4)) } }
 			equals ( other ) {
 				return other != Ꝋ
 					&& this.subject.equals(other.subject)
@@ -895,23 +890,6 @@ export default (( ) => { // strict IIFE, though unnecessary
 					&& this.object.equals(other.object) }
 			toNT ( ) { return `${ this.subject.toNT() } ${ this.predicate.toNT() } ${ this.object.toNT() } .` }
 			toString ( ) { return S͢(this.toNT()) } }
-		, ꞰꝹF = class DataFactory {
-			constructor ( ) {
-				let ꝟbid = 0
-				$℘(this, "blankNode", { [Ꝟ]: value => {
-					if (Number.isInteger(+value)) ꝟbid = +value + 1
-					return ꞰꝹF[Ꝕ].blankNode(value == Ꝋ ? ++ꝟbid : value) } }) }
-			blankNode ( value ) { return new ꞰBN (value) }
-			defaultGraph ( ) { return new ꞰDG }
-			fromQuad ( original ) { return Ʞ4[Ꝕ].clone.call(original) }
-			fromTerm ( original ) { return _nT(original) }
-			literal ( value, languageOrDatatype ) {
-				return typeof languageOrDatatype == "string"
-				? new ꞰL (value, languageOrDatatype)
-				: new ꞰL (value, null, languageOrDatatype) }
-			namedNode ( value ) { return new ꞰÑN (value) }
-			quad ( subject, predicate, object, graph ) {
-				return new Ʞ4 (subject, predicate, object, graph == Ꝋ ? new ꞰDG : graph) } }
 		, ꞰꝾ = class Graph {
 			constructor ( actions ) {
 				const
@@ -1086,82 +1064,6 @@ export default (( ) => { // strict IIFE, though unnecessary
 					{ action: { [ꝴ]: 1, get: ( ) => $action }
 					, test: { [ꝴ]: 1, get: ( ) => $test } }) }
 			run ( triple, graph ) { if ( this.test(triple) ) this.action(triple, graph) } }
-		, ꞰPXM = class PrefixMap {
-			addAll ( prefixes, override ) {
-				O͢.keys(prefixes).forEach($ => {
-					if ( override || !this[𝒫]($) )
-						$℘(this, $, { [Ꝯ]: 1, [ꝴ]: 1, [Ꝟ]: prefixes[$], [ꝶ]: 1 }) })
-				return this }
-			get ( prefix ) { return this[prefix] }
-			remove ( prefix ) { delete this[prefix] }
-			resolve ( curie ) { return pxÑ.call(this, curie) }
-			set ( prefix, iri ) { this[prefix] = iri }
-			setDefault ( iri ) { this[""] = iri }
-			shrink ( iri ) { // use turtify instead
-				const
-					$ñꝞ = S͢($)
-					, px = O͢.keys(this).find(px => {
-						const xp = this[px]
-						return xp == $ñꝞ[ẞ](0, xp[Ɫ]) })
-				return px ? `${ px }:${ ñꝞ.substring(this[px].length) }` : ñꝞ } }
-		, ꞰTM = class TermMap {
-			addAll ( terms, override ) {
-				O͢.keys(terms).forEach($ => {
-					if ( override || !this[𝒫]($) )
-						$℘(this, $, { [Ꝯ]: 1, [ꝴ]: 1, [Ꝟ]: terms[$], [ꝶ]: 1 }) })
-				return this }
-			get ( term ) { return this[term] }
-			remove ( term ) { delete this[term] }
-			resolve ( term ) { return this[𝒫](term) ? this[term] : `${ this[""] }term` }
-			set ( term, iri ) { this[term] = iri }
-			setDefault ( iri ) { this[""] = iri }
-			shrink ( iri ) { return O͢.keys(this).find($ => this[$] == term) || term } }
-		, ꞰP = class Profile {
-			constructor ( ) {
-				return $℘s(this,
-					{ prefixes: { [ꝴ]: 1, [Ꝟ]: new ꞰPXM }
-					, terms: { [ꝴ]: 1, [Ꝟ]: new ꞰTM } }) }
-			importProfile ( profile, override ) {
-				this.prefixes.addAll(profile.prefixes, override)
-				this.terms.addAll(profile.terms, override)
-				return this }
-			resolve ( toresolve ) {
-				const $ = S͢(toresolve)
-				return $.includes(":") ? prefixes.resolve(toresolve) : terms.resolve(toresolve) }
-			setDefaultPrefix ( iri ) { prefixes.setDefault(iri) }
-			setDefaultVocabulary ( iri ) { terms.setDefault(iri) }
-			setPrefix ( prefix, iri ) { prefixes.set(prefix, iri) }
-			setTerm ( term, iri ) { terms.set(term, iri) } }
-		, ꞰRDFENV = class RDFEnvironment extends ꞰP {
-			constructor ( ) {
-				const $ꝯ = ꞰCX.context
-				super()
-				this.prefixes.addAll($ꝯ == Ꝋ ? _ꝯ : $ꝯ)
-				return $℘(this, "dataFactory", { [ꝴ]: 1, [Ꝟ]: new ꞰꝹF }) }
-			createAction ( test, action ) { return new Ʞ3A (test, action) }
-			createBlankNode ( ) { return this.dataFactory.blankNode() }
-			createGraph ( triples ) {
-				const ꝵ = new ꞰꝾ
-				if ( triples != Ꝋ ) triples.forEach(ꞰꝾ[Ꝕ].add.bind(ꝵ))
-				return ꝵ }
-			createLiteral ( value, language, datatype ) {
-				return new ꞰL (value, language, datatype) }
-			createNamedNode ( value ) { return new ꞰÑN (value) }
-			createPrefixMap ( empty ) {
-				const ꝵ = new ꞰPXM
-				if ( !empty ) ꝵ.addAll(this)
-				return ꝵ }
-			createProfile ( empty ) {
-				const ꝵ = new ꞰP
-				if ( !empty ) ꝵ.importProfile(this)
-				return ꝵ }
-			createTermMap ( empty ) {
-				const ꝵ = new ꞰTM
-				if ( !empty ) ꝵ.addAll(this)
-				return ꝵ }
-			createTriple ( subject, predicate, object ) {
-				try { return new Ʞ3 (subject, predicate, object) }
-				catch ( ɛ ) { return null } } }
 		, ꞰCX = class Codex extends ꞰꝾV { // codex resource
 			constructor ( graph, subject ) {
 				super(graph, subject) }
@@ -1224,7 +1126,6 @@ export default (( ) => { // strict IIFE, though unnecessary
 	return $℘s(ꞰCX,
 		{ BlankNode: { [Ꝯ]: 1, [Ꝟ]: phony(ꞰBN) }
 		, Codex: { [Ꝯ]: 1, [Ꝟ]: phony(ꞰCX) }
-		, DataFactory: { [Ꝯ]: 1, [Ꝟ]: phony(ꞰꝹF) }
 		, DefaultGraph: { [Ꝯ]: 1, [Ꝟ]: phony(ꞰDG) }
 		, Graph: { [Ꝯ]: 1, [Ꝟ]: $℘s(phony(ꞰꝾ),
 			{ baseURI: { [ꝴ]: 1, get: ( ) => ꞰCX.baseURI, set: $ => ꞰCX.baseURI = $ }
@@ -1238,6 +1139,7 @@ export default (( ) => { // strict IIFE, though unnecessary
 			, EXPECTED_MATCH_AT: "$1 parser expected a match for $2 at position $3."
 			, INVALID_CONSTRUCTOR: "Invalid constructor."
 			, INVALID_NODE: "'$2' is not a valid $1 node."
+			, INVALID_QUAD_NODE: "Cannot construct quad: '$2' is not permitted in the $1 position."
 			, KICO: "Kico"
 			, KICO_LONG: "KIBI Codices"
 			, KICO_VERSION: "1.01"
@@ -1253,8 +1155,6 @@ export default (( ) => { // strict IIFE, though unnecessary
 			, TTL_UNNAMED_PREDICATE: "RDF Turtle parser received a predicate at position $1 which is not a named node."
 			, TTL_INVALID_TERM: "RDF Turtle parser expected a term at position $1, but none was found." } }
 		, NamedNode: { [Ꝯ]: 1, [Ꝟ]: phony(ꞰÑN) }
-		, PrefixMap: { [Ꝯ]: 1, [Ꝟ]: phony(ꞰPXM) }
-		, Profile: { [Ꝯ]: 1, [Ꝟ]: phony(ꞰP) }
 		, Quad: { [Ꝯ]: 1, [Ꝟ]: phony(Ʞ4) }
 		, Resource: { [Ꝯ]: 1, [Ꝟ]: $℘s(ꞰR,
 			{ baseURI: { [ꝴ]: 1, get: ( ) => ꞰCX.baseURI, set: $ => ꞰCX.baseURI = $ }
@@ -1263,22 +1163,18 @@ export default (( ) => { // strict IIFE, though unnecessary
 				return n3.call(this, $, ...$s).resources } }
 			, fromTurtle: { [Ꝯ]: 1, [ꝴ]: 1, [Ꝟ]: function fromNT ( $, ...$s ) {
 				return ꞇꞇl.call(this, $, ...$s).resources } } }) }
-		, RDFEnvironment: { [Ꝯ]: 1, [Ꝟ]: ꞰRDFENV }
-		, RDFNode: { [Ꝯ]: 1, [Ꝟ]: $℘s(ꞰRDFN,
+		, RDFNode: { [Ꝯ]: 1, [Ꝟ]: $℘s(phony(ꞰRDFN),
 			{ baseURI: { [ꝴ]: 1, get: ( ) => ꞰCX.baseURI, set: $ => ꞰCX.baseURI = $ }
 			, context: { [ꝴ]: 1, get: ( ) => ꞰCX.context }
 			, fromNT: { [Ꝯ]: 1, [ꝴ]: 1, [Ꝟ]: n3Obj }
 			, fromTurtle: { [Ꝯ]: 1, [ꝴ]: 1, [Ꝟ]: ꞇObj }
 			, fromValue: { [Ꝯ]: 1, [ꝴ]: 1, [Ꝟ]: nObj } }) }
 		, Term: { [Ꝯ]: 1, [Ꝟ]: phony(ꞰT) }
-		, TermMap: { [Ꝯ]: 1, [Ꝟ]: phony(ꞰTM) }
 		, Triple: { [Ꝯ]: 1, [Ꝟ]: phony(Ʞ3) }
 		, TripleAction: { [Ꝯ]: 1, [Ꝟ]: phony(Ʞ3A) }
 		, TripleCallback: { [Ꝯ]: 1, [Ꝟ]: phony(Ʞ3C) }
 		, TripleFilter: { [Ꝯ]: 1, [Ꝟ]: phony(Ʞ3F) }
-		, Variable: { [Ꝯ]: 1, [Ꝟ]: phony(ꞰV) }
 		, baseURI: { [Ꝯ]: 1, [ꝴ]: 1, [Ꝟ]: null, [ꝶ]: 1 }
 		, context: { [Ꝯ]: 1, [ꝴ]: 1, [Ꝟ]: _ꝯ }
 		, l10n: { [Ꝯ]: 1, [Ꝟ]: l10n }
-		, prefixedName: { [Ꝯ]: 1, [Ꝟ]: pxÑ }
-		, turtify: { [Ꝯ]: 1, [Ꝟ]: turtify } }) })()
+		, prefixedName: { [Ꝯ]: 1, [Ꝟ]: pxÑ } }) })()
