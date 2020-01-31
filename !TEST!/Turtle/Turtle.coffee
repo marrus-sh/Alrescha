@@ -6,8 +6,8 @@ describe "Turtle", ->
 	Graph = null
 	manifestResources = null
 
-	before -> import("../../Kico.mjs").then ({ default: Codex }) ->
-		{ Graph, Resource } = Codex
+	before -> import("../../Kico.mjs").then ( { default: Kico } ) ->
+		{ Graph, Resource } = Kico
 		manifestResources = Array.from Resource.fromTurtle.call { baseURI: "http://www.w3.org/2013/TurtleTests/manifest.ttl" }, readFileSync "#{ do cwd }/!TEST!/Turtle/TurtleTests/manifest.ttl"
 
 	describe "Passes W3C tests", ->

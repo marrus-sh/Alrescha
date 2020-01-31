@@ -22,7 +22,7 @@
 		"url": "git+https://github.com/leaf-adventure/Kico.git"
 	},
 	"scripts": {
-		"test": "mocha --require coffeescript/register './!TEST!/*/*.coffee'"
+		"test": "export NODE_NO_WARNINGS=1; mocha --require coffeescript/register './!TEST!/*/*.coffee'"
 	},
 	"type": "module",
 	"version": "0.1.1"

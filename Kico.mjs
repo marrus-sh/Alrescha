@@ -141,12 +141,14 @@ export default (( ) => { // strict IIFE, though unnecessary
 						if ( content instanceof Node ) elt.appendChild(content)
 						if ( typeof handler == "function" ) handler.call(element) } } }
 			return fm̃t }
-		, l10n = function l10n ( { raw }, ...repls ) {
-				const strs = this == Ꝋ || this.LOCALIZATION_STRINGS == Ꝋ
-					? ꞰCX.LOCALIZATION_STRINGS
-					: this.LOCALIZATION_STRINGS
-				return strs ? S͢(strs[raw[0]] || "")
-					.replace(/\$0*([1-9][0-9]*)/g, (N, Ⅰ) => repls[+Ⅰ - 1])
+		, l10n = function l10n ( $, ...$s ) {
+				const
+					key = typeof $ == "string" ? $ : Array.isArray($) ? S͢($[0]) : S͢($)
+					, strs = this == Ꝋ || this.LOCALIZATION_STRINGS == Ꝋ
+						? ꞰCX.LOCALIZATION_STRINGS
+						: this.LOCALIZATION_STRINGS
+				return strs ? S͢(strs[key] || "")
+					.replace(/\$0*([1-9][0-9]*)/g, (N, Ⅰ) => $s[+Ⅰ - 1])
 					: "" }
 		, n3 = function fromNT ( $, ...$s ) {// make Set of Resources from RDF N‑Triples string or template
 			/*
