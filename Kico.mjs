@@ -184,7 +184,7 @@ export default (( ) => { // strict IIFE, though unnecessary
 				return ꞇObj($) }
 		, nObj = function fromValue ($) { // return a new valid object from given
 			return $ == Ꝋ ? __PN`rdf:nil`
-				: ["BlankNode", "NamedNode"].some(tꞆ => hasꞆ.call($, tꞆ)) ? _nT($)
+				: [ ꞰBN, ꞰÑN ].some(tꞆ => hasꞆ.call($, tꞆ)) ? _nT($)
 				: $ instanceof WHATWGꞏURL ? new ꞰÑN ($)
 				: $ instanceof Set ? A͢($).reduce(( ꝵ, ĩ ) => {
 					const addl = nObj(ĩ)
@@ -201,8 +201,8 @@ export default (( ) => { // strict IIFE, though unnecessary
 				: typeof $ == "boolean" ? new ꞰL (S͢($), __PN`xsd:boolean`)
 				: new ꞰL ($) }
 		, nSbj = $ => $ == Ꝋ ? __PN`rdf:nil` // subjects can only be ordinary nodes
-			: hasꞆ.call($, "BlankNode") ? new ꞰBN ($)
-			: hasꞆ.call($, "NamedNode") ? new ꞰÑN ($)
+			: hasꞆ.call($, ꞰBN) ? new ꞰBN ($)
+			: hasꞆ.call($, ꞰÑN) ? new ꞰÑN ($)
 			: S͢[Ꝕ][ẞ].call($, 0, 2) == "_:" ? new ꞰBN (S͢[Ꝕ][ẞ].call($, 2))
 			: new ꞰÑN ($)
 		, phony = Ʞ => { // creates a phony class, modifying the original to point to it
@@ -261,7 +261,7 @@ export default (( ) => { // strict IIFE, though unnecessary
 			else return false }
 		, turtify = $ => { // make RDF Turtle from object
 			// TK: Resources
-			if ( $ instanceof WHATWGꞏURL || hasꞆ.call($, "NamedNode") ) {
+			if ( $ instanceof WHATWGꞏURL || hasꞆ.call($, ꞰÑN) ) {
 				const ñꝞ = S͢($)
 				const
 					ꝯ = Codex.context
@@ -301,7 +301,7 @@ export default (( ) => { // strict IIFE, though unnecessary
 		, Ɫ = "length"
 		, ẞ = "substring"
 		, ℹ = function ( $, ...$s ) { // make NamedNode from string or template
-			if ( $ instanceof WHATWGꞏURL || hasꞆ.call($, "NamedNode") ) return new ꞰÑN ($)
+			if ( $ instanceof WHATWGꞏURL || hasꞆ.call($, ꞰÑN) ) return new ꞰÑN ($)
 			else {
 				const
 					$base = this == Ꝋ || this.baseURI == Ꝋ ? "" : S͢(this.baseURI)
@@ -425,7 +425,8 @@ export default (( ) => { // strict IIFE, though unnecessary
 								catch ( ɛ ) {
 									throw ꞆƐ͢(l10n`TTL_INVALID_TERM${ ꝟndx }`) } } })()
 						let ꝟcontinue = 1
-						if ( !hasꞆ.call(p, "NamedNode") ) throw ꞆƐ͢(l10n`TTL_UNNAMED_PREDICATE${ ꝟndx }`)
+						if ( !hasꞆ.call(p, ꞰÑN) )
+							throw ꞆƐ͢(l10n`TTL_UNNAMED_PREDICATE${ ꝟndx }`)
 						ꝯſꝸ(whitespace)
 						while ( ꝟcontinue ) {
 							const obj = ꝯſꝸT()
@@ -511,11 +512,13 @@ export default (( ) => { // strict IIFE, though unnecessary
 			return ꝿ }
 		, 𝒫 = "hasOwnProperty"
 		, ꞰT = class Term { // Provided by RDF/JS
-			constructor ( iÑ ) {
+			constructor ( termType ) {
+				const tꞆ = termType == Ꝋ ? new.target.name : termType
 				return $℘s(this,
-					{ termType: { [ꝴ]: 1, [Ꝟ]: S͢(iÑ) }
+					{ termType: { [ꝴ]: 1, [Ꝟ]: S͢(tꞆ) }
 					, value: { [Ꝯ]: 1, [ꝴ]: 1, [Ꝟ]: "" } }) }
 			static get [Symbol.species] ( ) { return this }
+			static [Symbol.toPrimitive] ( hint ) { return this.name }
 			[Symbol.toPrimitive] ( hint ) { return S͢(this.value) }
 			get [Symbol.toStringTag] ( ) { return S͢(this.termType) }
 			clone ( ) {
@@ -526,7 +529,7 @@ export default (( ) => { // strict IIFE, though unnecessary
 						, { [Ꝯ]: isꝮ, [ꝴ]: isꝴ, [ꝶ]: isꝶ } =
 							Object.getOwnPropertyDescriptor(this, "value")
 						, tꞆ = S͢(this.termType)
-					return ["BlankNode", "Literal", "NamedNode", "RDFNode"]
+					return [ ꞰBN, ꞰL, ꞰÑN ]
 						.some($ => hasꞆ.call(this, $))
 						? ꞰRDFN[Ꝕ].clone.call(this)
 						: $℘(ꝯﬆʞ(ꞰT, [ tꞆ ], ꝯﬆʞr.call(this, ꞰT)), "value",
@@ -535,9 +538,8 @@ export default (( ) => { // strict IIFE, though unnecessary
 			toString ( ) { return S͢(this.value) } }
 		, ꞰRDFN = class RDFNode extends ꞰT { // Provided by RDF Interfaces
 			constructor ( interfaceName ) {
-				super(interfaceName)
-				return $℘s(this, {
-					interfaceName: { [ꝴ]: 1, [Ꝟ]: S͢(interfaceName) }
+				return $℘s(super(interfaceName), {
+					interfaceName: { [ꝴ]: 1, get ( ) { return S͢(this.termType) } }
 					, nominalValue: { [Ꝯ]: 1, [ꝴ]: 1, [Ꝟ]: null }
 					, value: { [Ꝯ]: 0, get ( ) {
 						const ñꝞ = this.nominalValue
@@ -554,12 +556,12 @@ export default (( ) => { // strict IIFE, though unnecessary
 							Object.getOwnPropertyDescriptor(this, "nominalValue")
 						, tꞆ = $tꞆ == Ꝋ ? this.termType : $tꞆ
 						, ñꝞ = $ñꝞ === Ꝋ ? this.value : $ñꝞ // intentional ===
-					return hasꞆ.call(this, "Literal") ? ꞰL[Ꝕ].clone.call(this)
-						: hasꞆ.call(this, "BlankNode") && Array.isArray(this)
+					return hasꞆ.call(this, ꞰL) ? ꞰL[Ꝕ].clone.call(this)
+						: hasꞆ.call(this, ꞰBN) && Array.isArray(this)
 						? ꞰBNC[Ꝕ].clone.call(this)
 						: $℘(ꝯﬆʞ(ꞰRDFN, [ tꞆ ], ꝯﬆʞr.call(this,
-							hasꞆ.call(this, "NamedNode") ? ꞰÑN
-								: hasꞆ.call(this, "BlankNode") ? ꞰBN
+							hasꞆ.call(this, ꞰÑN) ? ꞰÑN
+								: hasꞆ.call(this, ꞰBN) ? ꞰBN
 								: ꞰRDFN)),
 							"nominalValue", { [Ꝯ]: isꝮ, [ꝴ]: isꝴ, [Ꝟ]: ñꝞ, [ꝶ]: isꝶ }) } }
 			equals ( toCompare ) {
@@ -567,25 +569,25 @@ export default (( ) => { // strict IIFE, though unnecessary
 					const n = ꞰRDFN[Ꝕ].clone.call(toCompare)
 					return S͢(this.interfaceName) == n.interfaceName
 						&& S͢(this.nominalValue) == n.nominalValue
-						&& (S͢(this.interfaceName) != "Literal"
+						&& (!hasꞆ.call(this, ꞰL)
 							|| S͢(this.language) == n.language
 							&& S͢(this.datatype) == n.datatype) }
 				else return toCompare === ꞰRDFN[Ꝕ].valueOf.call(this) }
-			toNT ( ) { return hasꞆ.call(this, "NamedNode") ? ꞰÑN[Ꝕ].toNT.call(this)
-				: hasꞆ.call(this, "Literal") ? ꞰL[Ꝕ].toNT.call(this)
-				: hasꞆ.call(this, "BlankNode") ? ꞰBN[Ꝕ].toNT.call(this)
+			toNT ( ) { return hasꞆ.call(this, ꞰÑN) ? ꞰÑN[Ꝕ].toNT.call(this)
+				: hasꞆ.call(this, ꞰL) ? ꞰL[Ꝕ].toNT.call(this)
+				: hasꞆ.call(this, ꞰBN) ? ꞰBN[Ꝕ].toNT.call(this)
 				: null }
-			toString ( ) { return hasꞆ.call(this, "BlankNode") ? `_:${ this.nominalValue }`
+			toString ( ) { return hasꞆ.call(this, ꞰBN) ? `_:${ this.nominalValue }`
 				: S͢(this.nominalValue) }
-			toTurtle ( ) { return hasꞆ.call(this, "NamedNode") ? ꞰÑN[Ꝕ].toTurtle.call(this)
-				: hasꞆ.call(this, "Literal") ? ꞰL[Ꝕ].toTurtle.call(this)
-				: hasꞆ.call(this, "BlankNode") ? ꞰBN[Ꝕ].toTurtle.call(this)
+			toTurtle ( ) { return hasꞆ.call(this, ꞰÑN) ? ꞰÑN[Ꝕ].toTurtle.call(this)
+				: hasꞆ.call(this, ꞰL) ? ꞰL[Ꝕ].toTurtle.call(this)
+				: hasꞆ.call(this, ꞰBN) ? ꞰBN[Ꝕ].toTurtle.call(this)
 				: null }
-			valueOf ( ) { return hasꞆ.call(this, "Literal") ? ꞰL[Ꝕ].valueOf.call(this) : S͢(this.nominalValue) } }
+			valueOf ( ) { return hasꞆ.call(this, ꞰL) ? ꞰL[Ꝕ].valueOf.call(this) : S͢(this.nominalValue) } }
 		, ꞰÑN = Object.getOwnPropertyNames(WHATWGꞏURL[Ꝕ]).reduce((ꝵ, $) => { // exclude symbols
 			const getter = Object.getOwnPropertyDescriptor(WHATWGꞏURL[Ꝕ], $).get
-			if ( getter != Ꝋ && !ꝵ.hasOwnProperty($) )
-				Object.defineProperty(ꝵ[Ꝕ], $, { [Ꝯ]: 1, [ꝴ]: 1, get: getter })
+			if ( getter != Ꝋ && !ꝵ[𝒫]($) )
+				$℘(ꝵ[Ꝕ], $, { [Ꝯ]: 1, [ꝴ]: 1, get: getter })
 			return ꝵ }, class NamedNode extends ꞰRDFN { // provided by RDF/JS and RDF Interfaces
 			constructor ( value ) {
 				const $ℹ = S͢(value)
@@ -624,9 +626,8 @@ export default (( ) => { // strict IIFE, though unnecessary
 			toTurtle ( ) { return ꞰÑN[Ꝕ].toNT.call(this) } })
 		, ꞰBN = class BlankNode extends ꞰRDFN { // Provided by RDF/JS and RDF Interfaces
 			constructor ( value ) {
-				super("BlankNode")
-				return $℘(this, "nominalValue", { [Ꝯ]: 0, [Ꝟ]:
-					hasꞆ.call(value, "BlankNode") ? (( ) => {
+				return $℘(super(ꞰBN), "nominalValue", { [Ꝯ]: 0, [Ꝟ]:
+					hasꞆ.call(value, ꞰBN) ? (( ) => {
 						const ñꝞ = value.nominalValue
 						return S͢(ñꝞ == Ꝋ ? value.value : ñꝞ) })() : S͢(value) }) }
 			equals ( other ) {
@@ -634,7 +635,7 @@ export default (( ) => { // strict IIFE, though unnecessary
 					&& S͢(this.value) == new ꞰBN (other).value }
 			toNT ( ) { return `_:${ this.nominalValue }` }
 			toTurtle ( ) { return ꞰBN[Ꝕ].toNT.call(this) } }
-		, ꞰBNC = class BlankNodeCollection extends ꞰBN {
+		, ꞰBNC = class BlankNode extends ꞰBN { // Anonymous collection
 			constructor ( iterator, bid ) {
 				if ( iterator == Ꝋ ) return __PN`rdf:nil`
 				else {
@@ -663,9 +664,9 @@ export default (( ) => { // strict IIFE, though unnecessary
 							if ( first != Ꝋ ) {
 								ꝵ.push(new Ʞ3 (this, __PN`rdf:first`, first))
 								ꝵ.push(new Ʞ3 (this, __PN`rdf:rest`, rest))
-								if ( hasꞆ.call(first, "BlankNode") && Array.isArray(first) )
+								if ( hasꞆ.call(first, ꞰBN) && Array.isArray(first) )
 									ꝵ.splice(Infinity, 0, ..._nT(first).triples) }
-							return hasꞆ.call(rest, "BlankNode") && Array.isArray(rest)
+							return hasꞆ.call(rest, ꞰBN) && Array.isArray(rest)
 								? ꝵ.concat(_nT(rest).triples)
 								: ꝵ } }
 						, value: { [ꝴ]: 1, get ( ) {
@@ -694,8 +695,7 @@ export default (( ) => { // strict IIFE, though unnecessary
 					, ɫᵹ = S͢(language == Ꝋ
 						? value.language == Ꝋ ? "" : value.language
 						: language).toLowerCase()
-				super("Literal")
-				return $℘s(this,
+				return $℘s(super(ꞰL),
 					{ datatype: { [ꝴ]: 1, [Ꝟ]: ɫᵹ ? __PN`rdf:langString` : ꝺꞆℹ }
 					, language: { [ꝴ]: 1, [Ꝟ]: ɫᵹ }
 					, nominalValue: { [Ꝯ]: 0, [Ꝟ]: S͢(value) } }) }
@@ -814,11 +814,11 @@ export default (( ) => { // strict IIFE, though unnecessary
 						const $obj = ꝺ[$]
 						if ( $obj instanceof Set )
 							for ( const obj of $obj ) {
-								if ( hasꞆ.call(obj, "BlankNode") && Array.isArray(obj) )
+								if ( hasꞆ.call(obj, ꞰBN) && Array.isArray(obj) )
 									ꝵ.splice(Infinity, 0, ...A͢(_nT(obj).triples))
 								ꝵ.push(new Ʞ3 (sbj, new ꞰÑN ($), obj)) }
 						else {
-							if ( hasꞆ.call($obj, "BlankNode") && Array.isArray($obj) )
+							if ( hasꞆ.call($obj, ꞰBN) && Array.isArray($obj) )
 								ꝵ.splice(Infinity, 0, ...A͢(_nT($obj).triples))
 							ꝵ.push(new Ʞ3 (sbj, new ꞰÑN ($), $obj)) }
 						return ꝵ }, [ ])[Symbol.iterator]() } }) }
@@ -841,33 +841,27 @@ export default (( ) => { // strict IIFE, though unnecessary
 			hasPredicate ( p, obj ) {
 				return this[𝒫]("hasPredicate") ? this.hasPredicate(p, obj) : false } }
 		, ꞰDG = class DefaultGraph extends ꞰT { // Provided by RDF/JS
-			constructor ( ) {
-				super("DefaultGraph")
-				return $℘(this, "value", { [Ꝯ]: 0, [Ꝟ]: "" }) }
+			constructor ( ) { return $℘(super(), "value", { [Ꝯ]: 0, [Ꝟ]: "" }) }
 			equals ( other ) { return ꞰT[Ꝕ].equals.call(this, other) } }
 		, Ʞ4 = class Quad {
 			constructor ( subject, predicate, object, graph ) {
 				const
-					gr = ["DefaultGraph", "NamedNode", "BlankNode", "Variable"]
-						.some(tꞆ => hasꞆ.call(graph, tꞆ))
+					gr = [ ꞰDG, ꞰÑN, ꞰBN, "Variable" ].some(tꞆ => hasꞆ.call(graph, tꞆ))
 						? _nT(graph)
 						: Ꝋ
-					, obj = ["NamedNode", "Literal", "BlankNode", "Variable"]
-						.some(tꞆ => hasꞆ.call(object, tꞆ))
+					, obj = [ ꞰÑN, ꞰL, ꞰBN, "Variable" ].some(tꞆ => hasꞆ.call(object, tꞆ))
 						? _nT(object)
 						: Ꝋ
-					, p = ["NamedNode", "Variable"]
-						.some(tꞆ => hasꞆ.call(predicate, tꞆ))
+					, p = [ ꞰÑN, "Variable" ].some(tꞆ => hasꞆ.call(predicate, tꞆ))
 						? _nT(predicate)
 						: Ꝋ
-					, sbj = ["NamedNode", "BlankNode", "Variable"]
-						.some(tꞆ => hasꞆ.call(subject, tꞆ))
+					, sbj = [ ꞰÑN, ꞰBN, "Variable"].some(tꞆ => hasꞆ.call(subject, tꞆ))
 						? _nT(subject)
 						: Ꝋ
-				if ( sbj == Ꝋ ) throw ꞆƐ͢(l10n`INVALID_QUAD_NODE${ "Subject "}${ subject }`)
-				if ( p == Ꝋ ) throw ꞆƐ͢(l10n`INVALID_QUAD_NODE${ "Predicate "}${ predicate }`)
-				if ( obj == Ꝋ ) throw ꞆƐ͢(l10n`INVALID_QUAD_NODE${ "Object "}${ object }`)
-				if ( gr == Ꝋ ) throw ꞆƐ͢(l10n`INVALID_QUAD_NODE${ "Graph "}${ graph }`)
+				if ( sbj == Ꝋ ) throw ꞆƐ͢(l10n`INVALID_QUAD_NODE${ "Subject " }${ subject }`)
+				if ( p == Ꝋ ) throw ꞆƐ͢(l10n`INVALID_QUAD_NODE${ "Predicate " }${ predicate }`)
+				if ( obj == Ꝋ ) throw ꞆƐ͢(l10n`INVALID_QUAD_NODE${ "Object " }${ object }`)
+				if ( gr == Ꝋ ) throw ꞆƐ͢(l10n`INVALID_QUAD_NODE${ "Graph " }${ graph }`)
 				return $℘s(this,
 					{ graph: { [ꝴ]: 1, [Ꝟ]: gr }
 					, object: { [ꝴ]: 1, [Ꝟ]: obj }
@@ -880,7 +874,7 @@ export default (( ) => { // strict IIFE, though unnecessary
 					const gr = this.graph
 					return ꝯﬆʞ(Ʞ4,
 						[ this.subject, this.predicate, this.object, gr ],
-						ꝯﬆʞr.call(this, gr == Ꝋ || hasꞆ.call(gr, "DefaultGraph") ? Ʞ3 : Ʞ4)) } }
+						ꝯﬆʞr.call(this, gr == Ꝋ || hasꞆ.call(gr, ꞰDG) ? Ʞ3 : Ʞ4)) } }
 			equals ( other ) {
 				return other != Ꝋ
 					&& this.subject.equals(other.subject)
@@ -889,7 +883,7 @@ export default (( ) => { // strict IIFE, though unnecessary
 					&& this.graph.equals(other.graph) }
 			toNQ ( ) {
 				const gr = this.graph
-				return gr == Ꝋ || hasꞆ.call(gr, "DefaultGraph") ? Ʞ3[Ꝕ].toNT.call(this)
+				return gr == Ꝋ || hasꞆ.call(gr, ꞰDG) ? Ʞ3[Ꝕ].toNT.call(this)
 				: `${ this.subject.toNT() } ${ this.predicate.toNT() } ${ this.object.toNT() } ${ this.graph.toNT() } .` }
 			toString ( ) { return S͢(this.toNQ()) } }
 		, Ʞ3 = class Triple extends Ʞ4 {
@@ -972,7 +966,7 @@ export default (( ) => { // strict IIFE, though unnecessary
 						{ [Ꝟ]: false, [ꝶ]: 1 }))
 				for ( const $3 of $3s ) {
 					const { subject: $sbj, object: $obj } = $3
-					if ( !hasꞆ.call($sbj, "BlankNode") && !hasꞆ.call($obj, "BlankNode") ) {
+					if ( !hasꞆ.call($sbj, ꞰBN) && !hasꞆ.call($obj, ꞰBN) ) {
 						const match = ðˢ3s.find(ðˢ3 =>
 							ðˢ3.equals(new Ʞ3 ($sbj, $3.predicate, $obj)))
 						if ( match == Ꝋ ) return false
@@ -980,13 +974,13 @@ export default (( ) => { // strict IIFE, though unnecessary
 				const
 					$b3s = $3s.filter($ => !$.matched)
 					, $bids = A͢($b3s.reduce((ꝵ, { subject: $sbj, object: $obj }) => {
-						if ( hasꞆ.call($sbj, "BlankNode") ) ꝵ.add($sbj.value)
-						if ( hasꞆ.call($obj, "BlankNode") ) ꝵ.add($obj.value)
+						if ( hasꞆ.call($sbj, ꞰBN) ) ꝵ.add($sbj.value)
+						if ( hasꞆ.call($obj, ꞰBN) ) ꝵ.add($obj.value)
 						return ꝵ }, new Set))
 					, ðˢb3s = ðˢ3s.filter($ => !$.matched)
 					, ðˢbids = A͢(ðˢb3s.reduce((ꝵ, { subject: $sbj, object: $obj }) => {
-						if ( hasꞆ.call($sbj, "BlankNode") ) ꝵ.add($sbj.value)
-						if ( hasꞆ.call($obj, "BlankNode") ) ꝵ.add($obj.value)
+						if ( hasꞆ.call($sbj, ꞰBN) ) ꝵ.add($sbj.value)
+						if ( hasꞆ.call($obj, ꞰBN) ) ꝵ.add($obj.value)
 						return ꝵ }, new Set))
 					, ɫ = ðˢbids[Ɫ]
 				if ( ɫ == 0 ) return true
@@ -1004,10 +998,10 @@ export default (( ) => { // strict IIFE, though unnecessary
 					for ( const $b3 of $b3s ) {
 						const
 							{ subject: $sbj, object: $obj } = $b3
-							, sbj = hasꞆ.call($sbj, "BlankNode")
+							, sbj = hasꞆ.call($sbj, ꞰBN)
 								? new ꞰBN (m.get($sbj.value))
 								: $sbj
-							, obj = hasꞆ.call($obj, "BlankNode")
+							, obj = hasꞆ.call($obj, ꞰBN)
 								? new ꞰBN (m.get($obj.value))
 								: $obj
 							, _match = ðˢb3s.find(ðˢb3 =>
@@ -1053,7 +1047,7 @@ export default (( ) => { // strict IIFE, though unnecessary
 			view ( predicate ) {
 				const rsrc = this.resource
 				return rsrc == Ꝋ ? new Set : new Set (A͢(rsrc.getPredicate(predicate))
-					.filter($ => ["BlankNode", "NamedNode"].indexOf($.termType) >= 0)
+					.filter($ => [ ꞰBN, ꞰNN ].some(tꞆ => hasꞆ.call($, tꞆ)) >= 0)
 					.map($ => new ꞰꝾV (this.graph, $))) } }
 		, Ʞ3F = class TripleFilter { // cannot modify passed triple
 			constructor ( test ) {
