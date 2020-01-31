@@ -922,6 +922,7 @@ export default (( ) => { // strict IIFE, though unnecessary
 						const sbj = nSbj(subject)
 						rsrcM[𝒫](sbj) ? rsrcM[sbj] : Ꝋ } }
 					, hasResource: { [Ꝟ]: subject => rsrcM[𝒫](nSbj(subject)) }
+					, length: { [ꝴ]: 1, get ( ) { return A͢(this.triples).length } }
 					, removeMatches: { [Ꝟ]: ( subject, predicate, object ) =>
 						(rmm3.call(rsrcM, subject, predicate, object), this) }
 					, resources: { [ꝴ]: 1, get: ( ) => O͢.values(rsrcM).map($ => $.clone())[Symbol.iterator]() }
@@ -1048,6 +1049,7 @@ export default (( ) => { // strict IIFE, though unnecessary
 					: (new ꞰꝾ).addAll(parent)
 				return Object.create(ꞰꝾ[Ꝕ],
 					{ actions: { [ꝴ]: 1, get ( ) { return this.parent.actions } }
+					, length: { [ꝴ]: 1, get ( ) { return A͢(this.triples).length } }
 					, parent: { [ꝴ]: 1, [Ꝟ]: ꝿ }
 					, resource: { [ꝴ]: 1, [Ꝟ]: ꞰꝾ[Ꝕ].getResource.bind(ꝿ, nSbj(resource)) }
 					, resources: { [ꝴ]: 1, get ( ) {
