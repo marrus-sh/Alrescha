@@ -48,6 +48,9 @@ export default (( ) => { // strict IIFE, though unnecessary
 		, O͢ = Object
 		, RX͢ = RegExp
 		, S͢ = String
+		, WHATWGꞏURL = typeof URL == "undefined"
+			? class WHATWGꞏURL extends String { } // fake it
+			: URL
 		, add3 = function add3 (sbj, p, obj) {
 			const $sbj = this[𝒫](sbj) ? this[sbj] : this[sbj] = new ꞰR (sbj)
 			$sbj.addPredicate(p, obj)
@@ -182,7 +185,7 @@ export default (( ) => { // strict IIFE, though unnecessary
 		, nObj = function fromValue ($) { // return a new valid object from given
 			return $ == Ꝋ ? __PN`rdf:nil`
 				: ["BlankNode", "NamedNode"].some(tꞆ => hasꞆ.call($, tꞆ)) ? _nT($)
-				: $ instanceof URL ? new ꞰÑN ($)
+				: $ instanceof WHATWGꞏURL ? new ꞰÑN ($)
 				: $ instanceof Set ? A͢($).reduce(( ꝵ, ĩ ) => {
 					const addl = nObj(ĩ)
 					return addl instanceof Set
@@ -258,7 +261,7 @@ export default (( ) => { // strict IIFE, though unnecessary
 			else return false }
 		, turtify = $ => { // make RDF Turtle from object
 			// TK: Resources
-			if ( $ instanceof URL || hasꞆ.call($, "NamedNode") ) {
+			if ( $ instanceof WHATWGꞏURL || hasꞆ.call($, "NamedNode") ) {
 				const ñꝞ = S͢($)
 				const
 					ꝯ = Codex.context
@@ -298,7 +301,7 @@ export default (( ) => { // strict IIFE, though unnecessary
 		, Ɫ = "length"
 		, ẞ = "substring"
 		, ℹ = function ( $, ...$s ) { // make NamedNode from string or template
-			if ( $ instanceof URL || hasꞆ.call($, "NamedNode") ) return new ꞰÑN ($)
+			if ( $ instanceof WHATWGꞏURL || hasꞆ.call($, "NamedNode") ) return new ꞰÑN ($)
 			else {
 				const
 					$base = this == Ꝋ || this.baseURI == Ꝋ ? "" : S͢(this.baseURI)
@@ -579,15 +582,24 @@ export default (( ) => { // strict IIFE, though unnecessary
 				: hasꞆ.call(this, "BlankNode") ? ꞰBN[Ꝕ].toTurtle.call(this)
 				: null }
 			valueOf ( ) { return hasꞆ.call(this, "Literal") ? ꞰL[Ꝕ].valueOf.call(this) : S͢(this.nominalValue) } }
-		, ꞰÑN = class NamedNode extends ꞰRDFN { // Provided by RDF/JS and RDF Interfaces
+		, ꞰÑN = Object.getOwnPropertyNames(WHATWGꞏURL[Ꝕ]).reduce((ꝵ, $) => { // exclude symbols
+			const getter = Object.getOwnPropertyDescriptor(WHATWGꞏURL[Ꝕ], $).get
+			if ( getter != Ꝋ && !ꝵ.hasOwnProperty($) )
+				Object.defineProperty(ꝵ[Ꝕ], $, { [Ꝯ]: 1, [ꝴ]: 1, get: getter })
+			return ꝵ }, class NamedNode extends ꞰRDFN { // provided by RDF/JS and RDF Interfaces
 			constructor ( value ) {
 				const $ℹ = S͢(value)
 				if ( /(?![-:\x2F?#\[\]@!$&\x27()*+,;=0-9A-Za-z._~\xA0-\uD7FF\uE000-\uFDCF\uFDF0-\uFFEF\u{10000}-\u{1FFFD}\u{20000}-\u{2FFFD}\u{30000}-\u{3FFFD}\u{40000}-\u{4FFFD}\u{50000}-\u{5FFFD}\u{60000}-\u{6FFFD}\u{70000}-\u{7FFFD}\u{80000}-\u{8FFFD}\u{90000}-\u{9FFFD}\u{A0000}-\u{AFFFD}\u{B0000}-\u{BFFFD}\u{C0000}-\u{CFFFD}\u{D0000}-\u{DFFFD}\u{E0000}-\u{EFFFD}\u{F0000}-\u{FFFFD}\u{100000}-\u{10FFFD}]|%[0-9A-Fa-f]{2})[^]/u.test( $ℹ ) )
 					throw ꞆƐ͢(l10n`NAMED_NODE_IRI_ERROR`)
-				try { new URL ($ℹ) }
-				catch ( ɛ ) { throw ꞆƐ͢(l10n`NAMED_NODE_IRI_ERROR`) }
-				super("NamedNode")
-				return $℘(this, "nominalValue", { [Ꝯ]: 0, [Ꝟ]: $ℹ }) }
+				return $℘s((( ) => {
+					try { return ꝯﬆʞ(WHATWGꞏURL, [ $ℹ], ꞰÑN) }
+					catch ( ɛ ) { throw ꞆƐ͢(l10n`NAMED_NODE_IRI_ERROR`) } })(),
+					{ interfaceName: { [ꝴ]: 1, [Ꝟ]: "NamedNode" }
+					, nominalValue: { [Ꝯ]: 0, [Ꝟ]: $ℹ }
+					, termType: { [ꝴ]: 1, [Ꝟ]: "NamedNode" }
+					, value: { [ꝴ]: 1, get ( ) {
+						const ñꝞ = this.nominalValue
+						return ñꝞ == Ꝋ ? "" : S͢(ñꝞ) } } }) }
 			doc ( ) {
 				const
 					ñꝞ = S͢(this.value)
@@ -609,7 +621,7 @@ export default (( ) => { // strict IIFE, though unnecessary
 					, _ndx = ñꝞ.indexOf("#")
 				return _ndx != -1 ? ñꝞ[ẞ](_ndx + 1) : null }
 			toNT ( ) { return `<${ S͢[Ꝕ].replace.call(this.nominalValue, />/g, "\u003E") }>` }
-			toTurtle ( ) { return ꞰÑN[Ꝕ].toNT.call(this) } }
+			toTurtle ( ) { return ꞰÑN[Ꝕ].toNT.call(this) } })
 		, ꞰBN = class BlankNode extends ꞰRDFN { // Provided by RDF/JS and RDF Interfaces
 			constructor ( value ) {
 				super("BlankNode")
@@ -756,7 +768,7 @@ export default (( ) => { // strict IIFE, though unnecessary
 					ꝺꞆ = S͢(this.datatype)
 					, ñꝞ = S͢(this.nominalValue)
 				if ( ꝺꞆ == __PNS`xsd:anyURI` )
-					return new URL (ñꝞ)
+					return new WHATWGꞏURL (ñꝞ)
 				else if ( ꝺꞆ == __PNS`xsd:base64Binary` )
 					try {
 						const $atob = scope == Ꝋ ? atob : scope.atob
