@@ -19,24 +19,24 @@ describe "Helpers", -> describe "l10n", ->
 
 	it "falls back to default strings", ->
 		expect l10n "KICO"
-			.equals LOCALIZATION_STRINGS.KICO
+			.does.equal LOCALIZATION_STRINGS.KICO
 
 	it "can be configured with this", ->
 		expect l10n.call testThis, "KICO"
-			.equals testThis.LOCALIZATION_STRINGS.KICO
+			.does.equal testThis.LOCALIZATION_STRINGS.KICO
 
 	it "returns the empty string for undefined values", ->
 		expect l10n.call { }, "NOT_DEFINED_VALUE"
-			.equals ""
+			.does.equal ""
 
 	it "accepts replacement strings", ->
 		expect l10n.call testThis, "SWAP", "first", "second"
-			.equals "second first"
+			.does.equal "second first"
 
 	it "can be used to tag templates", ->
 		expect (l10n.bind testThis)"TRUE"
-			.equals "V A L U E"
+			.does.equal "V A L U E"
 
 	it "accepts replacement strings in template", ->
 		expect (l10n.bind testThis)"SWAP#{ "first" }#{ "second" }"
-			.equals "second first"
+			.does.equal "second first"
