@@ -14,21 +14,21 @@ describe "Turtle", ->
 		readdirSync("!TEST!/Turtle/TurtleTests/")
 			.filter ( file ) => file isnt "manifest.ttl" and file.slice(-4, Infinity) is ".ttl"
 			.map ( file ) => it "Passes \"#{ file.slice(0, -4) }\"", ->
-				testManifest = manifestResources.find ( test ) => "#{ test.getPredicate("http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action") }".includes "/#{ file }"
+				testManifest = manifestResources.find ( test ) => "#{ test["http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action"] }".includes "/#{ file }"
 				(expect testManifest, "manifest").to.exist
 				switch
 					when testManifest.a "http://www.w3.org/ns/rdftest#TestTurtlePositiveSyntax"
-						do expect (=> Graph.fromTurtle.call { baseURI: testManifest.getPredicate "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action" }, readFileSync "!TEST!/Turtle/TurtleTests/#{ file }"), "action"
+						do expect (=> Graph.fromTurtle.call { baseURI: testManifest["http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action"] }, readFileSync "!TEST!/Turtle/TurtleTests/#{ file }"), "action"
 							.does.not.throw
 					when testManifest.a "http://www.w3.org/ns/rdftest#TestTurtleNegativeSyntax"
-						do expect (=> Graph.fromTurtle.call { baseURI: testManifest.getPredicate "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action" }, readFileSync "!TEST!/Turtle/TurtleTests/#{ file }"), "action"
+						do expect (=> Graph.fromTurtle.call { baseURI: testManifest["http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action"] }, readFileSync "!TEST!/Turtle/TurtleTests/#{ file }"), "action"
 							.does.throw
 					when testManifest.a "http://www.w3.org/ns/rdftest#TestTurtleEval"
-						ttl = Graph.fromTurtle.call { baseURI: testManifest.getPredicate "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action" }, readFileSync "!TEST!/Turtle/TurtleTests/#{ file }"
-						n3 = Graph.fromNT.call { baseURI: testManifest.getPredicate "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action" }, readFileSync "#{ testManifest.getPredicate "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#result" }".replace "http://www.w3.org/2013/", "!TEST!/Turtle/"
+						ttl = Graph.fromTurtle.call { baseURI: testManifest["http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action"] }, readFileSync "!TEST!/Turtle/TurtleTests/#{ file }"
+						n3 = Graph.fromNT.call { baseURI: testManifest["http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action"] }, readFileSync "#{ testManifest["http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#result"] }".replace "http://www.w3.org/2013/", "!TEST!/Turtle/"
 						expect (ttl.isomorphic n3), "isomorphism between\n\n#{ do ttl.toNT }\n\n        and\n\n#{ do n3.toNT }\n\n        "
 							.is.true
 					when testManifest.a "http://www.w3.org/ns/rdftest#TestTurtleNegativeEval"
-						do expect (=> Graph.fromTurtle.call { baseURI: testManifest.getPredicate "http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action" }, readFileSync "!TEST!/Turtle/TurtleTests/#{ file }"), "action"
+						do expect (=> Graph.fromTurtle.call { baseURI: testManifest["http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#action"] }, readFileSync "!TEST!/Turtle/TurtleTests/#{ file }"), "action"
 							.does.throw
 					else expect.fail "Did not understand manifest for #{ file }."

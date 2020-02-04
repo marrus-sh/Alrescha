@@ -260,7 +260,7 @@ describe "Terms", -> describe "Literal", ->
 
 			it "gives its native value", ->
 				for own _, instance of instances when instance isnt instances.bad
-					value = instance.valueOf defaultView: atob: ( $ ) => do (Buffer.from $, "base64").toString
+					value = do instance.valueOf
 					if typeof value isnt "object"
 						expect value
 							.does.equal (instance.js ? instance.nominalValue)

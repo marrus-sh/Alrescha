@@ -102,7 +102,7 @@ describe "Terms", -> describe "BlankNodeCollection", ->
 				]
 
 		it "produces triples", ->
-			triples = instances.collection.triples
+			triples = do instances.collection.triples
 			expect triples
 				.does.respondTo "next"
 			expect (Array.from triples).map ( { object, predicate, subject } ) => [

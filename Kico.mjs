@@ -52,61 +52,61 @@ export default (( ) => { // strict IIFE, though unnecessary
 		, WHATWGꞏURL = typeof URL == "undefined"
 			? class WHATWGꞏURL extends String { } // fake it
 			: URL
+		, a2b = $ => { // array buffer from base64
+			const
+				$u6s = A͢[Ꝕ].map.call(S͢[Ꝕ].replace.call($, /=*$/u, ""), ch => {
+					const code = ch.charCodeAt(0)
+					return code >= 0x41 && code <= 0x5A ? code - 65
+						: code >= 0x61 && code <= 0x7A ? code - 71
+						: code >= 0x30 && code <= 0x39 ? code + 4
+						: code == 0x2B ? 62
+						: code == 0x2F ? 63
+						: 0 })
+				, ɫ = $u6s[Ɫ]
+				, ꝺV = new DataView (new ArrayBuffer (Math.floor(ɫ * 3 / 4)))
+				for ( let ꝟndx = 0 ; ꝟndx < ɫ - 1 ; ) {
+					const
+						ndx = Math.ceil(ꝟndx * 3 / 4)
+						, _mod = ndx % 3
+					if ( _mod == 0 )
+						ꝺV.setUint8(ndx, ($u6s[ꝟndx++] << 2) + ($u6s[ꝟndx] >> 4))
+					else if ( _mod == 1 )
+						ꝺV.setUint8(ndx, (($u6s[ꝟndx++] & 0xF) << 4) + ($u6s[ꝟndx] >> 2))
+					else ꝺV.setUint8(ndx, (($u6s[ꝟndx++] & 0x3) << 6) + $u6s[ꝟndx++]) }
+				return ꝺV.buffer }
 		, add3 = function add3 (sbj, p, obj) {
 			const $sbj = this[𝒫](sbj) ? this[sbj] : this[sbj] = new ꞰR (sbj)
-			$sbj.addPredicate(p, obj)
+			$sbj[p] = obj
 			return $sbj }
-		, addP = function addPredicate ( ꝺ, p, obj ) { // add object to predicate for data
-			if ( !O͢.isExtensible(this) )
-				throw ꞆƐ͢(l10n`NONEXTENSIBLE_ADD_PREDICATE`)
-			else if ( obj != Ꝋ ) {
+		, b2a = $ => { // (big-endian) base64 from typed array / buffer / string
+			const
+				$buf = $ instanceof ArrayBuffer ? $
+					: $ instanceof DataView || $ instanceof ꝕ(Uint8Array) ? $.buffer
+					: ($str => A͢[Ꝕ].reduce.call($str,
+							( ꝵ, ch, ndx ) => (ꝵ.setUint16(ndx * 2, ch.charCodeAt(0)), ꝵ),
+							new DataView(new ArrayBuffer($str.length * 2))).buffer)(S͢($))
+				, ꝺV = new DataView ($buf)
+				, ɫ = $buf.byteLength
+				, _ɫ = Math.ceil(ɫ * 4 / 3)
+				, ꝵs = new Array (_ɫ + (3 - (_ɫ % 3)) % 3).fill("=")
+			for ( let ꝟndx = 0 ; ꝟndx < ɫ ; ) {
 				const
-					$ℹ = new ꞰÑN (p)
-					, exists = ꝺ[𝒫]($ℹ)
-					, provided = nObj(obj)
-				if ( exists ) {
-					const
-						existing = ꝺ[$ℹ]
-					if ( provided instanceof Set )
-						provided.forEach(this.addPredicate.bind(this, $ℹ))
-					else if ( !Ↄ̲.call(existing, provided) )
-						if ( existing instanceof Set ) existing.add(provided)
-						else (ꝺ[$ℹ] = new Set([ existing ])).add(provided)
-					else {
-						this.deletePredicate($ℹ, provided)
-						this.addPredicate($ℹ, provided) } }
-				else ꝺ[$ℹ] = provided }
-			return this }
-		, clearP = function clearPredicate ( ꝺ, p ) { // clear predicate on data
-			if ( O͢.isSealed(this) ) throw ꞆƐ͢(l10n`SEALED_CLEAR_PREDICATE`)
-			else {
-				const
-					$ℹ = new ꞰÑN (p)
-					, exists = ꝺ[𝒫]($ℹ)
-				if ( exists ) {
-					delete ꝺ[$ℹ]
-					return true }
-				else return false } }
-		, deleteP = function deletePredicate ( ꝺ, p, obj ) { // delete object from predicate on data
-			if ( O͢.isSealed(this) ) throw ꞆƐ͢(l10n`SEALED_DELETE_PREDICATE`)
-			else {
-				const
-					$ℹ = new ꞰÑN (p)
-					, exists = ꝺ[𝒫]($ℹ)
-				if ( exists ) {
-					const
-						existing = ꝺ[$ℹ]
-						, provided = nObj(obj)
-					if ( existing instanceof Set ) {
-						let ꝟꝵ = false
-						A͢(existing).forEach($ => {
-							if ( Ↄ̲.call(provided, $) ) {
-								existing.delete($)
-								ꝟꝵ = true } })
-						return ꝟꝵ }
-					else if ( Ↄ̲.call(provided, existing) ) return delete ꝺ[$ℹ]
-					else return false }
-				else return false } }
+					$ndx = Math.ceil(ꝟndx * 4 / 3)
+					, ndx = ꝟndx % 3 == 0 && ꝵs[$ndx] != "=" ? $ndx + 1 : $ndx
+					, _mod = ndx % 4
+					, __u6 = _mod == 0 ? ꝺV.getUint8(ꝟndx) >> 2
+						: _mod == 1 ? ((ꝺV.getUint8(ꝟndx++) & 0x3) << 4)
+							+ (ꝟndx < ɫ ? ꝺV.getUint8(ꝟndx) >> 4 : 0)
+						: _mod == 2 ? ((ꝺV.getUint8(ꝟndx++) & 0xF) << 2)
+							+ (ꝟndx < ɫ ? ꝺV.getUint8(ꝟndx) >> 6 : 0)
+						: ꝺV.getUint8(ꝟndx++) & 0x3F
+				ꝵs[ndx] = __u6 < 26 ? __u6 + 65
+					: __u6 < 52 ? __u6 + 71
+					: __u6 < 62 ? __u6 - 4
+					: __u6 < 63 ? 43
+					: __u6 < 64 ? 47
+					: 65 }
+			return S͢.fromCharCode(...ꝵs) }
 		, dſ𝒫 = Object.getOwnPropertyDescriptor.bind(Object)
 		, first𝒫Of = function ( ...$s ) {
 			for ( let $ of $s ) {
@@ -114,13 +114,6 @@ export default (( ) => { // strict IIFE, though unnecessary
 					$𝒫 = dſ𝒫(this, $)
 					, $Ꝟ = $𝒫 == Ꝋ ? Ꝋ : $𝒫[Ꝟ]
 				if ( $Ꝟ != Ꝋ ) return $Ꝟ } }
-		, getP = function getPredicate ( ꝺ, p ) { // get objects for predicate on data
-			const
-				$ℹ = new ꞰÑN (p)
-				, exists = ꝺ[𝒫]($ℹ)
-			return exists ? nObj(ꝺ[$ℹ]) : Ꝋ }
-		, hasP = function hasPredicate ( ꝺ, p ) { // check existence of predicate on data
-			return ꝺ[𝒫](new ꞰÑN (p)) }
 		, hasꞆ = function ( $ ) {
 			if ( this == Ꝋ ) return false
 			else {
@@ -128,25 +121,27 @@ export default (( ) => { // strict IIFE, though unnecessary
 				return S͢(tꞆ == Ꝋ ? this.interfaceName : tꞆ) == $ } }
 		, htm4ÐˢDoc = function html ( strs, ...elts ) { // must be bound to a document
 			const fm̃t = this.createDocumentFragment()
-			let ꝟndx
-			for ( ꝟndx = 0 ; ꝟndx < strs[Ɫ] ; ꝟndx++ ) {
+			for ( let ꝟndx = 0 ; ꝟndx < strs[Ɫ] ; ꝟndx++ ) {
 				const
 					elt = elts[ꝟndx]
 					, str = strs[ꝟndx]
 				if ( str ) fm̃t.appendChild(this.createTextNode(str))
-				if ( typeof elt == "string") fm̃t.appendChild(this.createTextNode(elt))
+				if ( elt == Ꝋ ) continue
+				else if ( typeof elt == "string" ) fm̃t.appendChild(this.createTextNode(elt))
 				else if ( elt.ownerDocument == this ) fm̃t.appendChild(elt)
-				else if ( elt ) {
+				else {
 					const { attributes, content, handler, localName, namespaceURI } = elt
 					if ( localName ) {
 						const elt = fm̃t.appendChild(
 							this.createElementNS(namespaceURI == Ꝋ
 								? "http://www.w3.org/1999/xhtml"
-								: namespaceURI, tagName))
+								: namespaceURI, localName))
 						if ( attributes != Ꝋ ) Object
 							.keys(attributes)
 							.forEach(attr => elt.setAttribute(attr, attributes[attr]))
-						if ( content instanceof Node ) elt.appendChild(content)
+						if ( content != Ꝋ )
+							elt.appendChild(content instanceof Node ? content
+								: this.createTextNode(content))
 						if ( typeof handler == "function" ) handler.call(element) } } }
 			return fm̃t }
 		, l10n = function l10n ( $, ...$s ) {
@@ -191,18 +186,19 @@ export default (( ) => { // strict IIFE, though unnecessary
 			if ( !RX͢($ꝛ`^${ IRIREF }|${ BLANK_NODE_LABEL }|(?:${ STRING_LITERAL_QUOTE })${ whitespace }(?:\^\^${ whitespace }(?:${ IRIREF })|${ LANGTAG })?$`).test( $ ) )
 					throw ꞆƐ͢(l10n`INVALID_NODE${ "RDF N‑Triples" }${ $ }`)
 				return ꞇObj($) }
-		, nObj = function fromValue ($) { // return a new valid object from given
+		, nObj = function fromValue ($) { // return a new valid object from given; do not expose
 			return $ == Ꝋ ? __PN`rdf:nil`
-				: [ ꞰBN, ꞰÑN ].some(tꞆ => hasꞆ.call($, tꞆ)) ? _nT($)
+				: [ ꞰBN, ꞰÑN, ꞰL ].some(tꞆ => hasꞆ.call($, tꞆ)) ? _nT($)
 				: $ instanceof WHATWGꞏURL ? new ꞰÑN ($)
-				: $ instanceof Set ? A͢($).reduce(( ꝵ, ĩ ) => {
-					const addl = nObj(ĩ)
-					return addl instanceof Set
-						? addl.forEach(Set[Ꝕ].add.bind(ꝵ))
-						: ꝵ.add(addl) }, new Set)
-				: $ instanceof A͢ ? $.map(nObj)
+				: $ instanceof Set ? (( ) => {
+					const ꝵ = new ꞰTS
+					$.forEach(ꞰTS[Ꝕ].add, ꝵ)
+					return ꝵ })()
 			// TK: Dates
-			// TK: Binary
+				: $ instanceof DataView
+				|| $ instanceof ꝕ(Uint8Array)
+				|| $ instanceof ArrayBuffer
+				? new ꞰL (b2a($), __PN`xsd:base64Binary`)
 				: typeof $ == "number" ? Number.isInteger($) ? new ꞰL (S͢($), __PN`xsd:integer`)
 					: $ == Infinity ? new ꞰL ("INF", __PN`xsd:double`)
 					: $ == -Infinity ? new ꞰL ("-INF", __PN`xsd:double`)
@@ -218,11 +214,11 @@ export default (( ) => { // strict IIFE, though unnecessary
 			if ( Ʞ[𝒫]($ϕ) ) return Ʞ[$ϕ]
 			else {
 				const
-					$ꝕ = Object.getPrototypeOf(Ʞ)
+					$ꝕ = ꝕ(Ʞ)
 					, Ↄ = function ( ) {
 						if ( new.target != Ꝋ ) throw ꞆƐ͢(l10n`ILLEGAL_CONSTRUCTOR`)
 						else throw ꞆƐ͢(l10n`REQUIRES_NEW${ Ʞ.name }`) }
-				Object.setPrototypeOf(Ↄ, Object.create(
+				O͢.setPrototypeOf(Ↄ, O͢.create(
 					$ꝕ !== Ꝋ && $ꝕ != Function[Ꝕ] ? phony($ꝕ) : Function[Ꝕ],
 					{ toString: { [Ꝯ]: 1, [Ꝟ]: ( ) =>
 						"function ${ Ʞ.name }() {\n    [hidden code]\n}", [ꝶ]: 1 } }))
@@ -264,7 +260,7 @@ export default (( ) => { // strict IIFE, though unnecessary
 						catch { return false } }
 					else {
 						let ꝟꝵ = false
-						A͢($sbj.predicates).forEach($p => ꝟꝵ = ꝟꝵ || $sbj.deletePredicate($p, $obj))
+						A͢($sbj.predicates()).forEach($p => ꝟꝵ = ꝟꝵ || $sbj.deletePredicate($p, $obj))
 						return ꝟꝵ } }
 				else return obj == Ꝋ ? $sbj.clearPredicate() : $sbj.deletePredicate(p, obj) }
 			else return false }
@@ -324,6 +320,7 @@ export default (( ) => { // strict IIFE, though unnecessary
 					: `${ $base.match(/^[^?#]+(?=\x2F)|[^?#\x2F]*/gu)[0] }/${ $src }`) } }
 		, Ꝋ = undefined
 		, Ꝕ = "prototype"
+		, ꝕ = Object.getPrototypeOf.bind(Object)
 		, Ꝟ = "value"
 		, Ꝯ = "configurable"
 		, ꝯſꝸr = function ($) { // consume and return
@@ -520,6 +517,138 @@ export default (( ) => { // strict IIFE, though unnecessary
 				ꝯſꝸ(whitespace) }
 			return ꝿ }
 		, 𝒫 = "hasOwnProperty"
+		, ꞰTS = class TermSet extends Set { // set of terms; not exposed
+			constructor ( ) { return $℘(super(), "™", { [Ꝟ]: new Map }) }
+			[Symbol.iterator] ( ) {
+				const si = Set[Ꝕ][Symbol.iterator].call(this)
+				return O͢.create(ꝕ(si), { next: { [Ꝟ]: function next ( ) {
+					const { [Ꝟ]: nxꝞ, done } = si.next()
+					return { [Ꝟ]: nxꝞ == Ꝋ ? Ꝋ
+						: _nT(this["™"].get(nxꝞ)), done } } } }) }
+			add ( value ) {
+				const
+					$t = _nT(value)
+					, n3 = S͢($t.toNT())
+				this["™"].set(n3, $t)
+				return Set[Ꝕ].add.call(this, n3) }
+			clear ( ) {
+				this["™"].clear()
+				return Set[Ꝕ].clear.call(this) }
+			delete ( value ) {
+				const n3 = S͢(_nT(value).toNT())
+				this["™"].delete(n3)
+				return Set[Ꝕ].delete.call(this, n3) }
+			entries ( ) {
+				const si = Set[Ꝕ].entries.call(this)
+				return O͢.create(ꝕ(si), { next: { [Ꝟ]: function next ( ) {
+					const
+						{ [Ꝟ]: $nx, done } = si.next()
+						, nxꝞ = $nx == Ꝋ ? Ꝋ : $nx[0]
+					return { [Ꝟ]: nxꝞ == Ꝋ ? Ꝋ
+						: new Array (2).fill(_nT(this["™"].get(nxꝞ))), done } } } }) }
+			forEach ( callbackFn, thisArg ) {
+				return Set[Ꝕ].forEach.call(this, $ =>
+					callbackFn.call(thisArg, _nT(this["™"].get($)))) }
+			has ( value ) {
+				return Set[Ꝕ].has.call(this, S͢(_nT(value).toNT())) }
+			keys ( ) {
+				const si = Set[Ꝕ].keys.call(this)
+				return O͢.create(ꝕ(si), { next: { [Ꝟ]: function next ( ) {
+					const { [Ꝟ]: nxꝞ, done } = si.next()
+					return { [Ꝟ]: nxꝞ == Ꝋ ? Ꝋ
+						: _nT(this["™"].get(nextꝞ)), done } } } }) }
+			values ( ) {
+				const si = Set[Ꝕ].values.call(this)
+				return O͢.create(ꝕ(si), { next: { [Ꝟ]: function next ( ) {
+					const { [Ꝟ]: nxꝞ, done } = si.next()
+					return { [Ꝟ]: nxꝞ == Ꝋ ? Ꝋ
+						: _nT(this["™"].get(nxꝞ)), done } } } }) } }
+		, ꞰPM = class PredicateMap extends Map { // not exposed
+			[Symbol.iterator] ( ) {
+				const mi = Map[Ꝕ][Symbol.iterator].call(this)
+				return O͢.create(ꝕ(mi), { next: { [Ꝟ]: function next ( ) {
+					const { [Ꝟ]: $nx, done } = mi.next()
+					if ( $nx == Ꝋ ) return { [Ꝟ]: $nx, done }
+					else {
+						const [ nxKey, nxꝞ ] = $nx
+						return { [Ꝟ]: nxꝞ instanceof ꞰTS
+							? [new ꞰÑN (nxKey), new Set (nxꝞ)]
+							: [new ꞰÑN (nxKey), _nT(nxꝞ)], done } } } } }) }
+			add ( predicate, object ) {
+				if ( !O͢.isExtensible(this) )
+					throw ꞆƐ͢(l10n`NONEXTENSIBLE_ADD_PREDICATE`)
+				else if ( object != Ꝋ ) {
+					const
+						$p = S͢(new ꞰÑN (predicate))
+						, provided = nObj(object)
+					if ( Map[Ꝕ].has.call(this, $p) ) {
+						const existing = Map[Ꝕ].get.call(this, $p)
+						if ( provided instanceof Set )
+							provided.forEach(add.bind(this, $p))
+						else if ( existing instanceof Set ) existing.add(provided)
+						else Map[Ꝕ].set.call(this, $p, (new ꞰTS).add(existing).add(provided)) }
+					else Map[Ꝕ].set.call(this, $p, provided)
+					return this } }
+			clear ( predicate ) {
+				if ( !O͢.isExtensible(this) )
+					throw ꞆƐ͢(l10n`NONEXTENSIBLE_CLEAR_PREDICATE`)
+				return Map[Ꝕ].delete.call(this, S͢(new ꞰÑN (predicate))) }
+			clearAll ( ) { return Map[Ꝕ].clear.call(this) }
+			delete ( predicate ) {
+				if ( !O͢.isExtensible(this) )
+					throw ꞆƐ͢(l10n`NONEXTENSIBLE_DELETE_PREDICATE`)
+				else {
+					const $p = S͢(new ꞰÑN (predicate))
+					if ( Map[Ꝕ].has.call(this, $p) ) {
+						const existing = Map[Ꝕ].get.call(this, $p)
+						if ( existing instanceof Set ) return existing.delete(predicate)
+						else return Map[Ꝕ].delete.call(this, $p) }
+					else return false } }
+			entries ( ) {
+				const mi = Map[Ꝕ].entries.call(this)
+				return O͢.create(ꝕ(mi), { next: { [Ꝟ]: function next ( ) {
+					const { [Ꝟ]: $nx, done } = mi.next()
+					if ( $nx == Ꝋ ) return { [Ꝟ]: $nx, done }
+					else {
+						const [ nxKey, nxꝞ ] = $nx
+						return { [Ꝟ]: nxꝞ instanceof ꞰTS
+							? [new ꞰÑN (nxKey), new Set (nxꝞ)]
+							: [new ꞰÑN (nxKey), _nT(nxꝞ)], done } } } } }) }
+			forEach ( callbackFn, thisArg ) {
+				return Map[Ꝕ].forEach.call(this, ( [ key, $ ] ) =>
+					callbackFn.call(thisArg, $ instanceof ꞰTS
+						? [new ꞰÑN (key), new Set ($)]
+						: [new ꞰÑN (key), _nT($)])) }
+			get ( predicate ) {
+				const existing = Map[Ꝕ].get.call(this, S͢(new ꞰÑN (predicate)))
+				if ( existing == Ꝋ ) return existing
+				else if ( existing instanceof ꞰTS ) return new Set (existing)
+				else return _nT(existing) }
+			has ( predicate ) { return Map[Ꝕ].has.call(this, S͢(new ꞰÑN (predicate))) }
+			keys ( ) {
+				const mi = Map[Ꝕ].keys.call(this)
+				return O͢.create(ꝕ(mi), { next: { [Ꝟ]: function next ( ) {
+					const { [Ꝟ]: nxKey, done } = mi.next()
+					return { [Ꝟ]: nxKey == Ꝋ ? nxKey : new ꞰÑN (nxKey), done } } } }) }
+			set ( predicate, object ) {
+				if ( !O͢.isExtensible(this) )
+					throw ꞆƐ͢(l10n`NONEXTENSIBLE_ADD_PREDICATE`)
+				else {
+					const $p = S͢(new ꞰÑN (predicate))
+					if ( object != Ꝋ ) {
+						const provided = nObj(object)
+						Map[Ꝕ].set.call(this, $p, provided instanceof Set
+							? new TermSet (provided)
+							: provided) }
+					else Map[Ꝕ].delete.call(this, $p)
+					return this } }
+			values ( ) {
+				const mi = Map[Ꝕ].keys.call(this)
+				return O͢.create(ꝕ(mi), { next: { [Ꝟ]: function next ( ) {
+					const { [Ꝟ]: nxꝞ, done } = mi.next()
+					return { [Ꝟ]: nxꝞ instanceof ꞰTS
+						? new Set (nxꝞ)
+						: nxꝞ == Ꝋ ? nxꝞ : _nT(nxꝞ), done } } } }) } }
 		, ꞰT = class Term { // Provided by RDF/JS
 			constructor ( termType ) {
 				const tꞆ = termType == Ꝋ && new.target != Ꝋ ? new.target.name : termType
@@ -692,33 +821,12 @@ export default (( ) => { // strict IIFE, though unnecessary
 						, interfaceName: { [Ꝟ]: "BlankNode" }
 						, nominalValue: { [Ꝟ]: S͢(bid) }
 						, termType: { [Ꝟ]: "BlankNode" }
-						, triples: { get: dſ𝒫(ꞰBNC[Ꝕ], "triples").get  }
 						, value: { get: dſ𝒫(ꞰRDFN[Ꝕ], "value").get } }) } }
 			get graph ( ) {
-				const
-					$iterator = this[Symbol.iterator]()
-					, first = $iterator.next().value
-					, rest = new ꞰBNC ($iterator, `${ this.nominalValue }.rest`)
-					, ꝿ = new ꞰꝾ
-				if ( first != Ꝋ ) ꝿ.addResource((new ꞰR (this))
-					.addPredicate(__PN`rdf:first`, first)
-					.addPredicate(__PN`rdf:rest`, rest))
+				const ꝿ = new ꞰꝾ
+				for ( const triple of this.triples() ) { ꝿ.add(triple) }
 				return ꝿ }
-			get triples ( ) {
-				const
-					$iterator = this[Symbol.iterator]()
-					, first = $iterator.next().value
-					, rest = new ꞰBNC ($iterator, `${ this.nominalValue }.rest`)
-					, ꝵ = [ ]
-				if ( first != Ꝋ ) {
-					ꝵ.push(new Ʞ3 (this, __PN`rdf:first`, first))
-					ꝵ.push(new Ʞ3 (this, __PN`rdf:rest`, rest))
-					if ( hasꞆ.call(first, ꞰBN) && Array.isArray(first) )
-						ꝵ.splice(Infinity, 0, ...A͢(_nT(first).triples)) }
-				return (hasꞆ.call(rest, ꞰBN) && Array.isArray(rest)
-					? ꝵ.concat(A͢(_nT(rest).triples))
-					: ꝵ)[Symbol.iterator]() }
-			*[Symbol.iterator] ( ) { yield* A͢[Ꝕ][Symbol.iterator].call(this) }
+			*[Symbol.iterator] ( ) { yield *A͢[Ꝕ][Symbol.iterator].call(this) }
 			clone ( ) {
 				if ( this == Ꝋ ) return Ꝋ
 				else {
@@ -729,6 +837,18 @@ export default (( ) => { // strict IIFE, though unnecessary
 			equals ( other ) {
 				return ꞰT[Ꝕ].equals.call(this, other)
 					&& S͢(this.value) == new ꞰBN (other).value }
+			*triples ( ) {
+				let
+					ꝟcur = this
+					, ꝟndx = 0
+				for ( const car of this[Symbol.iterator]() ) {
+					yield new Ʞ3 (ꝟcur, __PN`rdf:first`, car)
+					if ( ++ꝟndx < this.length ) {
+						const cdr = new ꞰBN (`${ this.nominalValue }.c${
+							new Array (ꝟndx).fill("d").join("") }r`)
+						yield new Ʞ3 (ꝟcur, __PN`rdf:rest`, cdr)
+						ꝟcur = cdr }
+					else yield new Ʞ3 (ꝟcur, __PN`rdf:rest`, __PN`rdf:nil`) } }
 			toNT ( ) { return ꞰBN[Ꝕ].toNT.call(this) }
 			toString ( ) { return ꞰBN[Ꝕ].toString.call(this) }
 			toTurtle ( ) { return ꞰBN[Ꝕ].toTurtle.call(this) }
@@ -843,15 +963,7 @@ export default (( ) => { // strict IIFE, though unnecessary
 				if ( ꝺꞆ == __PNS`xsd:anyURI` )
 					return new WHATWGꞏURL (ñꝞ)
 				else if ( ꝺꞆ == __PNS`xsd:base64Binary` )
-					try {
-						const
-							$window = doc == Ꝋ ? Ꝋ : doc.defaultView
-							, _atob = $window == Ꝋ ? atob : $window.atob
-							, __bStr = _atob(ñꝞ)
-						return A͢[Ꝕ].reduce.call(__bStr, ( view, char, ndx ) =>
-							(view.setUint8(ndx, char.charCodeAt(0)), view),
-							new DataView (new ArrayBuffer (__bStr[Ɫ]))).buffer }
-					catch ( ɛ ) { return ꞰL[Ꝕ][Symbol.toPrimitive].call(this, "default") }
+					return a2b(ñꝞ)
 				else if ( ꝺꞆ == __PNS`xsd:hexBinary` )
 					return Uint8Array.from(ñꝞ.split(/(?=(?:[^]{2})*$)/),
 						pair => parseInt(pair, 16)).buffer
@@ -871,53 +983,95 @@ export default (( ) => { // strict IIFE, though unnecessary
 		, ꞰR = class Resource extends ꞰRDFN { // subject node with predicate+object pairs
 			constructor ( subject ) {
 				const
-					sbj = nSbj(subject) // use instead of this for faster cloning
-					, ꝺ = { }
-				$℘(sbj, "constructor", { [Ꝟ]: { [Symbol.species]: new.target } })
-				const ðˢ = sbj.clone()
-				return $℘s(ðˢ,
-					{ addPredicate: { [Ꝟ]: addP.bind(ðˢ, ꝺ) }
-					, clearPredicate: { [Ꝟ]: clearP.bind(ðˢ, ꝺ) }
-					, deletePredicate: { [Ꝟ]: deleteP.bind(ðˢ, ꝺ) }
-					, getPredicate: { [Ꝟ]: getP.bind(ðˢ, ꝺ) }
-					, graph: { get: ( ) => O͢.keys(ꝺ)
-						.reduce((ꝿ, $) => ꝿ.add(new Ʞ3 (sbj, new ꞰÑN ($), ꝺ[$])), new ꞰꝾ) }
-					, hasPredicate: { [Ꝟ]: hasP.bind(ðˢ, ꝺ) }
-					, predicates: { get: ( ) => O͢.keys(ꝺ)
-						.map($ => new ꞰÑN ($))[Symbol.iterator]() }
-					, triples: { get: ( ) => O͢.keys(ꝺ).reduce((ꝵ, $) => {
-						const $obj = ꝺ[$]
-						if ( $obj instanceof Set )
-							for ( const obj of $obj ) {
-								if ( hasꞆ.call(obj, ꞰBN) && Array.isArray(obj) )
-									ꝵ.splice(Infinity, 0, ...A͢(_nT(obj).triples))
-								ꝵ.push(new Ʞ3 (sbj, new ꞰÑN ($), obj)) }
+					$sbj = nSbj(subject)
+					, ðˢ = $℘(nSbj(subject), "constructor",
+						{ [Ꝟ]: { [Symbol.species]: new.target } }).clone()
+					, pM = new ꞰPM
+				return new Proxy($℘s(ðˢ,
+					{ graph: { get: dſ𝒫(ꞰR[Ꝕ], "graph").get }
+					, predicates: { [Ꝟ]: ꞰPM[Ꝕ].keys.bind(pM) }
+					, triples: { [Ꝟ]: function *triples ( ) {
+						for ( const [ $p, $obj ] of pM.entries() ) {
+							if ( $obj instanceof Set ) {
+								for ( const obj of $obj ) {
+									if ( hasꞆ.call(obj, ꞰBN) && Array.isArray(obj) )
+										yield *ꞰBNC[Ꝕ].triples.call(obj)
+									yield new Ʞ3 ($sbj, $p, obj) } }
+							else {
+								if ( hasꞆ.call($obj, ꞰBN) && Array.isArray($obj) )
+									yield *ꞰBNC[Ꝕ].triples.call($obj)
+								yield new Ʞ3 ($sbj, $p, $obj) } } } } }),
+					{ defineProperty ( O, P, Desc ) {
+						if ( !O͢.isExtensible(O) || dſ𝒫(O, P) != Ꝋ || typeof P != "string" )
+							return Reflect.defineProperty(O, P, Desc)
 						else {
-							if ( hasꞆ.call($obj, ꞰBN) && Array.isArray($obj) )
-								ꝵ.splice(Infinity, 0, ...A͢(_nT($obj).triples))
-							ꝵ.push(new Ʞ3 (sbj, new ꞰÑN ($), $obj)) }
-						return ꝵ }, [ ])[Symbol.iterator]() } }) }
+							try {
+								if ( Desc[Ꝯ] !=0
+									&& Desc[ꝴ] != 0
+									&& (Desc[𝒫](ꝶ) || Desc[𝒫](Ꝟ))
+									&& Desc[ꝶ] != 0 )
+									return !!pM.set(P, Desc[Ꝟ])
+								else if ( new ꞰÑN (P) ) return false }
+							catch ( ɛ ) { }
+							return Reflect.defineProperty(O, P, Desc) } }
+					, deleteProperty ( O, P ) {
+						if ( !O͢.isExtensible(O) || dſ𝒫(O, P) != Ꝋ || typeof P != "string" )
+							return Reflect.delete(O, P)
+						else {
+							try { return pM.delete(P) }
+							catch ( ɛ ) { return Reflect.delete(O, P) } } }
+					, get ( O, P, Receiver ) {
+						if ( !O͢.isExtensible(O) || dſ𝒫(O, P) != Ꝋ || typeof P != "string" )
+							return Reflect.get(O, P, Receiver)
+						else {
+							try { return pM.get(P) }
+							catch ( ɛ ) { return Reflect.get(O, P, Receiver) } } }
+					, getOwnPropertyDescriptor ( O, P ) {
+						if ( !O͢.isExtensible(O) || dſ𝒫(O, P) != Ꝋ || typeof P != "string" )
+							return Reflect.getOwnPropertyDescriptor(O, P)
+						else {
+							try {
+								if ( pM.has(prop) )
+									return { [Ꝯ]: 1, [ꝴ]: 1, get: ꞰPM[Ꝕ].get.bind(pM, p) }
+								else return Ꝋ }
+							catch ( ɛ ) { }
+							return Reflect.getOwnPropertyDescriptor(O, P) } }
+					, has ( O, P ) {
+						if ( !O͢.isExtensible(O) || typeof P != "string" ) return Reflect.has(O, P)
+						else if ( dſ𝒫(O, P) != Ꝋ ) return true
+						else {
+							try { if ( pM.has(P) ) return true }
+							catch ( ɛ ) { return Reflect.has(O, P) } } }
+					, ownKeys ( O ) {
+						if ( !O͢.isExtensible(O) ) return Reflect.ownKeys(O)
+						else return
+							Reflect.ownKeys(O).concat(A͢(pM.keys()).map($ => S͢($))) }
+					, preventExtensions ( O ) {
+						if ( O͢.isExtensible(O) ) {
+							for ( const p of pM.keys() ) {
+								$℘(O, p, { [Ꝯ]: 0, [ꝴ]: 1, get: ꞰPM[Ꝕ].get.bind(pM, p) }) }
+							O͢.preventExtensions(pM) }
+						return Reflect.preventExtensions(O) }
+					, set ( O, P, V, Receiver ) {
+						if ( !O͢.isExtensible(O) || dſ𝒫(O, P) != Ꝋ || typeof P != "string" )
+							return Reflect.set(O, P, V, Receiver)
+						else {
+							try { return !!pM.add(P, V) }
+							catch ( ɛ ) { return Reflect.set(O, P, V, Receiver) } } } }) }
 			static get [Symbol.species] ( ) { return Ꝋ } // only clone as Resource when default
+			get graph ( ) {
+				const ꝿ = new ꞰꝾ
+				for ( const triple of this.triples() ) { ꝿ.add(triple) }
+				return ꝿ }
 			get nominalValue ( ) {
 				const ñꝞ = first𝒫Of.call(this, "nominalValue", Ꝟ)
 				return ñꝞ == Ꝋ ? "" : S͢(ñꝞ) }
-			a ( Ꞇ ) { return Ↄ̲.call(this.getPredicate(__PN`rdf:type`), new ꞰÑN (Ꞇ)) }
-			addPredicate ( p, obj ) {
-				return this[𝒫]("addPredicate") ? this.addPredicate(p, obj) : this }
-			clearPredicate ( p, obj ) {
-				return this[𝒫]("clearPredicate") ? this.clearPredicate(p, obj) : false }
+			a ( Ꞇ ) { return Ↄ̲.call(this[__PN`rdf:type`], new ꞰÑN (Ꞇ)) }
 			clone ( ) {
 				if ( this == Ꝋ ) return Ꝋ
-				else {
-					return A͢(this.predicates).reduce(
-						(ꝵ, $) => ꝵ.addPredicate($, this.getPredicate($)),
-						ꝯﬆʞ(ꞰR, [ this ], ꝯﬆʞr.call(this, ꞰR))) } }
-			deletePredicate ( p, obj ) {
-				return this[𝒫]("deletePredicate") ? this.deletePredicate(p, obj) : false }
-			getPredicate ( p, obj ) {
-				return this[𝒫]("getPredicate") ? this.getPredicate(p, obj) : Ꝋ }
-			hasPredicate ( p, obj ) {
-				return this[𝒫]("hasPredicate") ? this.hasPredicate(p, obj) : false } }
+				else return A͢(this.predicates()).reduce(( ꝵ, $ ) => (ꝵ[$] = this[$], ꝵ),
+					ꝯﬆʞ(ꞰR, [ this ], ꝯﬆʞr.call(this, ꞰR))) }
+			*triples ( ) { if ( this[𝒫]("triples") ) yield *this.triples() } }
 		, ꞰDG = class DefaultGraph extends ꞰT { // provided by RDF/JS
 			constructor ( ) { return $℘(ꝯﬆʞ(ꞰT, [ ꞰDG ], new.target), Ꝟ, { [Ꝯ]: 0, [Ꝟ]: "" }) }
 			get value ( ) { return "" }
@@ -1015,7 +1169,7 @@ export default (( ) => { // strict IIFE, though unnecessary
 			addAction ( action, run ) {
 				return this[𝒫]("addAction") ? this.addAction(action, run) : this }
 			addResource ( resource ) {
-				A͢(resource.triples).forEach($3 => this.add($3))
+				A͢(resource.triples()).forEach($3 => this.add($3))
 				return this }
 			clearResource ( resource ) {
 				return this.removeMatches(nSbj(resource), null, null) }
@@ -1024,7 +1178,8 @@ export default (( ) => { // strict IIFE, though unnecessary
 				else {
 					return (new (ꝯﬆʞr.call(this, ꞰꝾ))).addAll(this) } }
 			deleteResource ( resource ) {
-				A͢(resource.triples).forEach($3 => this.add($3))
+				A͢(resource.triples()).forEach(( { subject, predicate, object }) =>
+					this.removeMatches(subject, predicate, object))
 				return this }
 			every ( callback ) {
 				return this.toArray().every($3 => (new Ʞ3F (callback)).test($3)) }
@@ -1071,7 +1226,7 @@ export default (( ) => { // strict IIFE, though unnecessary
 					else {
 						const abid = abids[0]
 						for ( let ꝟndx = 0 ; ꝟndx < bbids[Ɫ] ; ꝟndx++ )
-							yield* allMEntries(prefix.concat([ [ abid, bbids[ꝟndx] ] ]),
+							yield *allMEntries(prefix.concat([ [ abid, bbids[ꝟndx] ] ]),
 								abids.slice(1),
 								bbids.slice(0, ꝟndx).concat(bbids.slice(ꝟndx + 1))) } }
 				tryMap: for ( const mEntries of allMEntries([ ], $bids, ðˢbids) ) {
@@ -1126,7 +1281,7 @@ export default (( ) => { // strict IIFE, though unnecessary
 				const ꝿ = parent instanceof ꞰꝾV ? parent.parent
 					: parent instanceof ꞰꝾ ? parent
 					: (new ꞰꝾ).addAll(parent)
-				return Object.create(ꞰꝾ[Ꝕ],
+				return O͢.create(ꞰꝾ[Ꝕ],
 					{ actions: { get ( ) { return this.parent.actions } }
 					, length: { get ( ) { return A͢(this.triples).length } }
 					, parent: { [Ꝟ]: ꝿ }
@@ -1207,7 +1362,7 @@ export default (( ) => { // strict IIFE, though unnecessary
 			constructor ( graph, subject ) {
 				super(graph, subject) } }
 		, _nT = Function[Ꝕ].call.bind(ꞰT[Ꝕ].clone)
-		, _ꝯ = Object.freeze(
+		, _ꝯ = O͢.freeze(
 			{ as: ℹ`https://www.w3.org/ns/activitystreams#`
 			, cc: ℹ`http://creativecommons.org/ns#`
 			, csvw: ℹ`http://www.w3.org/ns/csvw#`
@@ -1279,12 +1434,12 @@ export default (( ) => { // strict IIFE, though unnecessary
 			, KICO_VERSION: "1.01"
 			, NAMED_NODE_IRI_ERROR: "NamedNode must have a valid IRI name."
 			, NONEXTENSIBLE_ADD_PREDICATE: "Cannot add predicate: Object is not extensible."
+			, NONEXTENSIBLE_CLEAR_PREDICATE: "Cannot clear predicate: Object is not extensible."
+			, NONEXTENSIBLE_DELETE_PREDICATE: "Cannot delete predicate: Object is not extensible."
 			, PNAME_EXPANSION_ERROR: "Prefix $1 did not resolve to a valid IRI."
 			, PNAME_UNDEFINED: "Prefix $1 was not defined."
 			, PNAME_SYNTAX_ERROR: "Prefixed name $1 does not match Turtle syntax."
 			, REQUIRES_NEW: "Constructor $1 requires 'new'."
-			, SEALED_CLEAR_PREDICATE: "Cannot clear predicate: Object is sealed."
-			, SEALED_DELETE_PREDICATE: "Cannot delete predicate: Object is sealed."
 			, TTL_LITERAL_SUBJECT: "RDF Turtle parser received a literal for a subject at position $1."
 			, TTL_UNNAMED_PREDICATE: "RDF Turtle parser received a predicate at position $1 which is not a named node."
 			, TTL_INVALID_TERM: "RDF Turtle parser expected a term at position $1, but none was found." } }
@@ -1301,8 +1456,7 @@ export default (( ) => { // strict IIFE, though unnecessary
 			{ baseURI: { [ꝴ]: 1, get: ( ) => ꞰCX.baseURI, set: $ => ꞰCX.baseURI = $ }
 			, context: { [ꝴ]: 1, get: ( ) => ꞰCX.context }
 			, fromNT: { [Ꝯ]: 1, [ꝴ]: 1, [Ꝟ]: n3Obj }
-			, fromTurtle: { [Ꝯ]: 1, [ꝴ]: 1, [Ꝟ]: ꞇObj }
-			, fromValue: { [Ꝯ]: 1, [ꝴ]: 1, [Ꝟ]: nObj } }) }
+			, fromTurtle: { [Ꝯ]: 1, [ꝴ]: 1, [Ꝟ]: ꞇObj } }) }
 		, Term: { [Ꝯ]: 1, [Ꝟ]: phony(ꞰT) }
 		, Triple: { [Ꝯ]: 1, [Ꝟ]: phony(Ʞ3) }
 		, TripleAction: { [Ꝯ]: 1, [Ꝟ]: phony(Ʞ3A) }
