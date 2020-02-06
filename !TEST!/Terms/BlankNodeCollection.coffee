@@ -86,11 +86,11 @@ describe "Terms", -> describe "BlankNodeCollection", ->
 
 		it "produces a graph", ->
 			graph = instances.collection.graph
-			triples = instances.collection.triples
+			triples = do instances.collection.triples
 			expect graph
 				.instanceof Graph
 				.which.satisfies ( $ ) -> $.hasResource instances.collection
-			expect (Array.from graph.triples).map ( { object, predicate, subject } ) => [
+			expect (Array.from do graph.triples).map ( { object, predicate, subject } ) => [
 				{ subject: do subject.toNT }
 				{ predicate: do predicate.toNT }
 				{ object: do object.toNT }
@@ -99,28 +99,6 @@ describe "Terms", -> describe "BlankNodeCollection", ->
 					{ subject: do subject.toNT }
 					{ predicate: do predicate.toNT }
 					{ object: do object.toNT }
-				]
-
-		it "produces triples", ->
-			triples = do instances.collection.triples
-			expect triples
-				.does.respondTo "next"
-			expect (Array.from triples).map ( { object, predicate, subject } ) => [
-				{ subject: do subject.toNT }
-				{ predicate: do predicate.toNT }
-				{ object: do object.toNT }
-			]
-				.does.have.deep.members [
-					[
-						{ subject: do instances.collection.toNT }
-						{ predicate: do pname"rdf:first".toNT }
-						{ object: RDFNode::toNT.call instances.collection[0] }
-					]
-					[
-						{ subject: do instances.collection.toNT }
-						{ predicate: do pname"rdf:rest".toNT }
-						{ object: do pname"rdf:nil".toNT }
-					]
 				]
 
 
@@ -206,6 +184,30 @@ describe "Terms", -> describe "BlankNodeCollection", ->
 				for own _, instance of instances
 					expect do instance.toString
 						.does.equal "_:#{ instance.nominalValue }"
+
+		describe "*triples()", ->
+
+			it "produces triples", ->
+				triples = do instances.collection.triples
+				expect triples
+					.does.respondTo "next"
+				expect (Array.from triples).map ( { object, predicate, subject } ) => [
+					{ subject: do subject.toNT }
+					{ predicate: do predicate.toNT }
+					{ object: do object.toNT }
+				]
+					.does.have.deep.members [
+						[
+							{ subject: do instances.collection.toNT }
+							{ predicate: do pname"rdf:first".toNT }
+							{ object: RDFNode::toNT.call instances.collection[0] }
+						]
+						[
+							{ subject: do instances.collection.toNT }
+							{ predicate: do pname"rdf:rest".toNT }
+							{ object: do pname"rdf:nil".toNT }
+						]
+					]
 
 		describe "valueOf()", ->
 
