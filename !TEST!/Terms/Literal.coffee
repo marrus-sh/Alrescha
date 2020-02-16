@@ -223,7 +223,7 @@ describe "Terms", -> describe "Literal", ->
 					expect instance.equals other
 						.is.false
 
-			it "can compare with native strings as an RDFNode", ->
+			it "can compare with native types as an RDFNode", ->
 				expect RDFNode::equals.call instances.simple, String do instances.simple.valueOf
 					.is.true
 				expect RDFNode::equals.call instances.true, instances.true.js

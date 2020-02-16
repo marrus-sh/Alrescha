@@ -7,7 +7,6 @@ describe "Terms", -> describe "Resource", ->
 	Resource = null
 	Graph = null
 	pname = null
-	instances = { }
 
 	before -> import("../../Kico.mjs").then ( { default: Kico } ) ->
 		{ RDFNode, Resource, Graph, pname } = Kico
@@ -64,6 +63,14 @@ describe "Terms", -> describe "Resource", ->
 			expect instance.value
 				.does.equal instance.nominalValue
 
+		it "knows whether it is empty", ->
+			resource = new Resource "example:sbj"
+			expect resource.empty
+				.is.true
+			resource["example:p"] = "example object"
+			expect resource.empty
+				.is.false
+
 		it "produces a graph", ->
 			resource = new Resource "example:sbj"
 			resource["example:p"] = "example object"
@@ -80,7 +87,7 @@ describe "Terms", -> describe "Resource", ->
 			triples = do resource.triples
 			expect graph
 				.instanceof Graph
-				.which.satisfies ( $ ) -> $.hasResource resource
+				.which.satisfies ( $ ) -> $[resource]?
 			expect (Array.from do graph.triples).map ( { object, predicate, subject } ) => [
 				{ subject: do subject.toNT }
 				{ predicate: do predicate.toNT }
@@ -132,16 +139,19 @@ describe "Terms", -> describe "Resource", ->
 				expect resource["example:p"]
 					.instanceof RDFNode
 					.which.has.property "nominalValue", "a different object"
+				Object.defineProperty resource, "example:p", value: undefined
+				expect resource
+					.does.not.have.own.property "example:p"
 
 			it "deletes a predicate with delete", ->
 				resource = new Resource "example:sbj"
 				resource["example:p"] = "example object"
 				expect delete resource["example:p"]
 					.is.true
-				expect delete resource["example:p"]
-					.is.false
 				expect resource["example:p"]
 					.is.undefined
+				expect delete resource["example:p"]
+					.is.true
 
 			it "gets a predicate descriptor with getOwnPropertyDescriptor", ->
 				resource = new Resource "example:sbj"
@@ -239,6 +249,24 @@ describe "Terms", -> describe "Resource", ->
 				expect resource.a "example:Thing"
 					.is.true
 
+		describe "add()", ->
+
+			it "adds", ->
+				resource = new Resource "example:sbj"
+				resource.add "example:p", "first"
+				resource.add "example:p", "second"
+				resource.add "example:p", new Set [ "third", "fourth" ]
+				expect resource["example:p"]
+					.a "set"
+					.which.has.property "size", 4
+				expect (Array.from resource["example:p"]).map ($) => $.nominalValue
+					.does.have.members [ "first", "second", "third", "fourth" ]
+
+			it "returns this", ->
+				resource = new Resource "example:sbj"
+				expect resource.add "example:p", "first"
+					.does.equal resource
+
 		describe "any()", ->
 
 			it "returns undefined when none match", ->
@@ -282,6 +310,38 @@ describe "Terms", -> describe "Resource", ->
 				expect resource.all "example:p", ( $ ) -> $.nominalValue is "example object"
 					.a "set"
 					.which.has.property "size", 1
+
+		describe "clear()", ->
+
+			it "clears", ->
+				resource = new Resource "example:sbj"
+				resource["example:p"] = "example object"
+				resource["example:p2"] = "player two"
+				expect Array.from resource.predicates()
+					.does.have.property "length", 2
+				do resource.clear
+				expect Array.from resource.predicates()
+					.does.have.property "length", 0
+
+			it "returns undefined", ->
+				resource = new Resource "example:sbj"
+				expect do resource.clear
+					.is.undefined
+
+			it "clears as a fallback", ->
+				resource = new Resource "example:sbj"
+				resource["example:p"] = "example object"
+				resource["example:p2"] = "player two"
+				expect Array.from resource.predicates()
+					.does.have.property "length", 2
+				Resource::clear.call resource
+				expect Array.from resource.predicates()
+					.does.have.property "length", 0
+
+			it "returns undefined as a fallback", ->
+				resource = new Resource "example:sbj"
+				expect Resource::clear.call resource
+					.is.undefined
 
 		describe "clone()", ->
 
@@ -407,6 +467,103 @@ describe "Terms", -> describe "Resource", ->
 				expect (Array.from do resource.predicates).map ( $ ) => $.nominalValue
 					.does.have.members [ "example:p", "example:p2" ]
 
+			it "gets the predicates as a fallback", ->
+				resource = new Resource "example:sbj"
+				expect Resource::predicates.call resource
+					.does.respondTo "next"
+				expect Array.from Resource::predicates.call resource
+					.does.have.property "length", 0
+				resource["example:p"] = "example object"
+				resource["example:p"] = "another example object"
+				resource["example:p2"] = "player two"
+				expect (Array.from Resource::predicates.call resource).map ( $ ) => $.nominalValue
+					.does.have.members [ "example:p", "example:p2" ]
+
+		describe "remove()", ->
+
+			it "removes", ->
+				resource = new Resource "example:sbj"
+				resource["example:p"] = "example object"
+				resource["example:p"] = "another example object"
+				resource.remove "example:p", "another example object"
+				expect resource["example:p"]
+					.instanceof RDFNode
+					.which.has.property "nominalValue", "example object"
+
+			it "returns whether an object was removed", ->
+				resource = new Resource "example:sbj"
+				resource["example:p"] = "example object"
+				resource["example:p"] = "another example object"
+				expect resource.remove "example:p", "not present"
+					.is.false
+				expect resource.remove "example:p", "another example object"
+					.is.true
+				expect resource.remove "example:p", "another example object"
+					.is.false
+				expect resource.remove "example:p", "example object"
+					.is.true
+				expect resource.remove "example:p", "example object"
+					.is.false
+
+			it "removes as a fallback", ->
+				resource = new Resource "example:sbj"
+				resource["example:p"] = "example object"
+				resource["example:p"] = "another example object"
+				Resource::remove.call resource, "example:p", "another example object"
+				expect resource["example:p"]
+					.instanceof RDFNode
+					.which.has.property "nominalValue", "example object"
+
+			it "returns whether an object was removed as a fallback", ->
+				resource = new Resource "example:sbj"
+				resource["example:p"] = "example object"
+				resource["example:p"] = "another example object"
+				expect Resource::remove.call resource, "example:p", "not present"
+					.is.false
+				expect Resource::remove.call resource, "example:p", "another example object"
+					.is.true
+				expect Resource::remove.call resource, "example:p", "another example object"
+					.is.false
+				expect Resource::remove.call resource, "example:p", "example object"
+					.is.true
+				expect Resource::remove.call resource, "example:p", "example object"
+					.is.false
+
+		describe "set()", ->
+
+			it "sets", ->
+				resource = new Resource "example:sbj"
+				resource["example:p"] = "example object"
+				resource.set "example:p", "a different object"
+				expect resource["example:p"]
+					.instanceof RDFNode
+					.which.has.property "nominalValue", "a different object"
+
+			it "returns this", ->
+				resource = new Resource "example:sbj"
+				expect resource.set "example:p", "a different object"
+					.does.equal resource
+
+		describe "toNT()", ->
+
+			it "converts to N-Triples", ->
+				named = new Resource "example:sbj"
+				blank = new Resource "_:sbj"
+				expect do named.toNT
+					.does.equal "<example:sbj>"
+				expect do blank.toNT
+					.does.equal "_:sbj"
+
+		describe "toString()", ->
+
+			it "gives its value, prefixed by _: for blank nodes", ->
+				named = new Resource "example:sbj"
+				blank = new Resource "_:sbj"
+				expect (do named.toString)
+					.does.equal "example:sbj"
+				expect (do blank.toString)
+					.does.equal "_:sbj"
+
 		describe "*triples()", ->
 
 			it "produces triples", ->
@@ -461,26 +618,6 @@ describe "Terms", -> describe "Resource", ->
 							{ object: do pname"rdf:nil".toNT }
 						]
 					]
-
-		describe "toNT()", ->
-
-			it "converts to N-Triples", ->
-				named = new Resource "example:sbj"
-				blank = new Resource "_:sbj"
-				expect (do named.toNT)
-					.does.equal "<example:sbj>"
-				expect (do blank.toNT)
-					.does.equal "_:sbj"
-
-		describe "toString()", ->
-
-			it "gives its value, prefixed by _: for blank nodes", ->
-				named = new Resource "example:sbj"
-				blank = new Resource "_:sbj"
-				expect (do named.toString)
-					.does.equal "example:sbj"
-				expect (do blank.toString)
-					.does.equal "_:sbj"
 
 		describe "valueOf()", ->
 

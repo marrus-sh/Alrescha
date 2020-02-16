@@ -89,7 +89,7 @@ describe "Terms", -> describe "BlankNodeCollection", ->
 			triples = do instances.collection.triples
 			expect graph
 				.instanceof Graph
-				.which.satisfies ( $ ) -> $.hasResource instances.collection
+				.which.satisfies ( $ ) -> $[instances.collection]?
 			expect (Array.from do graph.triples).map ( { object, predicate, subject } ) => [
 				{ subject: do subject.toNT }
 				{ predicate: do predicate.toNT }
@@ -215,3 +215,9 @@ describe "Terms", -> describe "BlankNodeCollection", ->
 				expect do instances.collection.valueOf
 					.a "array"
 					.which.has.members [ instances.collection[0].nominalValue ]
+
+			it "provides interfaceName and nominalValue", ->
+				expect do instances.collection.valueOf
+					.does.have.property "interfaceName", instances.collection.interfaceName
+				expect do instances.collection.valueOf
+					.does.have.property "nominalValue", instances.collection.nominalValue
