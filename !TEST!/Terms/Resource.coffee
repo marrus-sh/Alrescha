@@ -22,7 +22,7 @@ describe "Terms", -> describe "Resource", ->
 				.does.throw
 
 		it "can be called as a constructor", ->
-			do expect -> new Resource
+			do expect -> new Resource "example:sbj"
 				.does.not.throw
 
 		it "is of undefined species", ->
@@ -420,12 +420,18 @@ describe "Terms", -> describe "Resource", ->
 				expect resource.matches null, "example object"
 					.is.false
 
-			it "checks predicate presence for no object", ->
+			it "returns false for undefined object", ->
 				resource = new Resource "example:sbj"
-				expect resource.matches "example:p"
-					.is.false
 				resource["example:p"] = "example object"
 				expect resource.matches "example:p"
+					.is.false
+
+			it "checks predicate presence for null object", ->
+				resource = new Resource "example:sbj"
+				expect resource.matches "example:p", null
+					.is.false
+				resource["example:p"] = "example object"
+				expect resource.matches "example:p", null
 					.is.true
 
 			it "matches a predicate and object", ->

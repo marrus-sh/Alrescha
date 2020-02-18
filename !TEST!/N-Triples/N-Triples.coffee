@@ -8,7 +8,7 @@ describe "N-Triples", ->
 
 	before -> import("../../Kico.mjs").then ( { default: Kico } ) ->
 		{ Graph } = Kico
-		manifest = Graph.fromTurtle.call { baseURI: "http://www.w3.org/2013/TurtleTests/manifest.ttl" }, readFileSync "#{ do cwd }/!TEST!/N-Triples/TESTS/manifest.ttl"
+		manifest = Object.preventExtensions Graph.fromTurtle.call { baseURI: "http://www.w3.org/2013/TurtleTests/manifest.ttl" }, readFileSync "#{ do cwd }/!TEST!/N-Triples/TESTS/manifest.ttl"
 
 	describe "Passes W3C tests", ->
 		readdirSync("!TEST!/N-Triples/TESTS/")

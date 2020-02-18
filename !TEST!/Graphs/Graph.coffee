@@ -9,10 +9,14 @@ describe "Graphs", -> describe "Graph", ->
 	Resource = null
 	TripleAction = null
 	createGraph = null
+	isomorphic = null
 	pname = null
 
-	before -> import("../../Kico.mjs").then ( { default: Kico } ) ->
-		{ Graph, GraphView, RDFNode, Resource, TripleAction, createGraph, pname } = Kico
+	before ->
+		import("../../Kico.mjs").then ( { default: Kico } ) ->
+			{ Graph, GraphView, RDFNode, Resource, TripleAction, createGraph, pname } = Kico
+		import("../isomorphic.mjs").then ( { default: isoƒ } ) ->
+			isomorphic = isoƒ
 
 	describe "constructor", ->
 
@@ -99,11 +103,20 @@ describe "Graphs", -> describe "Graph", ->
 				expect instance["example:notSbj"]
 					.is.undefined
 
-			it "fails to set a resource with accessors", ->
+			it "sets a resource with accessors", ->
 				"use strict"
 				instance = do createGraph
-				do expect => instance["example:sbj"] = new Resource "example:sbj"
-					.does.throw
+				instance["example:sbj"] =
+					"example:p": "example object"
+				instance["example:sbj"] =
+					"example:p": "a different object"
+				expect instance["example:sbj"]
+					.instanceof Resource
+				expect instance["example:sbj"]["example:p"]
+					.does.have.property "nominalValue", "a different object"
+				instance["example:sbj"] = null
+				expect instance
+					.does.not.have.own.property "example:sbj"
 
 			it "sets a resource with defineProperty", ->
 				instance = do createGraph
@@ -355,7 +368,7 @@ describe "Graphs", -> describe "Graph", ->
 						predicate: "example:p"
 						object: "another example object"
 				instance.addAll other
-				expect instance.isomorphic other
+				expect isomorphic.call instance, other
 					.is.true
 
 			it "runs actions", ->
@@ -645,17 +658,6 @@ describe "Graphs", -> describe "Graph", ->
 				expect result
 					.equals 3
 
-		describe "isomorphic()", ->
-
-			###
-			If there are bugs here, they should (hopefully) show up in the Turtle/N‑Triples tests.
-			###
-
-			it "is a function", ->
-				instance = do createGraph
-				expect instance
-					.does.respondTo "isomorphic"
-
 		describe "match()", ->
 
 			it "returns an empty graph for no match", ->
@@ -793,7 +795,7 @@ describe "Graphs", -> describe "Graph", ->
 						subject: "example:sbj"
 						predicate: "example:p"
 						object: "another example object"
-				expect (instance.merge other).isomorphic other
+				expect isomorphic.call other, instance.merge other
 					.is.true
 
 			it "runs actions", ->
@@ -1213,10 +1215,3 @@ describe "Graphs", -> describe "Graph", ->
 						predicate: "example:p"
 						object: "example object"
 					]
-
-		describe "view()", ->
-
-			it "creates a graph view", ->
-				instance = do createGraph
-				expect instance.view "example:sbj"
-					.instanceof GraphView
