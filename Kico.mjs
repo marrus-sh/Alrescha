@@ -44,7 +44,23 @@ export default (( ) => { // strict IIFE, though unnecessary
 		, ANON = $ꝛ`\[(?:${ WS })*\]`
 		, A͢ = $℘s(Array.from.bind(Array),
 			{ [Symbol.hasInstance]: { value: $ => $ instanceof Array }
-			, prototype: { value: Array.prototype } })
+			, M̃: { value: $℘s(( ) => { }, // Meta Array
+				{ [Symbol.hasInstance]: { value: function hasInstance ( $ ) {
+					return $ == Array || Function[Ꝕ][Symbol.hasInstance].call(this, $) } }
+				, prototype: { value: Array } }) }
+			, prototype: { value: Array.prototype }
+			, ɫ: { value: $ => { // LengthOfArrayLike
+				const ɫ = +$[Ɫ]
+				return ɫ == 0/0 || ɫ <= 0 ? 0
+					: Math.min(Math.max(ɫ, 0), 9007199254740991) } }
+			, ʔ: { value: $ => { // is argument an array­‑like object?
+				/*
+				This is more exacting than ECMAScriptʼs definition of an array­‑like object, because it requires the "length" property to not be undefined.
+
+				(In ECMAScript, any object with undefined "length" is an array­‑like object for which LengthOfArrayLike is 0.)
+				*/
+				try { return typeof $ == "object" && Ɫ in $ && (+$[Ɫ], true) }
+				catch ( ɛ ) { return false } } } })
 		, KICO = Object.create(null)
 		, O͢ = Object
 		, RX͢ = RegExp
@@ -119,17 +135,8 @@ export default (( ) => { // strict IIFE, though unnecessary
 					: 65 }
 			return S͢.fromCharCode(...ꝵs) }
 		, dſ𝒫 = Object.getOwnPropertyDescriptor.bind(Object)
-		, firstMethodOf = function ( method, ...$s ) {
-			for ( let $ of $s ) {
-				const ƒ = $[method]
-				if ( typeof ƒ == "function") return this != Ꝋ ? ƒ.bind(this) : ƒ }
-			return Ꝋ }
-		, first𝒫Of = function ( ...$s ) {
-			for ( let $ of $s ) {
-				const
-					$𝒫 = dſ𝒫(this, $)
-					, $Ꝟ = $𝒫 == Ꝋ ? Ꝋ : $𝒫[Ꝟ]
-				if ( $Ꝟ != Ꝋ ) return $Ꝟ } }
+		, defaultMethodOf = function ( method, $ ) {
+			return getꞆ.call($)[Ꝕ][method].bind(this === Ꝋ ? $ : this) }
 		, getꞆ = function ( ) {
 			if ( hasꞆ.call(this, "NamedNode") ) return ꞰÑN
 			else if ( hasꞆ.call(this, "BlankNode") )
@@ -261,6 +268,17 @@ export default (( ) => { // strict IIFE, though unnecessary
 					: S͢[Ꝕ][ẞ].call($, 0, 2) == "_:" ? new ꞰBN (S͢[Ꝕ][ẞ].call($, 2))
 					: new ꞰÑN ($) }
 			catch ( ɛ ) { return Ꝋ } }
+		, nº1MethodOf = function ( method, ...$s ) {
+			for ( let $ of $s ) {
+				const ƒ = $[method]
+				if ( typeof ƒ == "function") return this != Ꝋ ? ƒ.bind(this) : ƒ }
+			return Ꝋ }
+		, nº1𝒫Of = function ( ...$s ) {
+			for ( let $ of $s ) {
+				const
+					$𝒫 = dſ𝒫(this, $)
+					, $Ꝟ = $𝒫 == Ꝋ ? Ꝋ : $𝒫[Ꝟ]
+				if ( $Ꝟ != Ꝋ ) return $Ꝟ } }
 		, phony = Ʞ => { // creates a phony class, modifying the original to point to it
 			if ( Ʞ[𝒫]($ϕ) ) return Ʞ[$ϕ]
 			else {
@@ -327,16 +345,6 @@ export default (( ) => { // strict IIFE, though unnecessary
 						return ꝵ } }
 				else return false } }
 		, rs = function *resources ( ) { for ( const r of this.values() ) { yield r } }
-		, rsIn = function *resourcesIn ( issued, subject ) {
-			const r = this.get(subject)
-			if ( r != Ꝋ ) {
-				yield r
-				issued.add(S͢(r))
-				for ( const p of r.predicates() ) {
-					for ( const sbj of r.all(p, $ =>
-						[ ꞰÑN, ꞰBN ].some(Ꞇ => hasꞆ.call($, Ꞇ))
-						&& !issued.has(S͢($))) ) {
-						yield *rsIn.call(this, issued, sbj) } } } }
 		, turtify = $ => { // make RDF Turtle from object
 			// TK: Resources
 			if ( $ instanceof WHATWGꞏURL || hasꞆ.call($, ꞰÑN) ) {
@@ -349,16 +357,16 @@ export default (( ) => { // strict IIFE, though unnecessary
 				return px
 					? `${ px }:${ ñꝞ.substring(ꝯ[px].length).replace(/>/g, "\\u003E") }`
 					: `<${ ñꝞ.replace(/>/g, "\\u003E") }>` }
-			else return $ instanceof Set ? A͢($).map(turtify).join(", ")
-				: $ instanceof Array ? `( ${ $.map(turtify).join(" ") } )`
+			else return $ instanceof Set ? A͢($, turtify).join(", ")
+				: A͢.ʔ($) ? `( ${ A͢[Ꝕ].map.call($, turtify).join(" ") } )`
 				: ["BlankNode", "Literal"].some(tꞆ => hasꞆ.call($, tꞆ)) ? getꞆ.call($)[Ꝕ].toTurtle.call($)
 				: typeof $ == "number" && !Number.isInteger($)
 				? S͢(new ꞰL ($, __PN`xsd:double`))
 				: `"${ String[Ꝕ].replace.call($, /["\\\n\r]/g, $$ =>
 					({ "\"": $ꝛ`\"`, "\\": $ꝛ`\\`, "\n": $ꝛ`\n`, "\r": $ꝛ`\r` }[$$])) }"` }
-		, unpack = $ => $ == Ꝋ ? [ ] // Turn an object into a flat array
+		, unpack = $ => $ == Ꝋ ? [ ] // Flatten an iterable into an array, or make a singleton
 			: typeof $[Ʃ͢.iterator] == "function"
-			? A͢($).reduce((ꝵ, ĩ) => ꝵ.concat(unpack(ĩ)), [ ])
+			? A͢($, unpack).reduce((ꝵ, ĩ) => ꝵ.concat(ĩ))
 			: [ $ ]
 		, Ʃ͢ = Symbol
 		, ʃActns = Ʃ͢("actionIterator")
@@ -456,7 +464,7 @@ export default (( ) => { // strict IIFE, though unnecessary
 				, bidM = { }
 				, directive = RX͢($ꝛ`@prefix(?:${ $WHITESPACE })(?:${ PNAME_NS })(?:${ $WHITESPACE })(?:${ IRIREF })(?:${ $WHITESPACE })\.|@base(?:${ $WHITESPACE })(?:${ IRIREF })|[Pp][Rr][Ee][Ff][Ii][Xx](?:${ $WHITESPACE })(?:${ PNAME_NS })(?:${ $WHITESPACE })(?:${ IRIREF })|[Bb][Aa][Ss][Ee](?:${ $WHITESPACE })(?:${ IRIREF })`, "uy")
 				, whitespace = RX͢($WHITESPACE, "uy")
-				, ꝯ = $ꝯ == Ꝋ ? { } : O͢.keys($ꝯ).reduce((ꝯ, px) => ꝯ[px] = $ꝯ[px], { })
+				, ꝯ = $ꝯ == Ꝋ ? { } : O͢.keys($ꝯ).reduce((ꝯ, px) => (ꝯ[px] = $ꝯ[px], ꝯ), { })
 				, ꝯſꝸ = ꝯſꝸr.bind(
 					{ get ndx ( ) { return ꝟndx }
 					, set ndx ( $ ) { ꝟndx = $ }
@@ -780,13 +788,13 @@ export default (( ) => { // strict IIFE, though unnecessary
 					: Reflect.delete(O, P)  }
 			get ( O, P, Receiver ) {
 				return !O͢.isExtensible(O) || dſ𝒫(O, P) != Ꝋ ? Reflect.get(O, P, Receiver)
-					: isIRI(P) ? this.getTarget(O, P)
+					: isIRI(P) ? this.getPredicate(O, P)
 					: Reflect.get(O, P, Receiver) }
 			getOwnPropertyDescriptor ( O, P ) {
 				return !O͢.isExtensible(O) || dſ𝒫(O, P) != Ꝋ
 					? Reflect.getOwnPropertyDescriptor(O, P)
 					: isIRI(P) ? this.predicateMap.has(P)
-						? { [Ꝯ]: 1, [ꝴ]: 1, get: ꞰRPX[Ꝕ].getTarget.bind(this, O, P) }
+						? { [Ꝯ]: 1, [ꝴ]: 1, get: ꞰRPX[Ꝕ].getPredicate.bind(this, O, P) }
 						: Ꝋ
 					: Reflect.getOwnPropertyDescriptor(O, P) }
 			getPrototypeOf ( O, V ) {
@@ -803,16 +811,17 @@ export default (( ) => { // strict IIFE, though unnecessary
 						&& this.has(O, __PN`skos:topConceptOf`) ? ꞰTOP[Ꝕ]
 						: ꞰL̃R[Ꝕ]
 					: Reflect.getPrototypeOf(O) }
-			getTarget ( O, P ) {
-				const
-					$obj = O͢.isExtensible(O) ? this.predicateMap.get(P) : O͢[P]
-					, obj = S͢($obj)
-					, rM = this.resourceMap
-				return rM == Ꝋ
-					|| ![ ꞰÑN, ꞰBN ].some(Ꞇ => hasꞆ.call($obj, Ꞇ))
-					|| !rM.has(obj)
-					? $obj
-					: rM.get(obj) }
+			getPredicate ( O, P ) {
+				return this.getTarget(this.predicateMap.get(P)) }
+			getTarget ( target ) {
+				const rM = this.resourceMap
+				if ( target == Ꝋ || rM == Ꝋ ) return target
+				else if ( target instanceof Set ) {
+					return new Set (A͢(target, ꞰRPX[Ꝕ].getTarget.bind(this))) }
+				else {
+					const obj = S͢(target)
+					return ![ ꞰÑN, ꞰBN ].some(hasꞆ.bind(target)) || !rM.has(obj) ? target
+						: rM.get(obj) } }
 			has ( O, P ) {
 				return !O͢.isExtensible(O) ? Reflect.has(O, P)
 					: dſ𝒫(O, P) != Ꝋ ? true
@@ -825,8 +834,7 @@ export default (( ) => { // strict IIFE, though unnecessary
 				if ( O͢.isExtensible(O) ) {
 					Object.setPrototypeOf(O, this.getPrototypeOf(O))
 					for ( const p of Map[Ꝕ].keys.call(this.predicateMap) ) {
-						$℘(O, p, { [Ꝯ]: 0, [ꝴ]: 1, get:
-							Map[Ꝕ].get.bind(this.predicateMap, p) }) }
+						$℘(O, p, { [Ꝯ]: 0, [ꝴ]: 1, get: ꞰRPX[Ꝕ].getPredicate.bind(this, O, p) }) }
 					O͢.preventExtensions(this.predicateMap) }
 				return Reflect.preventExtensions(O) }
 			set ( O, P, V, Receiver ) {
@@ -948,7 +956,7 @@ export default (( ) => { // strict IIFE, though unnecessary
 					const
 						$ñꝞ𝒫 = dſ𝒫(this, Ꝟ)
 						, ñꝞ = this[Ꝟ]
-					return [ ꞰBN, ꞰL, ꞰÑN ].some(Ꞇ => hasꞆ.call(this, Ꞇ))
+					return [ ꞰBN, ꞰL, ꞰÑN ].some(hasꞆ.bind(this))
 						|| this[𝒫]("interfaceName")
 						? ꞰRDFN[Ꝕ].clone.call(this)
 						: $℘(ꝯﬆʞ(ꞰT, [ S͢(this.termType) ], ꝯﬆʞr.call(this, ꞰT)), Ꝟ,
@@ -959,7 +967,7 @@ export default (( ) => { // strict IIFE, though unnecessary
 							, [ꝶ]: $ñꝞ𝒫[ꝶ] }) } }
 			equals ( other ) {
 				return other == Ꝋ ? false
-					: [ ꞰBN, ꞰL, ꞰÑN ].some(Ꞇ => hasꞆ.call(this, Ꞇ))
+					: [ ꞰBN, ꞰL, ꞰÑN ].some(hasꞆ.bind(this))
 					? hasꞆ.call(other, get𝒫.call(this, "termType", ꞰRDFN))
 					: other.termType == S͢(this.termType) }
 			toString ( ) { return S͢(this[Ꝟ]) } }
@@ -971,22 +979,22 @@ export default (( ) => { // strict IIFE, though unnecessary
 					, text: { get: dſ𝒫(ꞰRDFN[Ꝕ], "text").get }
 					, [Ꝟ]: { [Ꝯ]: 0, get: dſ𝒫(ꞰRDFN[Ꝕ], Ꝟ).get } }) }
 			static [Ʃ͢.hasInstance] ( instance ) {
-				return [ ꞰBN, ꞰL, ꞰÑN ].some(Ꞇ => hasꞆ.call(instance, Ꞇ)) }
+				return [ ꞰBN, ꞰL, ꞰÑN ].some(hasꞆ.bind(instance)) }
 			get [Ʃ͢.toStringTag] ( ) { return S͢(get𝒫.call(this, "interfaceName", ꞰRDFN)) }
 			get interfaceName ( ) {
-				const tꞆ = first𝒫Of.call(this, "interfaceName", "termType")
+				const tꞆ = nº1𝒫Of.call(this, "interfaceName", "termType")
 				return tꞆ == Ꝋ ? "" : S͢(tꞆ) }
 			get nominalValue ( ) {
-				const ñꝞ = first𝒫Of.call(this, "nominalValue", Ꝟ)
+				const ñꝞ = nº1𝒫Of.call(this, "nominalValue", Ꝟ)
 				return ñꝞ == Ꝋ ? "" : S͢(ñꝞ) }
 			get termType ( ) {
-				const tꞆ = first𝒫Of.call(this, "termType", "interfaceName")
+				const tꞆ = nº1𝒫Of.call(this, "termType", "interfaceName")
 				return tꞆ == Ꝋ ? "" : S͢(tꞆ) }
 			get text ( ) {
 				return hasꞆ.call(this, ꞰL) ? dſ𝒫(ꞰL[Ꝕ], "text").get.call(this)
 					: ꞰRDFN[Ꝕ].toString.call(this) }
 			get value ( ) {
-				const ñꝞ = first𝒫Of.call(this, Ꝟ, "nominalValue")
+				const ñꝞ = nº1𝒫Of.call(this, Ꝟ, "nominalValue")
 				return ñꝞ == Ꝋ ? "" : S͢(ñꝞ) }
 			[Ʃ͢.toPrimitive] ( hint ) { return ꞰRDFN[Ꝕ].toString.call(this) }
 			clone ( ) {
@@ -994,8 +1002,7 @@ export default (( ) => { // strict IIFE, though unnecessary
 				else if ( hasꞆ.call(this, ꞰL) ) return ꞰL[Ꝕ].clone.call(this)
 				else if ( hasꞆ.call(this, ꞰÑN) ) return ꞰÑN[Ꝕ].clone.call(this)
 				else if ( hasꞆ.call(this, ꞰBN) )
-					return Array.isArray(this) ? ꞰBNC[Ꝕ].clone.call(this)
-						: ꞰBN[Ꝕ].clone.call(this)
+					return A͢.ʔ(this) ? ꞰBNC[Ꝕ].clone.call(this) : ꞰBN[Ꝕ].clone.call(this)
 				else {
 					const
 						$ñꝞ𝒫 = dſ𝒫(this, "nominalValue")
@@ -1020,7 +1027,7 @@ export default (( ) => { // strict IIFE, though unnecessary
 				return hasꞆ.call(this, ꞰÑN) ? ꞰÑN[Ꝕ].toDOMNode.call(this, document)
 					: hasꞆ.call(this, ꞰL) ? ꞰL[Ꝕ].toDOMNode.call(this, document)
 					: hasꞆ.call(this, ꞰBN) ?
-						 Array.isArray(this) ? ꞰBNC[Ꝕ].toDOMNode.call(this, document)
+						 A͢.ʔ(this) ? ꞰBNC[Ꝕ].toDOMNode.call(this, document)
 						 : ꞰBN[Ꝕ].toDOMNode.call(this, document)
 					: null }
 			toNT ( ) {
@@ -1050,9 +1057,7 @@ export default (( ) => { // strict IIFE, though unnecessary
 				else if ( $𝒫.set == Ꝋ ) $℘(ꝵ[Ꝕ], $, $𝒫) } // hoping URL hasnʼt mutating methods
 			return ꝵ }, class NamedNode extends ꞰRDFN { // RDF/JS & RDF Interfaces
 			constructor ( value ) {
-				const $ℹ = hasꞆ.call(value, ꞰÑN) ? (( ) => {
-					const ñꝞ = value.nominalValue
-					return S͢(ñꝞ == Ꝋ ? value[Ꝟ] : ñꝞ) })() : S͢(value)
+				const $ℹ = hasꞆ.call(value, ꞰÑN) ? get𝒫.call(value, "nominalValue", ꞰRDFN) : S͢(value)
 				if ( /(?![-:\x2F?#\[\]@!$&\x27()*+,;=0-9A-Za-z._~\xA0-\uD7FF\uE000-\uFDCF\uFDF0-\uFFEF\u{10000}-\u{1FFFD}\u{20000}-\u{2FFFD}\u{30000}-\u{3FFFD}\u{40000}-\u{4FFFD}\u{50000}-\u{5FFFD}\u{60000}-\u{6FFFD}\u{70000}-\u{7FFFD}\u{80000}-\u{8FFFD}\u{90000}-\u{9FFFD}\u{A0000}-\u{AFFFD}\u{B0000}-\u{BFFFD}\u{C0000}-\u{CFFFD}\u{D0000}-\u{DFFFD}\u{E0000}-\u{EFFFD}\u{F0000}-\u{FFFFD}\u{100000}-\u{10FFFD}]|%[0-9A-Fa-f]{2})[^]/u.test( $ℹ ) )
 					throw ꞆƐ͢(l10n`Kico: NamedNode invalid IRI. `)
 				return $℘s((( ) => {
@@ -1141,32 +1146,30 @@ export default (( ) => { // strict IIFE, though unnecessary
 						, text: { get: dſ𝒫(ꞰRDFN[Ꝕ], "text").get }
 						, [Ꝟ]: { get: dſ𝒫(ꞰRDFN[Ꝕ], Ꝟ).get } }) } }
 			static [Ʃ͢.hasInstance] ( instance ) {
-				return hasꞆ.call(instance, ꞰBN) && Array.isArray(instance) }
+				return hasꞆ.call(instance, ꞰBN) && A͢.ʔ(instance) }
 			get graph ( ) {
 				const ꝿ = new ꞰꝾ
-				for ( const triple of firstMethodOf.call(this, "triples", this, ꞰBNC[Ꝕ])() ) {
-					ꝿ.add(triple) }
+				for ( const $3 of nº1MethodOf.call(this, "triples", this, ꞰBNC[Ꝕ])() ) {
+					ꝿ.add($3) }
 				return ꝿ }
 			*[Ʃ͢.iterator] ( ) { yield *A͢[Ꝕ][Ʃ͢.iterator].call(this) }
 			clone ( ) {
 				if ( this == Ꝋ ) return Ꝋ
 				else {
-					const
-						$ꝯﬆʞr = ꝯﬆʞr.call(this, ꞰBNC)
-						, metaA = ( ) => { }
-					metaA[Ꝕ] = Array
+					const $ꝯﬆʞr = ꝯﬆʞr.call(this, ꞰBNC)
 					return ꝯﬆʞ(ꞰBNC,
 						[ this, get𝒫.call(this, "nominalValue", ꞰRDFN) ],
-						$ꝯﬆʞr == Array || $ꝯﬆʞr instanceof metaA ? ꞰBNC : $ꝯﬆʞr) } }
+						$ꝯﬆʞr instanceof A͢.M̃ ? ꞰBNC : $ꝯﬆʞr) } }
 			equals ( other ) { return ꞰBN[Ꝕ].equals.call(this, other) }
 			*triples ( ) {
 				let
 					ꝟcur = this
 					, ꝟndx = 0
-				for ( const car of this[Ʃ͢.iterator]() ) {
-					yield new Ʞ3 (ꝟcur, __PN`rdf:first`, car)
-					if ( hasꞆ.call(car, ꞰBN) && Array.isArray(car) )
-						yield *ꞰBNC[Ꝕ].triples.call(car)
+				for ( const car of A͢[Ꝕ][Ʃ͢.iterator].call(this) ) {
+					if ( car != Ꝋ ) {
+						yield new Ʞ3 (ꝟcur, __PN`rdf:first`, car)
+						if ( hasꞆ.call(car, ꞰBN) && A͢.ʔ(car) )
+							yield *ꞰBNC[Ꝕ].triples.call(car) }
 					if ( ++ꝟndx < this.length ) {
 						const cdr = new ꞰBN (`${ get𝒫.call(this, "nominalValue", ꞰRDFN) }.c${
 							new Array (ꝟndx).fill("d").join("") }r`)
@@ -1179,37 +1182,40 @@ export default (( ) => { // strict IIFE, though unnecessary
 					, ñꝞ = get𝒫.call(this, "nominalValue", ꞰRDFN)
 				return htm4ÐˢDoc.bind(doc)`${ A͢[Ꝕ].reduceRight.call(this,
 					( cdr, car, ndx ) => {
-						const
-							$lɁ = hasꞆ.call(car, ꞰL)
-							, ɫᵹ = $lɁ ? get𝒫.call(car, "language", ꞰL) : Ꝋ
-							, ꝺꞆ = $lɁ && (typeof ɫᵹ != "string" || ɫᵹ == "")
-								? S͢(get𝒫.call(car, "datatype", ꞰL))
-								: Ꝋ
-						return (
-							{ localName: "ol"
-							, attributes: { resource: ndx > 0 ? `_:${ ñꝞ }.c${
-								new Array (ndx).fill("d").join("") }r` : `_:${ ñꝞ }` }
-							, content:
-								[
-									{ localName: "li"
-									, attributes:
-										{ [$lɁ ? "property" : "rel"]: __PNS`rdf:first`
-										, lang: typeof ɫᵹ == "string" ? ɫᵹ : Ꝋ
-										, datatype: ꝺꞆ != Ꝋ ?
-											[ __PNS`rdf:HTML`
-											, __PNS`rdf:XMLLiteral` ].indexOf(ꝺꞆ) >= 0
-											? __PNS`rdf:XMLLiteral` : ꝺꞆ : Ꝋ }
-									, content: ꞰRDFN[Ꝕ].toDOMNode.call(car, doc) }
-								,
-									{ localName: "li"
-									, attributes: { rel: __PNS`rdf:rest` }
-									, content: cdr } ] }) },
+						if ( car == Ꝋ ) return cdr
+						else {
+							const
+								$lʔ = hasꞆ.call(car, ꞰL)
+								, ɫᵹ = $lʔ ? get𝒫.call(car, "language", ꞰL) : Ꝋ
+								, ꝺꞆ = $lʔ && (typeof ɫᵹ != "string" || ɫᵹ == "")
+									? S͢(get𝒫.call(car, "datatype", ꞰL))
+									: Ꝋ
+							return (
+								{ localName: "ol"
+								, attributes: { resource: ndx > 0 ? `_:${ ñꝞ }.c${
+									new Array (ndx).fill("d").join("") }r` : `_:${ ñꝞ }` }
+								, content:
+									[
+										{ localName: "li"
+										, attributes:
+											{ [$lʔ ? "property" : "rel"]: __PNS`rdf:first`
+											, lang: typeof ɫᵹ == "string" ? ɫᵹ : Ꝋ
+											, datatype: ꝺꞆ != Ꝋ ?
+												[ __PNS`rdf:HTML`
+												, __PNS`rdf:XMLLiteral` ].indexOf(ꝺꞆ) >= 0
+												? __PNS`rdf:XMLLiteral` : ꝺꞆ : Ꝋ }
+										, content: defaultMethodOf("toDOMNode", car)(doc) }
+									,
+										{ localName: "li"
+										, attributes: { rel: __PNS`rdf:rest` }
+										, content: cdr } ] }) } },
 					__PN`rdf:nil`.toDOMNode(doc)) }` }
 			toNT ( ) { return ꞰBN[Ꝕ].toNT.call(this) }
 			toString ( ) { return ꞰBN[Ꝕ].toString.call(this) }
 			toTurtle ( ) { return ꞰBN[Ꝕ].toTurtle.call(this) }
 			valueOf ( ) {
-				const ꝵ = new Array (this.length)
+				const ꝵ = new Array (get𝒫.call(this, "length", ꞰBNC))
+				A͢(this, defaultMethodOf.bind(Ꝋ, "valueOf"))
 				A͢[Ꝕ].forEach.call(this, ($, ndx) => ꝵ[ndx] = getꞆ.call($)[Ꝕ].valueOf.call($))
 				return $℘s(ꝵ,
 					{ interfaceName: { [Ꝟ]: get𝒫.call(this, "interfaceName", ꞰRDFN) }
@@ -1390,11 +1396,11 @@ export default (( ) => { // strict IIFE, though unnecessary
 				return Function.prototype[Ʃ͢.hasInstance].call(this, instance) }
 			get empty ( ) {
 				const { value, done } =
-					firstMethodOf.call(this, "predicates", this, ꞰR[Ꝕ])().next()
+					nº1MethodOf.call(this, "predicates", this, ꞰR[Ꝕ])().next()
 				return value == Ꝋ && done }
 			get graph ( ) {
 				const ꝿ = new ꞰꝾ
-				for ( const triple of firstMethodOf.call(this, "triples", this, ꞰR[Ꝕ])() ) {
+				for ( const triple of nº1MethodOf.call(this, "triples", this, ꞰR[Ꝕ])() ) {
 					ꝿ.add(triple) }
 				return ꝿ }
 			[Ʃ͢.iterator] ( ) { return ꞰR[Ꝕ].triples.call(this) }
@@ -1425,14 +1431,14 @@ export default (( ) => { // strict IIFE, though unnecessary
 						return Ꝋ }
 					else return test.call(thisArg, $obj) ? $obj : Ꝋ } }
 			clear ( ) {
-				for ( const p of firstMethodOf.call(this, "predicates", this, ꞰR[Ꝕ])() ) {
+				for ( const p of nº1MethodOf.call(this, "predicates", this, ꞰR[Ꝕ])() ) {
 					delete this[p] } }
 			clone ( ) {
 				if ( this == Ꝋ ) return Ꝋ
-				else return A͢(firstMethodOf.call(this, "predicates", this, ꞰR[Ꝕ])())
+				else return A͢(nº1MethodOf.call(this, "predicates", this, ꞰR[Ꝕ])())
 					.reduce(( ꝵ, $ ) => (ꝵ[$] = this[$], ꝵ),
 						ꝯﬆʞ(ꞰR, [ this ], ꝯﬆʞr.call(this, ꞰR))) }
-			equals ( other ) { return getꞆ.call(this)[Ꝕ].equals.call(this, other) }
+			equals ( other ) { return defaultMethodOf("equals", this)(other) }
 			get ( predicate ) { return isIRI(predicate) ? this[predicate] : Ꝋ }
 			has ( predicate ) { return isIRI(predicate) && this[predicate] != Ꝋ }
 			lock ( ) { return O͢.preventExtensions(this) }
@@ -1473,62 +1479,60 @@ export default (( ) => { // strict IIFE, though unnecessary
 				else return false }
 			set ( predicate, object ) { return $℘(this, predicate, { [Ꝟ]: object }) }
 			toDOMNode ( document ) {
-				const
-					doc = document == Ꝋ ? KICO.defaultDocument : document
+				const doc = document == Ꝋ ? KICO.defaultDocument : document
 				return htm4ÐˢDoc.bind(doc)`${
 					{ localName: "details"
 					, attributes: { resource: S͢(this) }
 					, content:
 						[
 							{ localName: "summary"
-							, content: ꞰRDFN[Ꝕ].toDOMNode.call(this, doc) }
+							, content: defaultMethodOf("toDOMNode", this)(doc) }
 						, { localName: "dl", content: A͢(this.predicates()).reduce(
 							( ꝵ, p ) => {
 								const $obj = this[p]
 								return ꝵ.concat([
 									{ localName: "dt"
-									, content: ꞰRDFN[Ꝕ].toDOMNode.call(p, doc) } ],
+									, content: defaultMethodOf("toDOMNode", p)(doc) } ],
 									($obj instanceof Set ? A͢($obj) : [ $obj ]).map(obj => {
 										const
-											$lɁ = hasꞆ.call(obj, ꞰL)
-											, ɫᵹ = $lɁ ? get𝒫.call(obj, "language", ꞰL) : Ꝋ
-											, ꝺꞆ = $lɁ && (typeof ɫᵹ != "string" || ɫᵹ == "")
+											$lʔ = hasꞆ.call(obj, ꞰL)
+											, ɫᵹ = $lʔ ? get𝒫.call(obj, "language", ꞰL) : Ꝋ
+											, ꝺꞆ = $lʔ && (typeof ɫᵹ != "string" || ɫᵹ == "")
 												? S͢(get𝒫.call(obj, "datatype", ꞰL))
 												: Ꝋ
 										return (
 											{ localName: "dd"
 											, attributes:
-												{ [$lɁ ? "property" : "rel"]: p
+												{ [$lʔ ? "property" : "rel"]: p
 												, lang: typeof ɫᵹ == "string" ? ɫᵹ : Ꝋ
 												, datatype: ꝺꞆ != Ꝋ ?
 													[ __PNS`rdf:HTML`
 													, __PNS`rdf:XMLLiteral` ]
 													.indexOf(ꝺꞆ) >= 0
 													? __PNS`rdf:XMLLiteral` : ꝺꞆ : Ꝋ }
-											, content:
-												ꞰRDFN[Ꝕ].toDOMNode.call(obj, doc) }) })) },
+											, content: defaultMethodOf("toDOMNode", obj)(doc) }) })) },
 							[ ]) } ] } }` }
 			*triples ( ) {
-				for ( const $p of firstMethodOf.call(this, "predicates", this, ꞰR[Ꝕ])() ) {
+				for ( const $p of nº1MethodOf.call(this, "predicates", this, ꞰR[Ꝕ])() ) {
 					const $obj = this[$p]
 					if ( $obj instanceof Set ) {
 						for ( const obj of $obj ) {
-							if ( hasꞆ.call(obj, ꞰBN) && Array.isArray(obj) ) {
+							if ( hasꞆ.call(obj, ꞰBN) && A͢.ʔ(obj) ) {
 								yield *ꞰBNC[Ꝕ].triples.call(obj)
 								yield new Ʞ3 (this, $p, new ꞰBN (obj)) }
 							else yield new Ʞ3 (this, $p, obj) } }
 					else {
-						if ( hasꞆ.call($obj, ꞰBN) && Array.isArray($obj) ) {
+						if ( hasꞆ.call($obj, ꞰBN) && A͢.ʔ($obj) ) {
 							yield *ꞰBNC[Ꝕ].triples.call($obj)
 							yield new Ʞ3 (this, $p, new ꞰBN ($obj)) }
 						else yield new Ʞ3 (this, $p, $obj) } } }
-			valueOf ( document ) {
-				return new Map (A͢(firstMethodOf.call(this, "predicates", this, ꞰR[Ꝕ])())
-					.map(p => {
+			valueOf ( ) {
+				return new Map (A͢(nº1MethodOf.call(this, "predicates", this, ꞰR[Ꝕ])(),
+					p => {
 						const obj = this[p]
 						return (
-							[ getꞆ.call(p)[Ꝕ].valueOf.call(p, document)
-							, getꞆ.call(obj)[Ꝕ].valueOf.call(obj, document) ]) })) } }
+							[ defaultMethodOf("valueOf", p)()
+							, defaultMethodOf("valueOf", obj)() ]) })) } }
 		, ꞰL̃R = class LinkedResource extends $℘(ꞰR, $ϕ, { [Ꝟ]: ꞰR }) {
 			constructor ( graph, subject, rM ) {
 				/*
@@ -1556,19 +1560,47 @@ export default (( ) => { // strict IIFE, though unnecessary
 		, ꞰRꝹ = class ResourceData {
 			constructor ( resource ) {
 				return $℘s(this, {
-					resource: { [Ꝟ]: resource }
+					language:  { get: dſ𝒫(ꞰRꝹ[Ꝕ], "language").get }
+					, resource: { [Ꝟ]: resource }
 					, textDescription: { get: dſ𝒫(ꞰRꝹ[Ꝕ], "textDescription").get }
 					, textLabel: { get: dſ𝒫(ꞰRꝹ[Ꝕ], "textLabel").get }
 					, textValue: { get: dſ𝒫(ꞰRꝹ[Ꝕ], "textDescription").get } }) }
-			get textDescription ( ) { }
+			get language ( ) {
+				const
+					$r = this.resource
+					, ɫᵹ = $r == Ꝋ ? Ꝋ : $r[__PN`dc:language`]
+				return ɫᵹ == Ꝋ ? null : get𝒫.call(ɫᵹ, "text", ꞰRDFN) }
+			get textDescription ( ) {
+				const
+					$r = this.resource
+					, desc = $r == Ꝋ ? Ꝋ : $r[__PN`rdfs:comment`]
+				return desc == Ꝋ ? null : get𝒫.call(desc, "text", ꞰRDFN) }
 			get textLabel ( ) { }
-			get textValue ( ) { }
-			createDescription ( ) { }
-			createLabel ( ) { }
-			createValue ( ) { }
+			get textValue ( ) {
+				const
+					$r = this.resource
+					, _Ꝟ = $r == Ꝋ ? Ꝋ : $r[__PN`rdf:value`]
+				return _Ꝟ == Ꝋ ? null : get𝒫.call(_Ꝟ, "text", ꞰRDFN) }
+			createDescription ( document ) { }
+			createLabel ( document ) { }
+			createValue ( document ) { }
 			toDescriptionString ( ) { }
 			toString ( ) { }
 			valueOf ( ) { } }
+		, ꞰDOCꝹ = class DocumentData extends ꞰRꝹ {
+			constructor ( resource ) {
+				return O͢.create(ꞰRꝹ[Ꝕ], {
+					language: { get: dſ𝒫(ꞰRꝹ[Ꝕ], "language").get }
+					, resource: { [Ꝟ]: resource }
+					, textDescription: { get: dſ𝒫(ꞰDOCꝹ[Ꝕ], "textDescription").get }
+					, textLabel: { get: dſ𝒫(ꞰDOCꝹ[Ꝕ], "textLabel").get }
+					, textValue: { get: dſ𝒫(ꞰRꝹ[Ꝕ], "textDescription").get } }) }
+			get textDescription ( ) { }
+			get textLabel ( ) { }
+			createDescription ( document ) { }
+			createLabel ( document ) { }
+			toDescriptionString ( ) { }
+			toString ( ) { } }
 		, ꞰꝾ = class Graph {
 			constructor ( actions ) {
 				const
@@ -1591,12 +1623,12 @@ export default (( ) => { // strict IIFE, though unnecessary
 				return S͢((constructor == Ꝋ ? ꝯﬆʞr.call(this, ꞰꝾ) : constructor).name) }
 			get actions ( ) {
 				const $actns = this[ʃActns]
-				if ( $actns ) return A͢($actns.call(this)).map(( { action, test } ) =>
+				if ( $actns ) return A͢($actns.call(this), ( { action, test } ) =>
 					new Ʞ3A (test, action))
 				else return [ ] }
-			get empty ( ) { return firstMethodOf.call(this, "toArray", this, ꞰꝾ[Ꝕ])()[Ɫ] == 0 }
-			get length ( ) { return firstMethodOf.call(this, "toArray", this, ꞰꝾ[Ꝕ])()[Ɫ] }
-			[Ʃ͢.iterator] ( ) { return firstMethodOf.call(this, "triples", this, ꞰꝾ[Ꝕ])() }
+			get empty ( ) { return A͢.ɫ(nº1MethodOf.call(this, "toArray", this, ꞰꝾ[Ꝕ])()) == 0 }
+			get length ( ) { return A͢.ɫ(nº1MethodOf.call(this, "toArray", this, ꞰꝾ[Ꝕ])()) }
+			[Ʃ͢.iterator] ( ) { return nº1MethodOf.call(this, "triples", this, ꞰꝾ[Ꝕ])() }
 			add ( triple ) {
 				const
 					$ad3 = this[ʃAd3]
@@ -1613,16 +1645,17 @@ export default (( ) => { // strict IIFE, though unnecessary
 				if ( $adActn == Ꝋ ) throw ꞆƐ͢(l10n`Kico: Graph actions not addable.`)
 				else {
 					$adActn.call(this, action)
-					if ( run ) firstMethodOf.call(this, "toArray", this, ꞰꝾ[Ꝕ])()
+					if ( run ) nº1MethodOf.call(this, "toArray", this, ꞰꝾ[Ꝕ])()
 						.forEach($3 => new Ʞ3A (action.test, action.action).run($3, this))
 					return this } }
 			addAll ( graph ) { // neednʼt actually be a graph
 				const
 					$2A = graph.toArray
 					, $3s = graph.triples
-				if ( $2A ) $2A.call(graph).forEach($3 => ꞰꝾ[Ꝕ].add.call(this, $3))
-				else if ( $3s ) for ( $3 of $3s.call(graph) ) { ꞰꝾ[Ꝕ].add.call(this, $3) }
-				else if ( Array.isArray(graph) ) for ( $3 of graph ) { ꞰꝾ[Ꝕ].add.call(this, $3) }
+				if ( $2A != Ꝋ ) $2A.call(graph).forEach($3 => ꞰꝾ[Ꝕ].add.call(this, $3))
+				else if ( $3s != Ꝋ ) for ( const $3 of $3s.call(graph) ) { ꞰꝾ[Ꝕ].add.call(this, $3) }
+				else if ( typeof graph[Ʃ͢.iterator] == "function" )
+					for ( const $3 of graph ) { ꞰꝾ[Ꝕ].add.call(this, $3) }
 				return this }
 			*agents ( ) {
 				const $rs = this[ʃRs]
@@ -1659,18 +1692,18 @@ export default (( ) => { // strict IIFE, though unnecessary
 				const $rs = this[ʃRs]
 				if ( $rs != Ꝋ ) for ( const r in $rs.call(this) ) { if ( r instanceof ꞰDOC ) yield r } }
 			every ( callback ) {
-				return firstMethodOf.call(this, "toArray", this, ꞰꝾ[Ꝕ])()
+				return nº1MethodOf.call(this, "toArray", this, ꞰꝾ[Ꝕ])()
 					.every($3 => new Ʞ3F (callback).test($3)) }
 			filter ( callback ) {
 				const
 					$actns = this[ʃActns]
-					, ꝿ = firstMethodOf.call(this, "toArray", this, ꞰꝾ[Ꝕ])().reduce(
+					, ꝿ = nº1MethodOf.call(this, "toArray", this, ꞰꝾ[Ꝕ])().reduce(
 						( ꝿ, $3 ) => new Ʞ3F (callback).test($3) ? ꞰꝾ[Ꝕ].add.call(ꝿ, $3) : ꝿ,
 						ꝯﬆʞ(ꞰꝾ, [ ], ꝯﬆʞr.call(this, ꞰꝾ)))
 				if ( $actns ) for ( const actn of $actns.call(this) ) { ꝿ.addAction(actn) }
 				return ꝿ }
 			forEach ( callback ) {
-				return firstMethodOf.call(this, "toArray", this, ꞰꝾ[Ꝕ])()
+				return nº1MethodOf.call(this, "toArray", this, ꞰꝾ[Ꝕ])()
 					.forEach($3 => (new Ʞ3C (callback)).run($3, this)) }
 			get ( subject ) {
 				const sbj = nSbj(subject)
@@ -1685,7 +1718,7 @@ export default (( ) => { // strict IIFE, though unnecessary
 					, lmt = limit >> 0
 					, ꝿ = ꝯﬆʞ(ꞰꝾ, [ ], ꝯﬆʞr.call(this, ꞰꝾ))
 				let ꝟcnt = 0
-				firstMethodOf.call(this, "toArray", this, ꞰꝾ[Ꝕ])().forEach($3 => {
+				nº1MethodOf.call(this, "toArray", this, ꞰꝾ[Ꝕ])().forEach($3 => {
 					if ( (subject === null || ꞰRDFN[Ꝕ].equals.call($3.subject, subject))
 						&& (predicate == null || ꞰRDFN[Ꝕ].equals.call($3.predicate, predicate))
 						&& (object == null || ꞰRDFN[Ꝕ].equals.call($3.object, object))
@@ -1721,14 +1754,23 @@ export default (( ) => { // strict IIFE, though unnecessary
 					else throw ꞆƐ͢(l10n`Kico: Subject does not match.`)
 					return this } }
 			some ( callback ) {
-				return firstMethodOf.call(this, "toArray", this, ꞰꝾ[Ꝕ])()
+				return nº1MethodOf.call(this, "toArray", this, ꞰꝾ[Ꝕ])()
 					.some($3 => (new Ʞ3F (callback)).test($3)) }
 			toArray ( ) {
 				const $rs = this[ʃRs]
-				if ( $rs != Ꝋ ) return A͢($rs.call(this)).reduce(( ꝵ, r ) => ꝵ.concat(A͢(r.triples())), [ ])
+				if ( $rs != Ꝋ ) return A͢($rs.call(this)).reduce(( ꝵ, r ) =>
+					ꝵ.concat(A͢(nº1MethodOf.call(r, "triples", r, ꞰR[Ꝕ])())), [ ])
 				else return [ ] }
+			toDOMNode ( document ) {
+				const
+					$rs = this[ʃRs]
+					, doc = document == Ꝋ ? KICO.defaultDocument : document
+				if ( $rs != Ꝋ ) return A͢($rs.call(this)).reduce(
+					( ꝵ, r ) => (ꝵ.appendChild(ꞰR[Ꝕ].toDOMNode.call(r, doc)), ꝵ),
+					doc.createDocumentFragment())
+				else return Ꝋ }
 			toNT ( ) {
-				return firstMethodOf.call(this, "toArray", this, ꞰꝾ[Ꝕ])()
+				return nº1MethodOf.call(this, "toArray", this, ꞰꝾ[Ꝕ])()
 					.map(Function[Ꝕ].call.bind(Ʞ3[Ꝕ].toNT))
 					.join("\n") }
 			toTurtle ( ) { return ꞰꝾ[Ꝕ].toNT.call(this) }
@@ -1743,7 +1785,7 @@ export default (( ) => { // strict IIFE, though unnecessary
 			*triples ( ) {
 				const $rs = this[ʃRs]
 				if ( $rs != Ꝋ ) for ( const r of $rs.call(this) ) { yield *r.triples() } }
-			valueOf ( ) { return new Set (firstMethodOf.call(this, "toArray", this, ꞰꝾ[Ꝕ])()
+			valueOf ( ) { return new Set (nº1MethodOf.call(this, "toArray", this, ꞰꝾ[Ꝕ])()
 				.map($3 => Ʞ3[Ꝕ].valueOf.call($3))) } }
 		, Ʞ3 = class Triple extends ꞰꝾ {
 			constructor ( subject, predicate, object ) {
@@ -1799,23 +1841,23 @@ export default (( ) => { // strict IIFE, though unnecessary
 					, p = this.predicate
 					, sbj = this.subject
 				return other != Ꝋ
-					&& firstMethodOf.call(sbj, "equals", sbj, getꞆ.call(sbj)[Ꝕ])(other.subject)
-					&& firstMethodOf.call(p, "equals", p, getꞆ.call(p)[Ꝕ])(other.predicate)
-					&& firstMethodOf.call(obj, "equals", obj, getꞆ.call(obj)[Ꝕ])(other.object) }
+					&& ꞰRDFN[Ꝕ].equals.call(sbj, other.subject)
+					&& ꞰRDFN[Ꝕ].equals.call(p, other.predicate)
+					&& ꞰRDFN[Ꝕ].equals.call(obj, other.object) }
 			toNT ( ) {
 				const
 					obj = this.object
 					, p = this.predicate
 					, sbj = this.subject
-				return `${ firstMethodOf.call(sbj, "toNT", sbj, getꞆ.call(sbj)[Ꝕ])() } ${ firstMethodOf.call(p, "toNT", p, getꞆ.call(p)[Ꝕ])() } ${ firstMethodOf.call(obj, "toNT", obj, getꞆ.call(obj)[Ꝕ])() } .` }
+				return `${ nº1MethodOf.call(sbj, "toNT", sbj, getꞆ.call(sbj)[Ꝕ])() } ${ nº1MethodOf.call(p, "toNT", p, getꞆ.call(p)[Ꝕ])() } ${ nº1MethodOf.call(obj, "toNT", obj, getꞆ.call(obj)[Ꝕ])() } .` }
 			toArray ( ) { return [ Ʞ3[Ꝕ].clone.call(this) ] }
-			toString ( ) { return S͢(firstMethodOf.call(this, "toNT", this, Ʞ3[Ꝕ])()) }
+			toString ( ) { return S͢(nº1MethodOf.call(this, "toNT", this, Ʞ3[Ꝕ])()) }
 			toTurtle ( ) {
 				const
 					obj = this.object
 					, p = this.predicate
 					, sbj = this.subject
-				return `${ firstMethodOf.call(sbj, "toTurtle", sbj, getꞆ.call(sbj)[Ꝕ])() } ${ firstMethodOf.call(p, "toTurtle", p, getꞆ.call(p)[Ꝕ])() } ${ firstMethodOf.call(obj, "toTurtle", obj, getꞆ.call(obj)[Ꝕ])() } .` }
+				return `${ nº1MethodOf.call(sbj, "toTurtle", sbj, getꞆ.call(sbj)[Ꝕ])() } ${ nº1MethodOf.call(p, "toTurtle", p, getꞆ.call(p)[Ꝕ])() } ${ nº1MethodOf.call(obj, "toTurtle", obj, getꞆ.call(obj)[Ꝕ])() } .` }
 			*triples ( ) { yield Ʞ3[Ꝕ].clone.call(this) }
 			valueOf ( ) {
 				const
@@ -1823,9 +1865,9 @@ export default (( ) => { // strict IIFE, though unnecessary
 					, p = this.predicate
 					, sbj = this.subject
 				return {
-					object: getꞆ.call(obj)[Ꝕ].valueOf.call(obj)
-					, predicate: getꞆ.call(p)[Ꝕ].valueOf.call(p)
-					, subject: getꞆ.call(sbj)[Ꝕ].valueOf.call(sbj) } } }
+					object: defaultMethodOf("valueOf", obj)()
+					, predicate: defaultMethodOf("valueOf", p)()
+					, subject: defaultMethodOf("valueOf", sbj)() } } }
 		, Ʞ3F = class TripleFilter { // cannot modify passed triple
 			constructor ( test ) {
 				const $tester = test.test
@@ -1833,7 +1875,7 @@ export default (( ) => { // strict IIFE, though unnecessary
 					!!($tester != Ꝋ ? $tester(Ʞ3[Ꝕ].clone.call(triple))
 						: test(Ʞ3[Ꝕ].clone.call(triple))) }) }
 			test ( triple ) {
-				const test = first𝒫Of.call(this, "test")
+				const test = nº1𝒫Of.call(this, "test")
 				return test == Ꝋ ? this(triple) : test.call(this, triple) } }
 		, Ʞ3C = class TripleCallback { // cannot modify passed triple, but can modify graph
 			constructor ( run ) {
@@ -1849,8 +1891,8 @@ export default (( ) => { // strict IIFE, though unnecessary
 				return $℘s(this, { action: { [ꝴ]: 1, [Ꝟ]: $action }, test: { [ꝴ]: 1, [Ꝟ]: $test } }) }
 			run ( triple, graph ) {
 				const { test, action } = this
-				if ( firstMethodOf.call(test, "test", test, Ʞ3F[Ꝕ])(triple) )
-					firstMethodOf.call(action, "run", action, Ʞ3C[Ꝕ])(triple, graph) } }
+				if ( nº1MethodOf.call(test, "test", test, Ʞ3F[Ꝕ])(triple) )
+					nº1MethodOf.call(action, "run", action, Ʞ3C[Ꝕ])(triple, graph) } }
 		, _nT = Function[Ꝕ].call.bind(ꞰT[Ꝕ].clone)
 		, _ꝯ = O͢.freeze(
 			{ as: ℹ`https://www.w3.org/ns/activitystreams#`
