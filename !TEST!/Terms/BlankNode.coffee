@@ -1,14 +1,19 @@
 { expect } = require "chai"
 { readFileSync, readdirSync } = require "fs"
 { cwd } = require "process"
+snapshot = require "snap-shot-it"
+{ DOMImplementation, XMLSerializer } = require "xmldom"
 
 describe "Terms", -> describe "BlankNode", ->
 	RDFNode = null
 	BlankNode = null
 	instances = { }
+	serializer = new XMLSerializer
 
 	before -> import("../../Kico.mjs").then ( { default: Kico } ) ->
 		{ RDFNode, BlankNode } = Kico
+		implementation = new DOMImplementation
+		Kico.defaultDocument = implementation.createDocument "http://www.w3.org/1999/xhtml", "html", implementation.createDocumentType "html", null, null
 		instances.instance = Object.create BlankNode::,
 			interfaceName: value: "BlankNode"
 			nominalValue: value: "1"
@@ -69,6 +74,10 @@ describe "Terms", -> describe "BlankNode", ->
 			expect instances.instance.value
 				.does.equal instances.instance.nominalValue
 
+		it "provides text", ->
+			expect instances.instance.text
+				.does.equal do instances.instance.toString
+
 		describe "clone()", ->
 
 			it "returns undefined for non-objects", ->
@@ -121,6 +130,12 @@ describe "Terms", -> describe "BlankNode", ->
 			it "can compare with native strings as an RDFNode", ->
 				expect RDFNode::equals.call instances.instance, String do instances.instance.valueOf
 					.is.true
+
+		describe "toDOMNode()", ->
+
+			it "generates a correct DOM node", ->
+				for own key, instance of instances
+					snapshot "blankNodes[\"#{ key }\"].toDOMNode()", serializer.serializeToString do instance.toDOMNode
 
 		describe "toNT()", ->
 

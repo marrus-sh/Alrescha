@@ -3,27 +3,34 @@
 		"name": "Ms Leaf Adventure",
 		"url": "https://go.KIBI.family/"
 	},
-	"bugs": "https://github.com/leaf-adventure/Kico/issues",
+	"bugs": "https://github.com/marrus-sh/Kico/issues",
+	"config": {
+		"snap-shot-it": {
+			"useRelativePath": true
+		}
+	},
 	"description": "🍂📖 KIBI Codices",
 	"devDependencies": {
 		"chai": "^4.2.0",
 		"coffeescript": "^2.3.2",
-		"mocha": "^5.2.0"
+		"mocha": "^5.2.0",
+		"snap-shot-it": "^7.9.2",
+		"xmldom": "^0.2.1"
 	},
 	"directories": {
-		"test": "./!TESTS!"
+		"test": "./!TEST!"
 	},
-	"homepage": "https://github.com/leaf-adventure/Kico#readme",
+	"homepage": "https://github.com/marrus-sh/Kico#readme",
 	"license": "Unlicense",
 	"main": "Kico.mjs",
 	"name": "kico",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/leaf-adventure/Kico.git"
+		"url": "git+https://github.com/marrus-sh/Kico.git"
 	},
 	"scripts": {
 		"test": "export NODE_NO_WARNINGS=1; mocha --require coffeescript/register './!TEST!/*/*.coffee'"
 	},
 	"type": "module",
-	"version": "0.1.1"
+	"version": "1.1.0-wip"
 }

@@ -1,15 +1,20 @@
 { expect } = require "chai"
 { readFileSync, readdirSync } = require "fs"
 { cwd } = require "process"
+snapshot = require "snap-shot-it"
+{ DOMImplementation, XMLSerializer } = require "xmldom"
 
-describe "Terms", -> describe "Resource", ->
+describe "Resources", -> describe "Resource", ->
 	RDFNode = null
 	Resource = null
 	Graph = null
 	pname = null
+	serializer = new XMLSerializer
 
 	before -> import("../../Kico.mjs").then ( { default: Kico } ) ->
 		{ RDFNode, Resource, Graph, pname } = Kico
+		implementation = new DOMImplementation
+		Kico.defaultDocument = implementation.createDocument "http://www.w3.org/1999/xhtml", "html", implementation.createDocumentType "html", null, null
 
 	describe "constructor", ->
 
@@ -62,6 +67,11 @@ describe "Terms", -> describe "Resource", ->
 				.does.equal instance.interfaceName
 			expect instance.value
 				.does.equal instance.nominalValue
+
+		it "provides text", ->
+			resource = new Resource "example:sbj"
+			expect resource.text
+				.does.equal do resource.toString
 
 		it "knows whether it is empty", ->
 			resource = new Resource "example:sbj"
@@ -549,6 +559,22 @@ describe "Terms", -> describe "Resource", ->
 				resource = new Resource "example:sbj"
 				expect resource.set "example:p", "a different object"
 					.does.equal resource
+
+		describe "toDOMNode()", ->
+
+			it "generates a correct DOM node", ->
+				resource = new Resource "example:sbj"
+				resource["example:p"] = "example object"
+				resource["example:p"] = "another example object"
+				resource["example:p2"] = "player two"
+				resource["example:collection"] = Object.defineProperties [
+					interfaceName: "Literal"
+					nominalValue: "Some value"
+					language: "en"
+				],
+					interfaceName: value: "BlankNode"
+					nominalValue: value: "collection"
+				snapshot "resource.toDOMNode()", serializer.serializeToString do resource.toDOMNode
 
 		describe "toNT()", ->
 

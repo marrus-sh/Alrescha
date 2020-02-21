@@ -1,6 +1,7 @@
 { expect } = require "chai"
 { readFileSync, readdirSync } = require "fs"
 { cwd } = require "process"
+{ DOMImplementation } = require "xmldom"
 
 describe "Terms", -> describe "RDFNode", ->
 	RDFNode = null
@@ -9,6 +10,8 @@ describe "Terms", -> describe "RDFNode", ->
 
 	before -> import("../../Kico.mjs").then ( { default: Kico } ) ->
 		{ RDFNode, pname } = Kico
+		implementation = new DOMImplementation
+		Kico.defaultDocument = implementation.createDocument "http://www.w3.org/1999/xhtml", "html", implementation.createDocumentType "html", null, null
 		instances.instance = Object.create RDFNode::,
 			interfaceName: value: "MyTerm"
 			nominalValue: value: "MyTerm value"
@@ -87,6 +90,10 @@ describe "Terms", -> describe "RDFNode", ->
 			expect instances.instance.value
 				.does.equal instances.instance.nominalValue
 
+		it "provides text", ->
+			expect instances.instance.text
+				.does.equal do instances.instance.toString
+
 		describe "clone()", ->
 
 			it "returns undefined for non-objects", ->
@@ -138,6 +145,26 @@ describe "Terms", -> describe "RDFNode", ->
 					for other in [ instances.l1, instances.l2, instances.l3 ]
 						expect literal.equals do other.clone
 							.equals literal is other
+
+		describe "toDOMNode()", ->
+
+			it "generates a DOM node when defined", ->
+				for n in [
+					instances.l1
+					instances.l2
+					instances.l3
+					instances.bN
+					instances.bNC
+					instances.nN
+				]
+					expect do n.toDOMNode
+						.does.have.property "nodeType"
+				for n in [
+					instances.instance
+					instances.instançe
+				]
+					expect do n.toDOMNode
+						.is.null
 
 		describe "toNT()", ->
 

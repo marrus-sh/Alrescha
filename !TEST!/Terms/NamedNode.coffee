@@ -1,14 +1,19 @@
 { expect } = require "chai"
 { readFileSync, readdirSync } = require "fs"
 { cwd } = require "process"
+snapshot = require "snap-shot-it"
+{ DOMImplementation, XMLSerializer } = require "xmldom"
 
 describe "Terms", -> describe "NamedNode", ->
 	RDFNode = null
 	NamedNode = null
 	instances = { }
+	serializer = new XMLSerializer
 
 	before -> import("../../Kico.mjs").then ( { default: Kico } ) ->
 		{ RDFNode, NamedNode } = Kico
+		implementation = new DOMImplementation
+		Kico.defaultDocument = implementation.createDocument "http://www.w3.org/1999/xhtml", "html", implementation.createDocumentType "html", null, null
 		instances.base = Object.create NamedNode::,
 			interfaceName: value: "NamedNode"
 			nominalValue: value: "https://example.com"
@@ -76,6 +81,10 @@ describe "Terms", -> describe "NamedNode", ->
 				.does.equal instances.base.interfaceName
 			expect instances.base.value
 				.does.equal instances.base.nominalValue
+
+		it "provides text", ->
+			expect instances.base.text
+				.does.equal do instances.base.toString
 
 		it "has URL properties", ->
 			url = new URL instances.hash
@@ -158,6 +167,12 @@ describe "Terms", -> describe "NamedNode", ->
 			it "correctly gets the id", ->
 				expect (do instances.hash.id)
 					.does.equal "hash"
+
+		describe "toDOMNode()", ->
+
+			it "generates a correct DOM node", ->
+				for own key, instance of instances
+					snapshot "namedNodes[\"#{ key }\"].toDOMNode()", serializer.serializeToString do instance.toDOMNode
 
 		describe "toNT()", ->
 

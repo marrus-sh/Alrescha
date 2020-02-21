@@ -158,6 +158,7 @@ export default (( ) => { // strict IIFE, though unnecessary
 				if ( elt == Ꝋ ) continue
 				else if ( typeof elt == "string" ) fm̃t.appendChild(this.createTextNode(elt))
 				else if ( elt.ownerDocument == this ) fm̃t.appendChild(elt)
+				else if ( elt.nodeName != Ꝋ ) fm̃t.appendChild(this.importNode(elt, true))
 				else {
 					const { attributes, content, handler, localName, namespaceURI } = elt
 					if ( localName ) {
@@ -167,10 +168,15 @@ export default (( ) => { // strict IIFE, though unnecessary
 								: namespaceURI, localName))
 						if ( attributes != Ꝋ ) Object
 							.keys(attributes)
-							.forEach(attr => elt.setAttribute(attr, attributes[attr]))
+							.forEach(attr => {
+								const $Ꝟ = attributes[attr]
+								if ( $Ꝟ !== Ꝋ ) elt.setAttribute(attr, attributes[attr]) })
 						if ( content != Ꝋ )
-							elt.appendChild(content instanceof Node ? content
-								: typeof content == "object" ? htm4ÐˢDoc.call(this, content)
+							elt.appendChild(content.nodeName != Ꝋ ? content
+								: Array.isArray(content)
+								? htm4ÐˢDoc.call(this, new Array (content.length), ...content)
+								: typeof content == "object"
+								? htm4ÐˢDoc.call(this, [ , ], content)
 								: this.createTextNode(content))
 						if ( typeof handler == "function" ) handler.call(element) } } }
 			return fm̃t }
@@ -664,8 +670,7 @@ export default (( ) => { // strict IIFE, though unnecessary
 						else {
 							const objs = new ꞰTS ([ existing, provided ])
 							Map[Ꝕ].set.call(this, predicate, objs.size > 1 ? objs
-								: objs.values().next()[Ꝟ]) }
-					else console.log(object) }
+								: objs.values().next()[Ꝟ]) } }
 				return this }
 			clear ( predicate ) {
 				if ( !O͢.isExtensible(this) )
@@ -963,6 +968,7 @@ export default (( ) => { // strict IIFE, though unnecessary
 				return $℘s(ꝯﬆʞ(ꞰT, [ interfaceName ], new.target), {
 					interfaceName: { get: dſ𝒫(ꞰRDFN[Ꝕ], "interfaceName").get }
 					, nominalValue: { [Ꝯ]: 1, [Ꝟ]: null }
+					, text: { get: dſ𝒫(ꞰRDFN[Ꝕ], "text").get }
 					, [Ꝟ]: { [Ꝯ]: 0, get: dſ𝒫(ꞰRDFN[Ꝕ], Ꝟ).get } }) }
 			static [Ʃ͢.hasInstance] ( instance ) {
 				return [ ꞰBN, ꞰL, ꞰÑN ].some(Ꞇ => hasꞆ.call(instance, Ꞇ)) }
@@ -976,6 +982,9 @@ export default (( ) => { // strict IIFE, though unnecessary
 			get termType ( ) {
 				const tꞆ = first𝒫Of.call(this, "termType", "interfaceName")
 				return tꞆ == Ꝋ ? "" : S͢(tꞆ) }
+			get text ( ) {
+				return hasꞆ.call(this, ꞰL) ? dſ𝒫(ꞰL[Ꝕ], "text").get.call(this)
+					: ꞰRDFN[Ꝕ].toString.call(this) }
 			get value ( ) {
 				const ñꝞ = first𝒫Of.call(this, Ꝟ, "nominalValue")
 				return ñꝞ == Ꝋ ? "" : S͢(ñꝞ) }
@@ -985,8 +994,8 @@ export default (( ) => { // strict IIFE, though unnecessary
 				else if ( hasꞆ.call(this, ꞰL) ) return ꞰL[Ꝕ].clone.call(this)
 				else if ( hasꞆ.call(this, ꞰÑN) ) return ꞰÑN[Ꝕ].clone.call(this)
 				else if ( hasꞆ.call(this, ꞰBN) )
-					if ( Array.isArray(this) ) return ꞰBNC[Ꝕ].clone.call(this)
-					else return ꞰBN[Ꝕ].clone.call(this)
+					return Array.isArray(this) ? ꞰBNC[Ꝕ].clone.call(this)
+						: ꞰBN[Ꝕ].clone.call(this)
 				else {
 					const
 						$ñꝞ𝒫 = dſ𝒫(this, "nominalValue")
@@ -1007,6 +1016,13 @@ export default (( ) => { // strict IIFE, though unnecessary
 					=== get𝒫.call(toCompare, "nominalValue", ꞰRDFN)
 					&& (!hasꞆ.call(this, ꞰL) || ꞰL[Ꝕ].equals.call(this, toCompare))
 					: toCompare === ꞰRDFN[Ꝕ].valueOf.call(this) }
+			toDOMNode ( document ) {
+				return hasꞆ.call(this, ꞰÑN) ? ꞰÑN[Ꝕ].toDOMNode.call(this, document)
+					: hasꞆ.call(this, ꞰL) ? ꞰL[Ꝕ].toDOMNode.call(this, document)
+					: hasꞆ.call(this, ꞰBN) ?
+						 Array.isArray(this) ? ꞰBNC[Ꝕ].toDOMNode.call(this, document)
+						 : ꞰBN[Ꝕ].toDOMNode.call(this, document)
+					: null }
 			toNT ( ) {
 				return hasꞆ.call(this, ꞰÑN) ? ꞰÑN[Ꝕ].toNT.call(this)
 					: hasꞆ.call(this, ꞰL) ? ꞰL[Ꝕ].toNT.call(this)
@@ -1020,8 +1036,8 @@ export default (( ) => { // strict IIFE, though unnecessary
 					: hasꞆ.call(this, ꞰL) ? ꞰL[Ꝕ].toTurtle.call(this)
 					: hasꞆ.call(this, ꞰBN) ? ꞰBN[Ꝕ].toTurtle.call(this)
 					: null }
-			valueOf ( ) {
-				return hasꞆ.call(this, ꞰL) ? ꞰL[Ꝕ].valueOf.call(this)
+			valueOf ( document ) {
+				return hasꞆ.call(this, ꞰL) ? ꞰL[Ꝕ].valueOf.call(this, document)
 					: get𝒫.call(this, "nominalValue", ꞰRDFN) } }
 		, ꞰÑN = Reflect.ownKeys(WHATWGꞏURL[Ꝕ]).reduce((ꝵ, $) => { // Node.js needs symbols
 			if ( ꝵ[Ꝕ][$] == Ꝋ ) { // check whole prototype chain
@@ -1045,6 +1061,7 @@ export default (( ) => { // strict IIFE, though unnecessary
 					{ interfaceName: { [Ꝟ]: "NamedNode" }
 					, nominalValue: { [Ꝯ]: 0, [Ꝟ]: $ℹ }
 					, termType: { [Ꝟ]: "NamedNode" }
+					, text: { get: dſ𝒫(ꞰRDFN[Ꝕ], "text").get }
 					, Ꝟ: { get: dſ𝒫(ꞰRDFN[Ꝕ], Ꝟ).get } }) }
 			static [Ʃ͢.hasInstance] ( instance ) { return hasꞆ.call(instance, ꞰÑN) }
 			clone ( ) {
@@ -1074,6 +1091,13 @@ export default (( ) => { // strict IIFE, though unnecessary
 					ñꝞ = get𝒫.call(this, "value", ꞰRDFN)
 					, _ndx = ñꝞ.indexOf("#")
 				return _ndx != -1 ? ñꝞ[ẞ](_ndx + 1) : null }
+			toDOMNode ( document ) {
+				const ñꝞ = get𝒫.call(this, "nominalValue", ꞰRDFN)
+				return htm4ÐˢDoc.bind(
+					document == Ꝋ ? KICO.defaultDocument : document)`${
+					{ localName: "a"
+					, attributes: { href: ñꝞ }
+					, content: ñꝞ } }` }
 			toNT ( ) {
 				return `<${ S͢[Ꝕ].replace.call(
 					get𝒫.call(this, "nominalValue", ꞰRDFN),
@@ -1094,6 +1118,13 @@ export default (( ) => { // strict IIFE, though unnecessary
 				return ꞰT[Ꝕ].equals.call(this, other)
 					&& get𝒫.call(this, "value", ꞰRDFN)
 					=== get𝒫.call(other, "value", ꞰRDFN) }
+			toDOMNode ( document ) {
+				const bn = `_:${ get𝒫.call(this, "nominalValue", ꞰRDFN) }`
+				return htm4ÐˢDoc.bind(
+					document == Ꝋ ? KICO.defaultDocument : document)`${
+					{ localName: "span"
+					, attributes: { resource: bn }
+					, content: bn } }` }
 			toNT ( ) { return `_:${ get𝒫.call(this, "nominalValue", ꞰRDFN) }` }
 			toTurtle ( ) { return ꞰBN[Ꝕ].toNT.call(this) } }
 		, ꞰBNC = class BlankNode extends ꞰBN { // Anonymous collection
@@ -1107,6 +1138,7 @@ export default (( ) => { // strict IIFE, though unnecessary
 						, interfaceName: { [Ꝟ]: "BlankNode" }
 						, nominalValue: { [Ꝟ]: S͢(bid) }
 						, termType: { [Ꝟ]: "BlankNode" }
+						, text: { get: dſ𝒫(ꞰRDFN[Ꝕ], "text").get }
 						, [Ꝟ]: { get: dſ𝒫(ꞰRDFN[Ꝕ], Ꝟ).get } }) } }
 			static [Ʃ͢.hasInstance] ( instance ) {
 				return hasꞆ.call(instance, ꞰBN) && Array.isArray(instance) }
@@ -1141,6 +1173,38 @@ export default (( ) => { // strict IIFE, though unnecessary
 						yield new Ʞ3 (ꝟcur, __PN`rdf:rest`, cdr)
 						ꝟcur = cdr }
 					else yield new Ʞ3 (ꝟcur, __PN`rdf:rest`, __PN`rdf:nil`) } }
+			toDOMNode ( document ) {
+				const
+					doc = document == Ꝋ ? KICO.defaultDocument : document
+					, ñꝞ = get𝒫.call(this, "nominalValue", ꞰRDFN)
+				return htm4ÐˢDoc.bind(doc)`${ A͢[Ꝕ].reduceRight.call(this,
+					( cdr, car, ndx ) => {
+						const
+							$lɁ = hasꞆ.call(car, ꞰL)
+							, ɫᵹ = $lɁ ? get𝒫.call(car, "language", ꞰL) : Ꝋ
+							, ꝺꞆ = $lɁ && (typeof ɫᵹ != "string" || ɫᵹ == "")
+								? S͢(get𝒫.call(car, "datatype", ꞰL))
+								: Ꝋ
+						return (
+							{ localName: "ol"
+							, attributes: { resource: ndx > 0 ? `_:${ ñꝞ }.c${
+								new Array (ndx).fill("d").join("") }r` : `_:${ ñꝞ }` }
+							, content:
+								[
+									{ localName: "li"
+									, attributes:
+										{ [$lɁ ? "property" : "rel"]: __PNS`rdf:first`
+										, lang: typeof ɫᵹ == "string" ? ɫᵹ : Ꝋ
+										, datatype: ꝺꞆ != Ꝋ ?
+											[ __PNS`rdf:HTML`
+											, __PNS`rdf:XMLLiteral` ].indexOf(ꝺꞆ) >= 0
+											? __PNS`rdf:XMLLiteral` : ꝺꞆ : Ꝋ }
+									, content: ꞰRDFN[Ꝕ].toDOMNode.call(car, doc) }
+								,
+									{ localName: "li"
+									, attributes: { rel: __PNS`rdf:rest` }
+									, content: cdr } ] }) },
+					__PN`rdf:nil`.toDOMNode(doc)) }` }
 			toNT ( ) { return ꞰBN[Ꝕ].toNT.call(this) }
 			toString ( ) { return ꞰBN[Ꝕ].toString.call(this) }
 			toTurtle ( ) { return ꞰBN[Ꝕ].toTurtle.call(this) }
@@ -1172,33 +1236,42 @@ export default (( ) => { // strict IIFE, though unnecessary
 				const
 					$ꝺꞆ𝒫 = dſ𝒫(this, "datatype")
 					, ꝺꞆ = $ꝺꞆ𝒫 == Ꝋ ? __PN`xsd:string` : $ꝺꞆ𝒫[Ꝟ]
-					, ɫᵹ = this.language
+					, ɫᵹ = get𝒫.call(this, "language", ꞰL)
 				return typeof ɫᵹ == "string" && ɫᵹ != "" ? __PN`rdf:langString`
 					: ꝺꞆ == Ꝋ ? __PN`xsd:string` : new ꞰÑN (ꝺꞆ) }
 			get language ( ) {
 				const $ɫᵹ𝒫 = dſ𝒫(this, "language")
 					, ɫᵹ = $ɫᵹ𝒫 == Ꝋ ? "" : $ɫᵹ𝒫[Ꝟ]
 				return typeof ɫᵹ == "string" ? ɫᵹ : "" }
+			get text ( ) { return ꞰL[Ꝕ][Ʃ͢.toPrimitive].call(this, "string") }
 			[Ʃ͢.toPrimitive] ( hint ) { // get native primitive type
 				const
 					ñꝞ = get𝒫.call(this, "nominalValue", ꞰRDFN)
-					, ꝺꞆ = get𝒫.call(this, "datatype", ꞰL)
+					, ꝺꞆ = S͢(get𝒫.call(this, "datatype", ꞰL))
 					, usedHint = ["number", "string"].indexOf(hint) < 0 ? "default" : hint
-				return ["number", "default"].indexOf(usedHint) >= 0
-					? [ __PNS`xsd:decimal`
-					, __PNS`xsd:integer`
-					, __PNS`xsd:long`
-					, __PNS`xsd:int`
-					, __PNS`xsd:short`
-					, __PNS`xsd:byte`
-					, __PNS`xsd:nonNegativeInteger`
-					, __PNS`xsd:positiveInteger`
-					, __PNS`xsd:unsignedLong`
-					, __PNS`xsd:unsignedInt`
-					, __PNS`xsd:unsignedShort`
-					, __PNS`xsd:unsignedByte`
-					, __PNS`xsd:nonPositiveInteger`
-					, __PNS`xsd:negativeInteger` ].indexOf(S͢(ꝺꞆ)) >= 0
+				if (
+					[ __PNS`rdf:HTML`
+					, __PNS`rdf:XMLLiteral` ].indexOf(ꝺꞆ) >= 0 ) {
+					const $Ꝟ = ꞰL[Ꝕ].valueOf.call(this)
+					if ( $Ꝟ != Ꝋ ) {
+						const txt = $Ꝟ.textContent
+						return txt == Ꝋ ? ñꝞ : txt } }
+				else return ["number", "default"].indexOf(usedHint) >= 0
+					?
+						[ __PNS`xsd:decimal`
+						, __PNS`xsd:integer`
+						, __PNS`xsd:long`
+						, __PNS`xsd:int`
+						, __PNS`xsd:short`
+						, __PNS`xsd:byte`
+						, __PNS`xsd:nonNegativeInteger`
+						, __PNS`xsd:positiveInteger`
+						, __PNS`xsd:unsignedLong`
+						, __PNS`xsd:unsignedInt`
+						, __PNS`xsd:unsignedShort`
+						, __PNS`xsd:unsignedByte`
+						, __PNS`xsd:nonPositiveInteger`
+						, __PNS`xsd:negativeInteger` ].indexOf(ꝺꞆ) >= 0
 						? +ñꝞ
 						: ꝺꞆ == __PNS`xsd:float` || ꝺꞆ == __PNS`xsd:double`
 						? ñꝞ == "+INF" || ñꝞ == "INF"
@@ -1206,8 +1279,9 @@ export default (( ) => { // strict IIFE, though unnecessary
 							: ñꝞ == "-INF"
 							? -Infinity
 							: +ñꝞ
-						: usedHint == "default" && ꝺꞆ == __PNS`xsd:boolean`
-						? !(ñꝞ == "false" || ñꝞ == "0")
+						: ꝺꞆ == __PNS`xsd:boolean` ? usedHint == "default"
+							? !(ñꝞ == "false" || ñꝞ == "0")
+							: +!(ñꝞ == "false" || ñꝞ == "0")
 						: ñꝞ
 					: ñꝞ }
 			clone ( ) {
@@ -1223,6 +1297,12 @@ export default (( ) => { // strict IIFE, though unnecessary
 					&& get𝒫.call(this, "language", ꞰL)
 					=== get𝒫.call(other, "language", ꞰL)
 					&& getꞆ.call(ꝺꞆ)[Ꝕ].equals.call(ꝺꞆ, get𝒫.call(other, "datatype", ꞰL)) }
+			toDOMNode ( document ) {
+				const
+					$Ꝟ = ꞰL[Ꝕ].valueOf.call(this)
+					, doc = document == Ꝋ ? KICO.defaultDocument : document
+				return $Ꝟ != Ꝋ && $Ꝟ.nodeType != Ꝋ ? doc.importNode($Ꝟ, true)
+					: doc.createTextNode(get𝒫.call(this, "nominalValue", ꞰRDFN)) }
 			toNT ( ) {
 				const
 					ñꝞ = get𝒫.call(this, "nominalValue", ꞰRDFN)
@@ -1248,10 +1328,10 @@ export default (( ) => { // strict IIFE, though unnecessary
 					: ꝺꞆ == __PNS`xsd:boolean`
 					? ñꝞ == "true" || ñꝞ == "1" ? "true" : "false"
 					: ꞰL[Ꝕ].toNT.call(this) }
-			valueOf ( doc ) { // get native type
+			valueOf ( ) { // get native type
 				const
 					ñꝞ = get𝒫.call(this, "nominalValue", ꞰRDFN)
-					, ꝺꞆ = get𝒫.call(this, "datatype", ꞰL)
+					, ꝺꞆ = S͢(get𝒫.call(this, "datatype", ꞰL))
 				if ( ꝺꞆ == __PNS`xsd:anyURI` )
 					return new WHATWGꞏURL (ñꝞ)
 				else if ( ꝺꞆ == __PNS`xsd:base64Binary` )
@@ -1259,17 +1339,34 @@ export default (( ) => { // strict IIFE, though unnecessary
 				else if ( ꝺꞆ == __PNS`xsd:hexBinary` )
 					return Uint8Array.from(ñꝞ.split(/(?=(?:[^]{2})*$)/),
 						pair => parseInt(pair, 16)).buffer
-				// TK: XML and HTML literals
 				else if ( ꝺꞆ == __PNS`rdf:XMLLiteral` )
 					try {
-						const _document = doc == Ꝋ ? document : doc
-						}
-					catch ( ɛ ) { return ꞰL[Ꝕ][Ʃ͢.toPrimitive].call(this, "default") }
+						const
+							$DOMParser = typeof DOMParser == "undefined"
+								? KICO.DOMParser
+								: DOMParser
+							, doc = (new $DOMParser).parseFromString(
+								`<ROOT>${ ñꝞ }</ROOT>`,
+								"application/xml")
+						return A͢[Ꝕ].reduceRight.call(
+							doc.documentElement.childNodes,
+							( ꝵ, ĩ ) => (ꝵ.insertBefore(ĩ, ꝵ.firstChild), ꝵ),
+							doc.createDocumentFragment()) }
+					catch ( ɛ ) { return ñꝞ }
 				else if ( ꝺꞆ == __PNS`rdf:HTML` )
 					try {
-						const _document = doc == Ꝋ ? document : doc
-						}
-					catch ( ɛ ) { return ꞰL[Ꝕ][Ʃ͢.toPrimitive].call(this, "default") }
+						const
+							$DOMParser = typeof DOMParser == "undefined"
+								? KICO.DOMParser
+								: DOMParser
+							, doc = (new $DOMParser).parseFromString(
+								`<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml"><head></head><body><div>${ ñꝞ }</div></body></html>`,
+								"text/html")
+						return A͢[Ꝕ].reduceRight.call(
+							doc.documentElement.lastChild.firstChild.childNodes,
+							( ꝵ, ĩ ) => (ꝵ.insertBefore(ĩ, ꝵ.firstChild), ꝵ),
+							doc.createDocumentFragment()) }
+					catch ( ɛ ) { return ñꝞ }
 				// TK: Dates
 				else return ꞰL[Ꝕ][Ʃ͢.toPrimitive].call(this, "default") } }
 		, ꞰR = class Resource extends ꞰRDFN { // subject node with predicate+object pairs
@@ -1277,15 +1374,17 @@ export default (( ) => { // strict IIFE, though unnecessary
 				/*
 				The object produced by this constructor will always have Resource.prototype as its prototype, regardless of how the constructor is called. This is because the prototypes of Resources are determined dynamically by the Resource Proxy.
 				*/
-				const pM = new ꞰPM
-				return new Proxy($℘s($℘(nSbj(subject), "constructor",
+				const
+					pM = new ꞰPM
+					, ðˢ = new Proxy($℘s($℘(nSbj(subject), "constructor",
 						{ [Ꝟ]: { [Ʃ͢.species]: ꞰR } }).clone(), // always use ꞰR as the species
-					{ clear: { [Ꝟ]: ꞰPM[Ꝕ].clearAll.bind(pM) } // optimization
-					, empty: { get: dſ𝒫(ꞰR[Ꝕ], "empty").get }
-					, graph: { get: dſ𝒫(ꞰR[Ꝕ], "graph").get }
-					, predicates: { [Ꝟ]: ꞰPM[Ꝕ].keys.bind(pM) } // optimization
-					, remove: { [Ꝟ]: ꞰPM[Ꝕ].delete.bind(pM) } }), // optimization
-					new ꞰRPX (Ꝋ, pM)) }
+						{ clear: { [Ꝟ]: ꞰPM[Ꝕ].clearAll.bind(pM) } // optimization
+						, empty: { get: dſ𝒫(ꞰR[Ꝕ], "empty").get }
+						, graph: { get: dſ𝒫(ꞰR[Ꝕ], "graph").get }
+						, predicates: { [Ꝟ]: ꞰPM[Ꝕ].keys.bind(pM) } // optimization
+						, remove: { [Ꝟ]: ꞰPM[Ꝕ].delete.bind(pM) } }), // optimization
+						new ꞰRPX (Ꝋ, pM))
+				return $℘(ðˢ, "data", { [Ꝟ]: new ꞰRꝹ (ðˢ) }) }
 			static get [Ʃ͢.species] ( ) { return Ꝋ } // only clone as Resource when default
 			static [Ʃ͢.hasInstance] ( instance ) {
 				return Function.prototype[Ʃ͢.hasInstance].call(this, instance) }
@@ -1373,6 +1472,42 @@ export default (( ) => { // strict IIFE, though unnecessary
 					else return false }
 				else return false }
 			set ( predicate, object ) { return $℘(this, predicate, { [Ꝟ]: object }) }
+			toDOMNode ( document ) {
+				const
+					doc = document == Ꝋ ? KICO.defaultDocument : document
+				return htm4ÐˢDoc.bind(doc)`${
+					{ localName: "details"
+					, attributes: { resource: S͢(this) }
+					, content:
+						[
+							{ localName: "summary"
+							, content: ꞰRDFN[Ꝕ].toDOMNode.call(this, doc) }
+						, { localName: "dl", content: A͢(this.predicates()).reduce(
+							( ꝵ, p ) => {
+								const $obj = this[p]
+								return ꝵ.concat([
+									{ localName: "dt"
+									, content: ꞰRDFN[Ꝕ].toDOMNode.call(p, doc) } ],
+									($obj instanceof Set ? A͢($obj) : [ $obj ]).map(obj => {
+										const
+											$lɁ = hasꞆ.call(obj, ꞰL)
+											, ɫᵹ = $lɁ ? get𝒫.call(obj, "language", ꞰL) : Ꝋ
+											, ꝺꞆ = $lɁ && (typeof ɫᵹ != "string" || ɫᵹ == "")
+												? S͢(get𝒫.call(obj, "datatype", ꞰL))
+												: Ꝋ
+										return (
+											{ localName: "dd"
+											, attributes:
+												{ [$lɁ ? "property" : "rel"]: p
+												, lang: typeof ɫᵹ == "string" ? ɫᵹ : Ꝋ
+												, datatype: ꝺꞆ != Ꝋ ?
+													[ __PNS`rdf:HTML`
+													, __PNS`rdf:XMLLiteral` ]
+													.indexOf(ꝺꞆ) >= 0
+													? __PNS`rdf:XMLLiteral` : ꝺꞆ : Ꝋ }
+											, content:
+												ꞰRDFN[Ꝕ].toDOMNode.call(obj, doc) }) })) },
+							[ ]) } ] } }` }
 			*triples ( ) {
 				for ( const $p of firstMethodOf.call(this, "predicates", this, ꞰR[Ꝕ])() ) {
 					const $obj = this[$p]
@@ -1387,13 +1522,13 @@ export default (( ) => { // strict IIFE, though unnecessary
 							yield *ꞰBNC[Ꝕ].triples.call($obj)
 							yield new Ʞ3 (this, $p, new ꞰBN ($obj)) }
 						else yield new Ʞ3 (this, $p, $obj) } } }
-			valueOf ( ) {
+			valueOf ( document ) {
 				return new Map (A͢(firstMethodOf.call(this, "predicates", this, ꞰR[Ꝕ])())
 					.map(p => {
 						const obj = this[p]
 						return (
-							[ getꞆ.call(p)[Ꝕ].valueOf.call(p)
-							, getꞆ.call(obj)[Ꝕ].valueOf.call(obj) ]) })) } }
+							[ getꞆ.call(p)[Ꝕ].valueOf.call(p, document)
+							, getꞆ.call(obj)[Ꝕ].valueOf.call(obj, document) ]) })) } }
 		, ꞰL̃R = class LinkedResource extends $℘(ꞰR, $ϕ, { [Ꝟ]: ꞰR }) {
 			constructor ( graph, subject, rM ) {
 				/*
@@ -1412,7 +1547,7 @@ export default (( ) => { // strict IIFE, though unnecessary
 						, predicates: { [Ꝟ]: ꞰPM[Ꝕ].keys.bind($pM) } }), // optimization
 						rPx)
 				$℘(rPx, "revoke", { [Ꝯ]: 0, [Ꝟ]: revoke })
-				return proxy } }
+				return $℘(proxy, "data", { [Ꝟ]: new ꞰRꝹ (proxy) }) } }
 		, ꞰCAT = class Category extends ꞰL̃R { }
 		, ꞰCX = class Codex extends ꞰL̃R { }
 		, ꞰDOC = class Document extends ꞰL̃R { }
@@ -1421,10 +1556,19 @@ export default (( ) => { // strict IIFE, though unnecessary
 		, ꞰRꝹ = class ResourceData {
 			constructor ( resource ) {
 				return $℘s(this, {
-					resource: { [Ꝟ]: actns.bind($actns) }
-				})
-			}
-		}
+					resource: { [Ꝟ]: resource }
+					, textDescription: { get: dſ𝒫(ꞰRꝹ[Ꝕ], "textDescription").get }
+					, textLabel: { get: dſ𝒫(ꞰRꝹ[Ꝕ], "textLabel").get }
+					, textValue: { get: dſ𝒫(ꞰRꝹ[Ꝕ], "textDescription").get } }) }
+			get textDescription ( ) { }
+			get textLabel ( ) { }
+			get textValue ( ) { }
+			createDescription ( ) { }
+			createLabel ( ) { }
+			createValue ( ) { }
+			toDescriptionString ( ) { }
+			toString ( ) { }
+			valueOf ( ) { } }
 		, ꞰꝾ = class Graph {
 			constructor ( actions ) {
 				const
@@ -1647,7 +1791,7 @@ export default (( ) => { // strict IIFE, though unnecessary
 								[ $3.subject, $3.predicate, $3.object ],
 								ꝯﬆʞr.call(this, Ʞ3)) } }
 					else return ꝯﬆʞ(Ʞ3,
-						[ this.subject, this.predicate, this.object ],
+						[ subject, predicate, object ],
 						ꝯﬆʞr.call(this, Ʞ3)) } }
 			equals ( other ) {
 				const
@@ -1788,7 +1932,9 @@ export default (( ) => { // strict IIFE, though unnecessary
 		, TripleFilter: { [Ꝯ]: 1, [Ꝟ]: phony(Ʞ3F) }
 		, baseURI: { [Ꝯ]: 1, [ꝴ]: 1, [Ꝟ]: null, [ꝶ]: 1 }
 		, context: { [Ꝯ]: 1, [ꝴ]: 1, [Ꝟ]: _ꝯ }
-		, createGraph: {  [Ꝯ]: 1, [Ꝟ]: ( ) => new ꞰꝾ }
+		, createGraph: { [Ꝯ]: 1, [Ꝟ]: ( ) => new ꞰꝾ }
+		, defaultDocument:
+			{ [Ꝯ]: 1, [ꝴ]: 1, [Ꝟ]: typeof document == "undefined" ? Ꝋ : document, [ꝶ]: 1 }
 		, l10n: { [Ꝯ]: 1, [Ꝟ]: l10n }
 		, pname: { [Ꝯ]: 1, [Ꝟ]: pxÑ }
 		, strings: { [Ꝯ]: 1, [Ꝟ]:

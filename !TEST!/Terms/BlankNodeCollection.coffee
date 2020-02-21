@@ -1,6 +1,8 @@
 { expect } = require "chai"
 { readFileSync, readdirSync } = require "fs"
 { cwd } = require "process"
+snapshot = require "snap-shot-it"
+{ DOMImplementation, XMLSerializer } = require "xmldom"
 
 describe "Terms", -> describe "BlankNodeCollection", ->
 	RDFNode = null
@@ -8,9 +10,12 @@ describe "Terms", -> describe "BlankNodeCollection", ->
 	Graph = null
 	pname = null
 	instances = { }
+	serializer = new XMLSerializer
 
 	before -> import("../../Kico.mjs").then ( { default: Kico } ) ->
 		{ RDFNode, BlankNodeCollection, Graph, pname } = Kico
+		implementation = new DOMImplementation
+		Kico.defaultDocument = implementation.createDocument "http://www.w3.org/1999/xhtml", "html", implementation.createDocumentType "html", null, null
 		instances.not = Object.create BlankNodeCollection::,
 			interfaceName: value: "BlankNode"
 			nominalValue: value: "1"
@@ -33,10 +38,10 @@ describe "Terms", -> describe "BlankNodeCollection", ->
 			nominalValue: "Some value"
 		], BlankNodeCollection),
 			interfaceName: value: "BlankNode"
-			nominalValue: value: "other collection"
+			nominalValue: value: "othercollection"
 		instances.empty = Object.defineProperties (Reflect.construct Array, [ ], BlankNodeCollection),
 			interfaceName: value: "BlankNode"
-			nominalValue: value: "other collection"
+			nominalValue: value: "othercollection"
 
 	describe "constructor", ->
 
@@ -83,6 +88,10 @@ describe "Terms", -> describe "BlankNodeCollection", ->
 				.does.equal instances.collection.interfaceName
 			expect instances.collection.value
 				.does.equal instances.collection.nominalValue
+
+		it "provides text", ->
+			expect instances.collection.text
+				.does.equal do instances.collection.toString
 
 		it "produces a graph", ->
 			graph = instances.collection.graph
@@ -171,6 +180,12 @@ describe "Terms", -> describe "BlankNodeCollection", ->
 			it "cannot compare with native strings as an RDFNode", ->
 				expect RDFNode::equals.call instances.collection, String do instances.collection.valueOf
 					.is.false
+
+		describe "toDOMNode()", ->
+
+			it "generates a correct DOM node", ->
+				for own key, instance of instances
+					snapshot "blankNodeCollections[\"#{ key }\"].toDOMNode()", serializer.serializeToString do instance.toDOMNode
 
 		describe "toNT()", ->
 
