@@ -7,7 +7,7 @@ describe "Graphs", -> describe "Triple", ->
 	Triple = null
 	instances = { }
 
-	before -> import("../../Kico.mjs").then ( { default: Kico } ) ->
+	before -> import("../../index.mjs").then ( { default: Kico } ) ->
 		{ Term, Triple } = Kico
 		instances.triple = Object.create Triple::,
 			subject: value:

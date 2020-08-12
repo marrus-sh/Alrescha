@@ -13,7 +13,7 @@ describe "Graphs", -> describe "Graph", ->
 	pname = null
 
 	before ->
-		import("../../Kico.mjs").then ( { default: Kico } ) ->
+		import("../../index.mjs").then ( { default: Kico } ) ->
 			{ Graph, GraphView, RDFNode, Resource, TripleAction, createGraph, pname } = Kico
 		import("../isomorphic.mjs").then ( { default: isoƒ } ) ->
 			isomorphic = isoƒ

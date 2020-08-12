@@ -10,7 +10,7 @@ describe "Terms", -> describe "BlankNode", ->
 	instances = { }
 	serializer = new XMLSerializer
 
-	before -> import("../../Kico.mjs").then ( { default: Kico } ) ->
+	before -> import("../../index.mjs").then ( { default: Kico } ) ->
 		{ RDFNode, BlankNode } = Kico
 		implementation = new DOMImplementation
 		Kico.defaultDocument = implementation.createDocument "http://www.w3.org/1999/xhtml", "html", implementation.createDocumentType "html", null, null

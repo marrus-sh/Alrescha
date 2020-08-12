@@ -10,7 +10,7 @@ describe "Helpers", -> describe "l10n", ->
 		SWAP: "$2 $1"
 		TRUE: "V A L U E"
 
-	before -> import("../../Kico.mjs").then ( { default: Kico } ) ->
+	before -> import("../../index.mjs").then ( { default: Kico } ) ->
 		{ l10n, strings } = Kico
 
 	it "is a function", ->

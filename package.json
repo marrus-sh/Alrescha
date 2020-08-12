@@ -22,7 +22,7 @@
 	},
 	"homepage": "https://github.com/marrus-sh/Alrescha#readme",
 	"license": "Unlicense",
-	"main": "Kico.mjs",
+	"main": "index.mjs",
 	"name": "alrescha",
 	"repository": {
 		"type": "git",

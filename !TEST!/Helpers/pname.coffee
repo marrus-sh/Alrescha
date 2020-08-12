@@ -20,7 +20,7 @@ describe "Helpers", -> describe "pname", ->
 		context: interfaceName: "NamedNode"
 		value: "example:value"
 
-	before -> import("../../Kico.mjs").then ( { default: Kico } ) ->
+	before -> import("../../index.mjs").then ( { default: Kico } ) ->
 		{ context, pname } = Kico
 
 	it "is a function", ->

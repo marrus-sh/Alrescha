@@ -8,7 +8,7 @@ describe "Terms", -> describe "RDFNode", ->
 	pname = null
 	instances = { }
 
-	before -> import("../../Kico.mjs").then ( { default: Kico } ) ->
+	before -> import("../../index.mjs").then ( { default: Kico } ) ->
 		{ RDFNode, pname } = Kico
 		implementation = new DOMImplementation
 		Kico.defaultDocument = implementation.createDocument "http://www.w3.org/1999/xhtml", "html", implementation.createDocumentType "html", null, null

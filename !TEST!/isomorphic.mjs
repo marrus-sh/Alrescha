@@ -1,4 +1,4 @@
-import Kico from "../Kico.mjs"
+import Kico from "../index.mjs"
 const ꞰBN = Kico.BlankNode
 export default function isomorphic ( other ) {
 	const
