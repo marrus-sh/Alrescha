@@ -106,10 +106,6 @@ describe "Terms", -> describe "Literal", ->
 			do expect -> new Literal
 				.does.throw
 
-		it "is its own species", ->
-			expect Literal
-				.has.property Symbol.species, Literal
-
 		it "gives its name as a primitive", ->
 			expect do Literal[Symbol.toPrimitive]
 				.does.equal Literal.name

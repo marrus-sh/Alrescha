@@ -57,10 +57,6 @@ describe "Terms", -> describe "BlankNodeCollection", ->
 			do expect -> new BlankNodeCollection
 				.does.throw
 
-		it "is its own species", ->
-			expect BlankNodeCollection
-				.has.property Symbol.species, BlankNodeCollection
-
 		it "gives its name as a primitive", ->
 			expect do BlankNodeCollection[Symbol.toPrimitive]
 				.does.equal BlankNodeCollection.name

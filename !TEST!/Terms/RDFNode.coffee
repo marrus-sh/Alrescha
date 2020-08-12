@@ -24,11 +24,11 @@ describe "Terms", -> describe "RDFNode", ->
 			interfaceName: value: "BlankNode"
 			nominalValue: value: "MyTerm true"
 		instances.bNC = Object.defineProperties (Reflect.construct Array, [
-			interfaceName: "SomeTerm"
+			interfaceName: "Literal"
 			nominalValue: "Some value"
 		], RDFNode),
 			interfaceName: value: "BlankNode"
-			nominalValue: value: "MyTerm true"
+			nominalValue: value: "MyTerm_true"
 		instances.l1 = Object.create RDFNode::,
 			interfaceName: value: "Literal"
 			nominalValue: value: "MyTerm true"
@@ -57,10 +57,6 @@ describe "Terms", -> describe "RDFNode", ->
 		it "cannot be called as a constructor", ->
 			do expect -> new RDFNode
 				.does.throw
-
-		it "is its own species", ->
-			expect RDFNode
-				.has.property Symbol.species, RDFNode
 
 		it "gives its name as a primitive", ->
 			expect do RDFNode[Symbol.toPrimitive]
@@ -115,6 +111,7 @@ describe "Terms", -> describe "RDFNode", ->
 
 			it "clones blank node collection contents", ->
 				clone = do instances.bNC.clone
+				console.log clone[0].interfaceName
 				expect clone.termType
 					.does.equal instances.bNC.interfaceName
 				expect clone.value

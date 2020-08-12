@@ -34,10 +34,6 @@ describe "Terms", -> describe "Term", ->
 			do expect -> new Term
 				.does.throw
 
-		it "is its own species", ->
-			expect Term
-				.has.property Symbol.species, Term
-
 		it "gives its name as a primitive", ->
 			expect do Term[Symbol.toPrimitive]
 				.does.equal Term.name

@@ -1,32 +1,32 @@
 {
 	"author": {
-		"name": "Ms Leaf Adventure",
+		"name": "kibigo!",
 		"url": "https://go.KIBI.family/"
 	},
-	"bugs": "https://github.com/marrus-sh/Kico/issues",
+	"bugs": "https://github.com/marrus-sh/Alrescha/issues",
 	"config": {
 		"snap-shot-it": {
 			"useRelativePath": true
 		}
 	},
-	"description": "🍂📖 KIBI Codices",
+	"description": "♓️🌟 An ECMAScript library for walking RDF graphs",
 	"devDependencies": {
 		"chai": "^4.2.0",
-		"coffeescript": "^2.3.2",
-		"mocha": "^5.2.0",
-		"snap-shot-it": "^7.9.2",
+		"coffeescript": "^2.5.1",
+		"mocha": "^8.1.1",
+		"snap-shot-it": "^7.9.3",
 		"xmldom": "^0.2.1"
 	},
 	"directories": {
 		"test": "./!TEST!"
 	},
-	"homepage": "https://github.com/marrus-sh/Kico#readme",
+	"homepage": "https://github.com/marrus-sh/Alrescha#readme",
 	"license": "Unlicense",
 	"main": "Kico.mjs",
-	"name": "kico",
+	"name": "alrescha",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/marrus-sh/Kico.git"
+		"url": "git+https://github.com/marrus-sh/Alrescha.git"
 	},
 	"scripts": {
 		"test": "export NODE_NO_WARNINGS=1; mocha --require coffeescript/register './!TEST!/*/*.coffee'"

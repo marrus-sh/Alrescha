@@ -30,10 +30,6 @@ describe "Resources", -> describe "Resource", ->
 			do expect -> new Resource "example:sbj"
 				.does.not.throw
 
-		it "is of undefined species", ->
-			expect Resource
-				.has.property Symbol.species, undefined
-
 		it "gives its name as a primitive", ->
 			expect do Resource[Symbol.toPrimitive]
 				.does.equal Resource.name

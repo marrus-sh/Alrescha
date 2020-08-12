@@ -32,10 +32,6 @@ describe "Graphs", -> describe "Graph", ->
 			do expect -> new Graph
 				.does.throw
 
-		it "is its own species", ->
-			expect Graph
-				.has.property Symbol.species, Graph
-
 	describe "instances", ->
 
 		it "gives its name as a string tag", ->

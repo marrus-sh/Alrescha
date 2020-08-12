@@ -52,10 +52,6 @@ describe "Graphs", -> describe "Triple", ->
 			do expect -> new Triple
 				.does.throw
 
-		it "is of undefined species", ->
-			expect Triple
-				.has.property Symbol.species, undefined
-
 	describe "instances", ->
 
 		it "gives its name as a string tag", ->

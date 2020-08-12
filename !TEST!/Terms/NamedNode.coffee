@@ -50,10 +50,6 @@ describe "Terms", -> describe "NamedNode", ->
 			do expect -> new NamedNode
 				.does.throw
 
-		it "is its own species", ->
-			expect NamedNode
-				.has.property Symbol.species, NamedNode
-
 		it "gives its name as a primitive", ->
 			expect do NamedNode[Symbol.toPrimitive]
 				.does.equal NamedNode.name
