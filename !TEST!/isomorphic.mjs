@@ -1,5 +1,5 @@
-import Kico from "../index.mjs"
-const ꞰBN = Kico.BlankNode
+import Al·rishāʼ from "../index.mjs"
+const ꞰBN = Al·rishāʼ.BlankNode
 export default function isomorphic ( other ) {
 	const
 		$3s = other.toArray().map($ =>

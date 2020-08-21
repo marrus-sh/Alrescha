@@ -11,10 +11,10 @@ describe "Terms", -> describe "Literal", ->
 	instances = { }
 	serializer = new XMLSerializer
 
-	before -> import("../../index.mjs").then ( { default: Kico } ) ->
-		{ RDFNode, Literal, pname } = Kico
+	before -> import("../../index.mjs").then ( { default: Al·rishāʼ } ) ->
+		{ RDFNode, Literal, pname } = Al·rishāʼ
 		implementation = new DOMImplementation
-		Kico.defaultDocument = implementation.createDocument "http://www.w3.org/1999/xhtml", "html", implementation.createDocumentType "html", null, null
+		Al·rishāʼ.defaultDocument = implementation.createDocument "http://www.w3.org/1999/xhtml", "html", implementation.createDocumentType "html", null, null
 		instances.simple = Object.create Literal::,
 			interfaceName: value: "Literal"
 			nominalValue: value: "A string"

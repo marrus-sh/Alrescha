@@ -1,15 +1,16 @@
-//  Al·rishā’: An ECMAScript library for walking RDF graphs.
+//  Al·rishāʼ
+//  ♓️🌟 An ECMAScript library for walking RDF graphs
 //  Developed ⌨⃝ 2020 kibigo!
 
 /*  ⁂  *\
 
-The author(s) of the following code have dedicated it, to the fullest extent, to the public domain.
-No warrantees of any kind, express or implied, are provided regarding this software or its use.
-You employ it at your own risk.
+The author(s) of the following code have dedicated it, to the fullest extent, to the public domain via a ‘CC0 1.0 Universal Public Domain Dedication’. No warrantees of any kind, express or implied, are provided regarding this software or its use. You employ it at your own risk.
+
+For more information, see: ‹ https://creativecommons.org/publicdomain/zero/1.0/ ›.
 
 \*  ⁂  */
 
-// · 🐟 · ★ · 🎣 · ★ · 🐟 //
+//  🐟 · ★ · 🎣 · ★ · 🐟  //
 
 export default (( ) => {  //  strict IIFE, though unnecessary
 	"use strict";
@@ -51,13 +52,13 @@ export default (( ) => {  //  strict IIFE, though unnecessary
 			{ [Symbol.hasInstance]: { value: $ => $ instanceof Array }
 			, M̃: { value: $℘s(( ) => { },  // metaärray
 				{ [Symbol.hasInstance]: { value: function hasInstance ( $ ) {
-					return $ == Array || Function[Ꝕ][Symbol.hasInstance].call(this, $) } }
+					return $ == Array || Function[Ꝕ][Ʃ͢.hasInstance].call(this, $) } }
 				, prototype: { value: Array } }) }
 			, prototype: { value: Array.prototype }
 			, ɫ: { value: $ => {  // LengthOfArrayLike
 /*  ⁂  *\
 
-This produces larger lengths than can actually be stored in arrays, because no such restrictions exist on arraylike methods. Use isNdx() to determine if a value is an actual array index.
+This produces larger lengths than can actually be stored in arrays, because no such restrictions exist on arraylike methods.  Use isNdx() to determine if a value is an actual array index.
 
 \*  ⁂  */
 				const ɫ = +$[Ɫ]
@@ -66,8 +67,7 @@ This produces larger lengths than can actually be stored in arrays, because no s
 			, ʔ: { value: $ => {  //  is argument a collection‐like object?
 /*  ⁂  *\
 
-This is more exacting than ECMAScript’s definition of an arraylike object, because it requires the .length property to not be undefined.
-It also explicitly excludes Resources which are not collections, even though all Resources are arraylike.
+This is more exacting than ECMAScript’s definition of an arraylike object, because it requires the .length property to not be undefined.  It also explicitly excludes Resources which are not collections, even though all Resources are arraylike.
 
 \*  ⁂  */
 				try { return typeof $ == `object` && $ != Ꝋ && Ɫ in $ && (+$[Ɫ], true)
@@ -221,9 +221,7 @@ It also explicitly excludes Resources which are not collections, even though all
 		, n3 = function fromNT ( $, ...$s ) {  //  make Set of Resources from N‑Triples
 /*  ⁂  *\
 
-Note:
-The N‑Triples specification grammar does not permit lines with only whitespace.
-However, Example 1 in the N‑Triples specification clearly shows them as allowed, so they are permitted here.
+☞  Note:  The N‑Triples specification grammar does not permit lines with only whitespace.  However, Example 1 in the N‑Triples specification clearly shows them as allowed, so they are permitted here.
 
 \*  ⁂  */
 			const
@@ -252,7 +250,7 @@ However, Example 1 in the N‑Triples specification clearly shows them as allowe
 			return ꝿ }
 		, n3Obj = function fromNT ( $ ) {  //  make object from N‑Triples
 			if ( !RX͢($ꝛ `^${ IRIREF }|${ BLANK_NODE_LABEL }|(?:${ STRING_LITERAL_QUOTE })${ whitespace }(?:\^\^${ whitespace }(?:${ IRIREF })|${ LANGTAG })?$`).test( $ ) )
-					throw ꞆƐ͢(l10n `Al·rishāʼ: Invalid node. ${ `RDF N‑Triples` }${ $ }`)
+					throw ꞆƐ͢(l10n `الرشآء: Invalid node. ${ `RDF N‑Triples` }${ $ }`)
 				return ꞇObj($) }
 		, nObj = function fromValue ( $ ) {  //  new valid object from given
 			try {
@@ -311,8 +309,8 @@ However, Example 1 in the N‑Triples specification clearly shows them as allowe
 				const
 					$ꝕ = ꝕ(Ʞ)
 					, Ↄ = function ( ) {
-						if ( new.target != Ꝋ ) throw ꞆƐ͢(l10n `Al·rishāʼ: Invalid constructor. `)
-						else throw ꞆƐ͢(l10n `Al·rishāʼ: Requires new. ${ Ʞ.name }`) }
+						if ( new.target != Ꝋ ) throw ꞆƐ͢(l10n `الرشآء: Invalid constructor. `)
+						else throw ꞆƐ͢(l10n `الرشآء: Requires new. ${ Ʞ.name }`) }
 				O͢.setPrototypeOf(Ↄ, O͢.create(
 					$ꝕ !== Ꝋ && $ꝕ != Function[Ꝕ] ? phony($ꝕ) : Function[Ꝕ],
 					{ toString: { [Ꝯ]: 1, [Ꝟ]: ( ) =>
@@ -339,8 +337,8 @@ However, Example 1 in the N‑Triples specification clearly shows them as allowe
 				if ( _xp == Ꝋ ) throw ꞆƐ͢(l10n `PNAME_UNDEFINED${ px }`)
 				else
 					try { return new ꞰÑN (`${ _xp }${ loclñ }`) }
-					catch ( ɛ ) { throw ꞆƐ͢(l10n `Al·rishāʼ: PName expansion error. ${ px }`) } }
-			else throw ꞆƐ͢(l10n `Al·rishāʼ: PName syntax error. ${ ñ }`) }
+					catch ( ɛ ) { throw ꞆƐ͢(l10n `الرشآء: PName expansion error. ${ px }`) } }
+			else throw ꞆƐ͢(l10n `الرشآء: PName syntax error. ${ ñ }`) }
 		, rm3Match = function removeTripleMatches ( subject, predicate, object ) {
 			if ( subject === null ) {
 				let ꝟꝵ = false
@@ -430,14 +428,14 @@ However, Example 1 in the N‑Triples specification clearly shows them as allowe
 			if ($ instanceof RX͢) {
 				$.lastIndex = ꝟndx
 				if ( !$.test($src) )
-					throw ꞆƐ͢(l10n `Al·rishāʼ: Expected match. ${ this.ñ }${ $ }${ ꝟndx }`)
+					throw ꞆƐ͢(l10n `الرشآء: Expected match. ${ this.ñ }${ $ }${ ꝟndx }`)
 				ꝟndx = $.lastIndex }
 			else {
 				const
 					$$ = S͢($)
 					, ɫ = $$[Ɫ]
 				if ( $src[ẞ](ꝟndx, ꝟndx + ɫ) != $$ )
-					throw ꞆƐ͢(l10n `Al·rishāʼ: Expected match. ${ this.ñ }${ `'${ $$ }'` }${ ꝟndx }`)
+					throw ꞆƐ͢(l10n `الرشآء: Expected match. ${ this.ñ }${ `'${ $$ }'` }${ ꝟndx }`)
 				ꝟndx += ɫ }
 			return $src[ẞ]($ndx, this.ndx = ꝟndx) }
 		, ꝯﬆʞ = Reflect.construct.bind(Reflect)
@@ -485,7 +483,7 @@ However, Example 1 in the N‑Triples specification clearly shows them as allowe
 							, ɫᵹ = (match[3] || ``)[ẞ](1)
 							, ꝺꞆℹ = $ꝺꞆ == Ꝋ ? __PN `xsd:string` : ꞇObj.call(this, $ꝺꞆ)
 						return new ꞰL (ñꝞ, ɫᵹ, ꝺꞆℹ) }
-					else throw ꞆƐ͢(l10n `Al·rishāʼ: Invalid node. ${ "RDF Turtle" }${ $ }`) } }
+					else throw ꞆƐ͢(l10n `الرشآء: Invalid node. ${ "RDF Turtle" }${ $ }`) } }
 		, ꞇꞇl = function fromTurtle ( $, ...$s ) {  //  make Graph from RDF Turtle
 			const
 				$WHITESPACE = $ꝛ `(?:${ WS }|#(?:(?!${ EOL })[^])*)*`
@@ -530,10 +528,10 @@ However, Example 1 in the N‑Triples specification clearly shows them as allowe
 									return __PN `rdf:type`
 								}
 								catch ( ɛ ) {
-									throw ꞆƐ͢(l10n `Al·rishāʼ: Turtle missing term error. ${ ꝟndx }`) } } })()
+									throw ꞆƐ͢(l10n `الرشآء: Turtle missing term error. ${ ꝟndx }`) } } })()
 						let ꝟcontinue = 1
 						if ( !hasꞆ.call(p, ꞰÑN) )
-							throw ꞆƐ͢(l10n `Al·rishāʼ: Turtle unnamed predicate error. ${ ꝟndx }`)
+							throw ꞆƐ͢(l10n `الرشآء: Turtle unnamed predicate error. ${ ꝟndx }`)
 						ꝯſꝸ(whitespace)
 						while ( ꝟcontinue ) {
 							const obj = ꝯſꝸT()
@@ -585,7 +583,7 @@ However, Example 1 in the N‑Triples specification clearly shows them as allowe
 						ꝯſꝸ(whitespace)
 						ꝯſꝸ `]`
 						return n }
-					else throw ꞆƐ͢(l10n `Al·rishāʼ: Turtle missing term error. ${ ꝟndx }`) }
+					else throw ꞆƐ͢(l10n `الرشآء: Turtle missing term error. ${ ꝟndx }`) }
 				, ꝯſꝸTriples = ( ) => {
 					const anon = RX͢(ANON, `uy`)
 					anon.lastIndex = ꝟndx
@@ -599,7 +597,7 @@ However, Example 1 in the N‑Triples specification clearly shows them as allowe
 					else {
 						const sbj = ꝯſꝸT()
 						if ( sbj instanceof ꞰL )
-							throw ꞆƐ͢(l10n `Al·rishāʼ: Turtle literal subject error. ${ ꝟndx }`)
+							throw ꞆƐ͢(l10n `الرشآء: Turtle literal subject error. ${ ꝟndx }`)
 						ꝟsbj = sbj
 						ꝯſꝸ(whitespace)
 						ꝯſꝸPObjs()
@@ -620,8 +618,7 @@ However, Example 1 in the N‑Triples specification clearly shows them as allowe
 		, ꞰTS = class TermSet extends Set {
 /*  ⁂  *\
 
-Not exposed.
-Expects node values as provided by PredicateMap, except for .delete().
+Not exposed.  Expects node values as provided by PredicateMap, except for .delete().
 
 \*  ⁂  */
 			constructor ( terms ) {
@@ -680,8 +677,7 @@ Expects node values as provided by PredicateMap, except for .delete().
 		, ꞰPM = class PredicateMap extends Map {
 /*  ⁂  *\
 
-Not exposed.
-All methods expect a string predicate (as provided by ResourceProxy) except for .delete().
+Not exposed.  All methods expect a string predicate (as provided by ResourceProxy) except for .delete().
 
 \*  ⁂  */
 			constructor ( ) { return super() }
@@ -694,7 +690,7 @@ All methods expect a string predicate (as provided by ResourceProxy) except for 
 						, ꞰPM[Ꝕ].get.call(this, nxKey) ], done } } } }) }
 			add ( predicate, object ) {
 				if ( !O͢.isExtensible(this) )
-					throw ꞆƐ͢(l10n `Al·rishāʼ: Nonextensible predicate addition error. `)
+					throw ꞆƐ͢(l10n `الرشآء: Nonextensible predicate addition error. `)
 				else if ( object instanceof Set )
 					object.forEach(ꞰPM[Ꝕ].add.bind(this, predicate))
 				else if ( object != Ꝋ ) {
@@ -711,7 +707,7 @@ All methods expect a string predicate (as provided by ResourceProxy) except for 
 				return this }
 			clear ( predicate ) {
 				if ( !O͢.isExtensible(this) )
-					throw ꞆƐ͢(l10n `Al·rishāʼ: Nonextensible predicate clearing error. `)
+					throw ꞆƐ͢(l10n `الرشآء: Nonextensible predicate clearing error. `)
 				else {
 					const existing = Map[Ꝕ].get.call(this, predicate)
 					if ( existing instanceof Set ) existing.clear()  //  for the sake of iterators
@@ -722,7 +718,7 @@ All methods expect a string predicate (as provided by ResourceProxy) except for 
 				return Map[Ꝕ].clear.call(this) }
 			delete ( predicate, object ) {
 				if ( !O͢.isExtensible(this) )
-					throw ꞆƐ͢(l10n `Al·rishāʼ: Nonextensible predicate deletion error. `)
+					throw ꞆƐ͢(l10n `الرشآء: Nonextensible predicate deletion error. `)
 				else {
 					const $p = S͢(predicate)
 					if ( Map[Ꝕ].has.call(this, $p) ) {
@@ -767,8 +763,7 @@ All methods expect a string predicate (as provided by ResourceProxy) except for 
 			*iterate ( predicate, method, initial ) {  //  iterate over underlying term set
 /*  ⁂  *\
 
-This iterates first over the initial set, then checks to see if a new set has taken its place, and, if so, iterates over that one too, starting from the previous final index.
-This handles the case where, during the course of a single iteration, the value of a predicate (1) stops being a set, and then (2) becomes a set again (and indeed, a set with a greater number of values than the current iteration index).
+This iterates first over the initial set, then checks to see if a new set has taken its place, and, if so, iterates over that one too, starting from the previous final index.  This handles the case where, during the course of a single iteration, the value of a predicate (1) stops being a set, and then (2) becomes a set again (and indeed, a set with a greater number of values than the current iteration index).
 
 This is an ※extreme※ edge‐case which code is unlikely to ever encounter in practice (for all intents and purposes, this functions just like a starred yield to the corresponding set method).
 
@@ -796,7 +791,7 @@ This is an ※extreme※ edge‐case which code is unlikely to ever encounter in
 			set ( predicate, object ) {
 				if ( object == Ꝋ ) return ꞰPM[Ꝕ].clear.call(this, predicate), this
 				else if ( !O͢.isExtensible(this) )
-					throw ꞆƐ͢(l10n `Al·rishāʼ: Nonextensible predicate addition error. `)
+					throw ꞆƐ͢(l10n `الرشآء: Nonextensible predicate addition error. `)
 				else {
 					const obj = nObj(object)
 					if ( obj instanceof Set ) {
@@ -847,7 +842,7 @@ This is an ※extreme※ edge‐case which code is unlikely to ever encounter in
 							, ɫ = $Ꝟ >>> 0
 							, oⱢ𝒫 = dſ𝒫(O, Ɫ)
 						if ( ɫ != +$Ꝟ )
-							throw RangeError(l10n `Al·rishāʼ: Invalid length. ${ Desc[Ꝟ] }`)
+							throw RangeError(l10n `الرشآء: Invalid length. ${ Desc[Ꝟ] }`)
 						if ( !oⱢ[ꝶ] ) return false
 						if ( !Reflect.defineProperty(O, Ɫ,
 							{ [Ꝯ]: Desc[Ꝯ], [ꝴ]: Desc[ꝴ], [Ꝟ]: $Ꝟ, [ꝶ]: 1 }) ) return false
@@ -1318,10 +1313,10 @@ This is an ※extreme※ edge‐case which code is unlikely to ever encounter in
 			constructor ( value ) {
 				const $ℹ = hasꞆ.call(value, ꞰÑN) ? get𝒫.call(value, `nominalValue`, ꞰRDFN) : S͢(value)
 				if ( /(?![-:\x2F?#\[\]@!$&\x27()*+,;=0-9A-Za-z._~\xA0-\uD7FF\uE000-\uFDCF\uFDF0-\uFFEF\u{10000}-\u{1FFFD}\u{20000}-\u{2FFFD}\u{30000}-\u{3FFFD}\u{40000}-\u{4FFFD}\u{50000}-\u{5FFFD}\u{60000}-\u{6FFFD}\u{70000}-\u{7FFFD}\u{80000}-\u{8FFFD}\u{90000}-\u{9FFFD}\u{A0000}-\u{AFFFD}\u{B0000}-\u{BFFFD}\u{C0000}-\u{CFFFD}\u{D0000}-\u{DFFFD}\u{E0000}-\u{EFFFD}\u{F0000}-\u{FFFFD}\u{100000}-\u{10FFFD}]|%[0-9A-Fa-f]{2})[^]/u.test( $ℹ ) )
-					throw ꞆƐ͢(l10n `Al·rishāʼ: NamedNode invalid IRI. `)
+					throw ꞆƐ͢(l10n `الرشآء: NamedNode invalid IRI. `)
 				const _ðˢ = $℘s((( ) => {
 					try { return ꝯﬆʞ(WHATWG·URL, [ $ℹ], new.target) }
-					catch ( ɛ ) { throw ꞆƐ͢(l10n `Al·rishāʼ: NamedNode invalid IRI. `) } })(),
+					catch ( ɛ ) { throw ꞆƐ͢(l10n `الرشآء: NamedNode invalid IRI. `) } })(),
 					{ interfaceName: { [Ꝟ]: `NamedNode` }
 					, nominalValue: { [Ꝯ]: 0, [Ꝟ]: $ℹ }
 					, termType: { [Ꝟ]: `NamedNode` }
@@ -1652,10 +1647,9 @@ This is an ※extreme※ edge‐case which code is unlikely to ever encounter in
 			constructor ( subject ) {
 /*  ⁂  *\
 
-The object produced by this constructor will always have Resource.prototype as its actual (non‐proxied) prototype, regardless of how the constructor is called.
-This is because the prototypes of Resources are determined dynamically by the Resource Proxy.
+The object produced by this constructor will always have Resource.prototype as its actual (non‐proxied) prototype, regardless of how the constructor is called.  This is because the prototypes of Resources are determined dynamically by the Resource Proxy.
 
-If you want to use this constructor to create objects which do not inherit from the Resource prototype at all, you can change the prototype yourself after object creation. You cannot change the prototype to a different Resource subclass.
+If you want to use this constructor to create objects which do not inherit from the Resource prototype at all, you can change the prototype yourself after object creation.  You cannot change the prototype to a different Resource subclass.
 
 \*  ⁂  */
 				if ( hasꞆ.call(subject, ꞰBN) && A͢.ʔ(subject) ) return new ꞰRC (subject)
@@ -1864,8 +1858,7 @@ There are fewer optimizations for LinkedResource to ensure resource removal and 
 
 Non‐linked ResourceCollections must be actual Arrays, so we effectively have to copy over all node properties ourselves.
 
-Subject is guaranteed (by the Resource constructor) to be a blank node; this is because name generation for rest nodes can’t be done for IRIs.
-No optimizations can take place because of the necessary special handling of rdf:first and rdf:rest.
+Subject is guaranteed (by the Resource constructor) to be a blank node; this is because name generation for rest nodes can’t be done for IRIs.  No optimizations can take place because of the necessary special handling of rdf:first and rdf:rest.
 
 \*  ⁂  */
 				const
@@ -1951,7 +1944,7 @@ No optimizations can take place because of the necessary special handling of rdf
 				const
 					$ad3 = this[ʃAd3]
 					, $actns = this[ʃActns]
-				if ( $ad3 == Ꝋ ) throw ꞆƐ͢(l10n `Al·rishāʼ: Graph not addable.`)
+				if ( $ad3 == Ꝋ ) throw ꞆƐ͢(l10n `الرشآء: Graph not addable.`)
 				else {
 					$ad3.call(this, triple)
 					if ( $actns != Ꝋ )
@@ -1960,7 +1953,7 @@ No optimizations can take place because of the necessary special handling of rdf
 					return this } }
 			addAction ( action, run ) {
 				const $adActn = this[ʃAdActn]
-				if ( $adActn == Ꝋ ) throw ꞆƐ͢(l10n `Al·rishāʼ: Graph actions not addable.`)
+				if ( $adActn == Ꝋ ) throw ꞆƐ͢(l10n `الرشآء: Graph actions not addable.`)
 				else {
 					$adActn.call(this, action)
 					if ( run ) nº1MethodOf.call(this, `toArray`, this, ꞰꝾ[Ꝕ])()
@@ -2018,7 +2011,7 @@ No optimizations can take place because of the necessary special handling of rdf
 				const sbj = nSbj(subject)
 				return sbj == Ꝋ ? false : this[sbj] != Ꝋ }
 			lock ( ) { return O͢.preventExtensions(this) }
-			match ( subject, predicate, object, limit ) {
+			match ( subject, predicate, object, limit = 0 ) {
 				const
 					$actns = this[ʃActns]
 					, lmt = limit >> 0
@@ -2036,13 +2029,13 @@ No optimizations can take place because of the necessary special handling of rdf
 			merge ( graph ) { return ꞰꝾ[Ꝕ].addAll.call(ꞰꝾ[Ꝕ].clone.call(this), graph) }
 			remove ( triple ) {
 				const $rm3Match = this[ʃRm3Match]
-				if ( $rm3Match == Ꝋ ) throw ꞆƐ͢(l10n `Al·rishāʼ: Graph not deletable.`)
+				if ( $rm3Match == Ꝋ ) throw ꞆƐ͢(l10n `الرشآء: Graph not deletable.`)
 				else {
 					$rm3Match.call(this, triple.subject, triple.predicate, triple.object)
 					return this } }
 			removeMatches ( subject, predicate, object ) {
 				const $rm3Match = this[ʃRm3Match]
-				if ( $rm3Match == Ꝋ ) throw ꞆƐ͢(l10n `Al·rishāʼ: Graph not deletable.`)
+				if ( $rm3Match == Ꝋ ) throw ꞆƐ͢(l10n `الرشآء: Graph not deletable.`)
 				else {
 					$rm3Match.call(this, subject, predicate, object)
 					return this } }
@@ -2051,13 +2044,13 @@ No optimizations can take place because of the necessary special handling of rdf
 				if ( $rs != Ꝋ ) yield *$rs.call(this) }
 			set ( subject, resource ) {
 				const $ad3 = this[ʃAd3]
-				if ( $ad3 == Ꝋ ) throw ꞆƐ͢(l10n `Al·rishāʼ: Graph not addable.`)
+				if ( $ad3 == Ꝋ ) throw ꞆƐ͢(l10n `الرشآء: Graph not addable.`)
 				else {
 					const r = ꞰR[Ꝕ].clone.call(resource)
 					if ( r == Ꝋ || ꞰRDFN[Ꝕ].equals.call(r, subject) ) {
 						ꞰꝾ[Ꝕ].removeMatches.call(this, subject, null, null)
 						if ( r != Ꝋ ) for ( const $3 of r.triples() ) { $ad3.call(this, $3) } }
-					else throw ꞆƐ͢(l10n `Al·rishāʼ: Subject does not match.`)
+					else throw ꞆƐ͢(l10n `الرشآء: Subject does not match.`)
 					return this } }
 			some ( callback ) {
 				return nº1MethodOf.call(this, `toArray`, this, ꞰꝾ[Ꝕ])()
@@ -2099,12 +2092,12 @@ No optimizations can take place because of the necessary special handling of rdf
 						: (( ) => {
 							try { return new ꞰÑN (predicate) }
 							catch ( ɛ ) {
-								throw ꞆƐ͢(l10n `Al·rishāʼ: Invalid predicate. ${ predicate }`) } })()
+								throw ꞆƐ͢(l10n `الرشآء: Invalid predicate. ${ predicate }`) } })()
 					, sbj = [ ꞰBN, ꞰL, `Variable` ].some($ => hasꞆ.call(subject, $)) ? nT(subject)
 						: nSbj(subject)
 					, ðˢ = O͢.create(new.target[Ꝕ])
-				if ( sbj == Ꝋ ) throw ꞆƐ͢(l10n `Al·rishāʼ: Invalid subject. ${ subject }`)
-				else if ( obj == Ꝋ ) throw ꞆƐ͢(l10n `Al·rishāʼ: Invalid object. ${ object }`)
+				if ( sbj == Ꝋ ) throw ꞆƐ͢(l10n `الرشآء: Invalid subject. ${ subject }`)
+				else if ( obj == Ꝋ ) throw ꞆƐ͢(l10n `الرشآء: Invalid object. ${ object }`)
 				else return $℘s(ðˢ,
 					{ actions: { get: dſ𝒫(Ʞ3[Ꝕ], `actions`).get }
 					, empty: { get: dſ𝒫(Ʞ3[Ꝕ], `empty`).get }
@@ -2276,29 +2269,29 @@ No optimizations can take place because of the necessary special handling of rdf
 		, l10n: { [Ꝯ]: 1, [Ꝟ]: l10n }
 		, pname: { [Ꝯ]: 1, [Ꝟ]: pxÑ }
 		, strings: { [Ꝯ]: 1, [Ꝟ]:
-			{ "Al·rishāʼ: Expected match.": `$1 parser expected a match for $2 at position $3.`
-			, "Al·rishāʼ: Graph actions not addable.": `Graph does not support action additions.`
-			, "Al·rishāʼ: Graph not addable.": `Graph does not support additions.`
-			, "Al·rishāʼ: Graph not deletable.": `Graph does not support deletions.`
-			, "Al·rishāʼ: Invalid constructor.": `Invalid constructor.`
-			, "Al·rishāʼ: Invalid length.": `'$1' is not a valid array length.`
-			, "Al·rishāʼ: Invalid node.": `'$2' is not a valid $1 node.`
-			, "Al·rishāʼ: Invalid object.": `'$1' is not a valid object for a Triple.`
-			, "Al·rishāʼ: Invalid predicate.": `'$1' is not a valid predicate for a Triple.`
-			, "Al·rishāʼ: Invalid subject.": `'$1' is not a valid subject for a Triple.`
-			, "Al·rishāʼ: Al·rishāʼ.": `Al·rishāʼ`
-			, "Al·rishāʼ: Al·rishāʼ version.": `1.01 [WIP]`
-			, "Al·rishāʼ: NamedNode invalid IRI.": `NamedNode must have a valid IRI name.`
-			, "Al·rishāʼ: Nonextensible predicate addition error.": `Cannot add predicate: Object is not extensible.`
-			, "Al·rishāʼ: Nonextensible predicate clearing error.": `Cannot clear predicate: Object is not extensible.`
-			, "Al·rishāʼ: Nonextensible predicate deletion error.": `Cannot delete predicate: Object is not extensible.`
-			, "Al·rishāʼ: PName expansion error.": `Prefix $1 did not resolve to a valid IRI.`
-			, "Al·rishāʼ: PName syntax error.": `Prefixed name $1 does not match Turtle syntax.`
-			, "Al·rishāʼ: Requires new.": `Constructor $1 requires 'new'.`
-			, "Al·rishāʼ: Subject does not match.": `The nominal value of the given resource does not match.`
-			, "Al·rishāʼ: Turtle literal subject error.": `RDF Turtle parser received a literal for a subject at position $1.`
-			, "Al·rishāʼ: Turtle unnamed predicate error.": `RDF Turtle parser received a predicate at position $1 which is not a named node.`
-			, "Al·rishāʼ: Turtle missing term error.": `RDF Turtle parser expected a term at position $1, but none was found.` } }
+			{ "الرشآء: Expected match.": `$1 parser expected a match for $2 at position $3.`
+			, "الرشآء: Graph actions not addable.": `Graph does not support action additions.`
+			, "الرشآء: Graph not addable.": `Graph does not support additions.`
+			, "الرشآء: Graph not deletable.": `Graph does not support deletions.`
+			, "الرشآء: Invalid constructor.": `Invalid constructor.`
+			, "الرشآء: Invalid length.": `'$1' is not a valid array length.`
+			, "الرشآء: Invalid node.": `'$2' is not a valid $1 node.`
+			, "الرشآء: Invalid object.": `'$1' is not a valid object for a Triple.`
+			, "الرشآء: Invalid predicate.": `'$1' is not a valid predicate for a Triple.`
+			, "الرشآء: Invalid subject.": `'$1' is not a valid subject for a Triple.`
+			, "الرشآء: Al·rishāʼ.": `Al·rishāʼ`
+			, "الرشآء: Al·rishāʼ version.": `1.01 [WIP]`
+			, "الرشآء: NamedNode invalid IRI.": `NamedNode must have a valid IRI name.`
+			, "الرشآء: Nonextensible predicate addition error.": `Cannot add predicate: Object is not extensible.`
+			, "الرشآء: Nonextensible predicate clearing error.": `Cannot clear predicate: Object is not extensible.`
+			, "الرشآء: Nonextensible predicate deletion error.": `Cannot delete predicate: Object is not extensible.`
+			, "الرشآء: PName expansion error.": `Prefix $1 did not resolve to a valid IRI.`
+			, "الرشآء: PName syntax error.": `Prefixed name $1 does not match Turtle syntax.`
+			, "الرشآء: Requires new.": `Constructor $1 requires 'new'.`
+			, "الرشآء: Subject does not match.": `The nominal value of the given resource does not match.`
+			, "الرشآء: Turtle literal subject error.": `RDF Turtle parser received a literal for a subject at position $1.`
+			, "الرشآء: Turtle unnamed predicate error.": `RDF Turtle parser received a predicate at position $1 which is not a named node.`
+			, "الرشآء: Turtle missing term error.": `RDF Turtle parser expected a term at position $1, but none was found.` } }
 		, symbols: { [Ꝯ]: 1, [Ꝟ]: O͢.create(O͢[Ꝕ],
 			{ actionIterator: { [Ꝟ]: ʃActns }
 			, addAction: { [Ꝟ]: ʃAdActn }

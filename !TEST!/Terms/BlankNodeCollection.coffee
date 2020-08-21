@@ -12,10 +12,10 @@ describe "Terms", -> describe "BlankNodeCollection", ->
 	instances = { }
 	serializer = new XMLSerializer
 
-	before -> import("../../index.mjs").then ( { default: Kico } ) ->
-		{ RDFNode, BlankNodeCollection, Graph, pname } = Kico
+	before -> import("../../index.mjs").then ( { default: Al·rishāʼ } ) ->
+		{ RDFNode, BlankNodeCollection, Graph, pname } = Al·rishāʼ
 		implementation = new DOMImplementation
-		Kico.defaultDocument = implementation.createDocument "http://www.w3.org/1999/xhtml", "html", implementation.createDocumentType "html", null, null
+		Al·rishāʼ.defaultDocument = implementation.createDocument "http://www.w3.org/1999/xhtml", "html", implementation.createDocumentType "html", null, null
 		instances.not = Object.create BlankNodeCollection::,
 			interfaceName: value: "BlankNode"
 			nominalValue: value: "1"

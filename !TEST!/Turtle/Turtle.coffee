@@ -8,8 +8,8 @@ describe "Turtle", ->
 	manifest = null
 
 	before ->
-		import("../../index.mjs").then ( { default: Kico } ) ->
-			{ Graph } = Kico
+		import("../../index.mjs").then ( { default: Al·rishāʼ } ) ->
+			{ Graph } = Al·rishāʼ
 			manifest = Object.preventExtensions Graph.fromTurtle.call { baseURI: "http://www.w3.org/2013/TurtleTests/manifest.ttl" }, readFileSync "#{ do cwd }/!TEST!/Turtle/TurtleTests/manifest.ttl"
 		import("../isomorphic.mjs").then ( { default: isoƒ } ) ->
 			isomorphic = isoƒ

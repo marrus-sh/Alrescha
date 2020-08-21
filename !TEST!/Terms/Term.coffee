@@ -8,8 +8,8 @@ describe "Terms", -> describe "Term", ->
 	instançe = null
 	differentInstance = null
 
-	before -> import("../../index.mjs").then ( { default: Kico } ) ->
-		{ Term } = Kico
+	before -> import("../../index.mjs").then ( { default: Al·rishāʼ } ) ->
+		{ Term } = Al·rishāʼ
 		instance = Object.create Term::,
 			termType: value: "MyTerm"
 			value: value: "MyTerm value"

@@ -7,8 +7,8 @@ describe "Graphs", -> describe "Triple", ->
 	Triple = null
 	instances = { }
 
-	before -> import("../../index.mjs").then ( { default: Kico } ) ->
-		{ Term, Triple } = Kico
+	before -> import("../../index.mjs").then ( { default: Al·rishāʼ } ) ->
+		{ Term, Triple } = Al·rishāʼ
 		instances.triple = Object.create Triple::,
 			subject: value:
 				termType: "BlankNode"

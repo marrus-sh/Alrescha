@@ -11,10 +11,10 @@ describe "Resources", -> describe "Resource", ->
 	pname = null
 	serializer = new XMLSerializer
 
-	before -> import("../../index.mjs").then ( { default: Kico } ) ->
-		{ RDFNode, Resource, Graph, pname } = Kico
+	before -> import("../../index.mjs").then ( { default: Al·rishāʼ } ) ->
+		{ RDFNode, Resource, Graph, pname } = Al·rishāʼ
 		implementation = new DOMImplementation
-		Kico.defaultDocument = implementation.createDocument "http://www.w3.org/1999/xhtml", "html", implementation.createDocumentType "html", null, null
+		Al·rishāʼ.defaultDocument = implementation.createDocument "http://www.w3.org/1999/xhtml", "html", implementation.createDocumentType "html", null, null
 
 	describe "constructor", ->
 
