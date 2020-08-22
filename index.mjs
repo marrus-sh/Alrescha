@@ -263,7 +263,7 @@ This is more exacting than ECMAScript’s definition of an arraylike object, bec
 						if ( $obj == Ꝋ ) return Ꝋ
 						else if ( $obj instanceof Set ) $obj.forEach(obj => ꝵ.add(obj))
 						else ꝵ.add($obj) }
-					return ꝵ.size == 0 ? __PN `rdf:nil`
+					return ꝵ.size == 0 ? __RDF·nil
 						: ꝵ.size == 1 ? ꝵ.values().next()[Ꝟ]
 						: ꝵ }
 				else return $ instanceof WHATWG·URL ? new ꞰÑN ($)
@@ -271,13 +271,13 @@ This is more exacting than ECMAScript’s definition of an arraylike object, bec
 					: $ instanceof DataView
 					|| $ instanceof ꝕ(Uint8Array)
 					|| $ instanceof ArrayBuffer
-					? new ꞰL (b2a($), __PN `xsd:base64Binary`)
+					? new ꞰL (b2a($), __XSD·base64Binary)
 					: typeof $ == `number`
-					? Number.isInteger($) ? new ꞰL (S͢($), __PN `xsd:integer`)
-						: $ == 1/0 ? new ꞰL (`INF`, __PN `xsd:double`)
-						: $ == -1/0 ? new ꞰL (`-INF`, __PN `xsd:double`)
-						: new ꞰL (S͢($), __PN `xsd:double`)
-					: typeof $ == `boolean` ? new ꞰL (S͢($), __PN`xsd:boolean`)
+					? Number.isInteger($) ? new ꞰL (S͢($), __XSD·integer)
+						: $ == 1/0 ? new ꞰL (`INF`, __XSD·double)
+						: $ == -1/0 ? new ꞰL (`-INF`, __XSD·double)
+						: new ꞰL (S͢($), __XSD·double)
+					: typeof $ == `boolean` ? new ꞰL (S͢($), __XSD·boolean)
 					: new ꞰL ($) }
 			catch ( ɛ ) { return Ꝋ } }
 		, nSbj = function ( $ ) {  //  new valid subject (with this target if present)
@@ -290,7 +290,7 @@ This is more exacting than ECMAScript’s definition of an arraylike object, bec
 						: ꝯﬆʞ(ꞰBN, [ S͢[Ꝕ][ẞ].call($, 2) ], this)
 					: this == Ꝋ ? new ꞰÑN ($) : ꝯﬆʞ(ꞰÑN, [ $ ], this) }
 			catch ( ɛ ) { return Ꝋ } }
-		, nT = $ => $ == Ꝋ ? __PN `rdf:nil` : new (getꞆ.call($)) ($)
+		, nT = $ => $ == Ꝋ ? __RDF·nil : new (getꞆ.call($)) ($)
 		, nº1MethodOf = function ( method, ...$s ) {  //  method of first argument with method
 			for ( let $ of $s ) {
 				const ƒ = $?.[method]
@@ -384,7 +384,7 @@ This is more exacting than ECMAScript’s definition of an arraylike object, bec
 				: A͢.ʔ($) ? `( ${ A͢[Ꝕ].map.call($, turtify).join ` ` } )`
 				: [ ꞰBN, ꞰL ].some(tꞆ => hasꞆ.call($, tꞆ)) ? getꞆ.call($)[Ꝕ].toTurtle.call($)
 				: typeof $ == `number` && !Number.isInteger($)
-				? S͢(new ꞰL ($, __PN `xsd:double`))
+				? S͢(new ꞰL ($, __XSD·double))
 				: `"${ String[Ꝕ].replace.call($, /["\\\n\r]/g, $$ =>
 					({ "\"": $ꝛ `\"`
 					, "\\": $ꝛ `\\`
@@ -457,11 +457,11 @@ This is more exacting than ECMAScript’s definition of an arraylike object, bec
 				else if ( RX͢($ꝛ `^(?:${ BLANK_NODE_LABEL }|${ ANON })$`, "u").test($src) )
 					return new ꞰBN ($src[0] == "_" ? $src[ẞ](2) : "")
 				else if ( RX͢($ꝛ `^(?:${ DOUBLE }|${ DECIMAL }|${ INTEGER })$`, "u").test($src) )
-					return !/[.e]/i.test($src) ? new ꞰL ($src, null, __PN `xsd:integer`)
-						: /e/i.test($src) ? new ꞰL ($src, null, __PN `xsd:double`)
-						: new ꞰL ($src, null, __PN `xsd:decimal`)
+					return !/[.e]/i.test($src) ? new ꞰL ($src, null, __XSD·integer)
+						: /e/i.test($src) ? new ꞰL ($src, null, __XSD·double)
+						: new ꞰL ($src, null, __XSD·decimal)
 				else if ( RX͢($ꝛ `^(?:true|false)$`, `u`).test($src) )
-					return new ꞰL ($src, null, __PN `xsd:boolean`)
+					return new ꞰL ($src, null, __XSD·boolean)
 				else {
 					const match = (RX͢($ꝛ `^(?:(${ STRING_LITERAL_LONG_SINGLE_QUOTE }|${ STRING_LITERAL_LONG_QUOTE })|(${ STRING_LITERAL_QUOTE }|${ STRING_LITERAL_SINGLE_QUOTE }))(?:(?:${ $WHITESPACE })(?:(${ LANGTAG })|\^\^(?:${ $WHITESPACE })(${ IRIREF }|${ PNAME_LN }|${ PNAME_NS })))?$`, `u`).exec($src))
 					if ( match ) {
@@ -481,7 +481,7 @@ This is more exacting than ECMAScript’s definition of an arraylike object, bec
 									/\\(?:U([0-9A-Fa-f]{8})|u([0-9A-Fa-f]{4}))/g,
 									(N, Ⅰ, Ⅱ) => S͢.fromCodePoint(parseInt(Ⅰ || Ⅱ, 0x10)))
 							, ɫᵹ = (match[3] || ``)[ẞ](1)
-							, ꝺꞆℹ = $ꝺꞆ == Ꝋ ? __PN `xsd:string` : ꞇObj.call(this, $ꝺꞆ)
+							, ꝺꞆℹ = $ꝺꞆ == Ꝋ ? __XSD·string : ꞇObj.call(this, $ꝺꞆ)
 						return new ꞰL (ñꝞ, ɫᵹ, ꝺꞆℹ) }
 					else throw ꞆƐ͢(l10n `الرشآء: Invalid node. ${ "RDF Turtle" }${ $ }`) } }
 		, ꞇꞇl = function fromTurtle ( $, ...$s ) {  //  make Graph from RDF Turtle
@@ -525,7 +525,7 @@ This is more exacting than ECMAScript’s definition of an arraylike object, bec
 							catch ( ɛ ) {
 								try {
 									ꝯſꝸ `a`
-									return __PN `rdf:type`
+									return __RDF·type
 								}
 								catch ( ɛ ) {
 									throw ꞆƐ͢(l10n `الرشآء: Turtle missing term error. ${ ꝟndx }`) } } })()
@@ -812,8 +812,8 @@ This is an ※extreme※ edge‐case which code is unlikely to ever encounter in
 					, resourceMap: { [Ꝟ]: resourceMap }
 					, revoke: { [Ꝯ]: 1, [Ꝟ]: Ꝋ } }) }
 			a ( O, V ) {  //  is O a V?
-				const $Ꞇ = O͢.isExtensible(O) ? this.predicateMap.get(__PN `rdf:type`)
-					: O[__PN `rdf:type`]
+				const $Ꞇ = O͢.isExtensible(O) ? this.predicateMap.get(__RDF·type)
+					: O[__RDF·type]
 				if ( $Ꞇ == Ꝋ ) return false
 				else if ( $Ꞇ instanceof Set ) {
 					for ( const Ꞇ of $Ꞇ ) { if ( ꞰRDFN[Ꝕ].equals.call(Ꞇ, V) ) return true }
@@ -863,12 +863,12 @@ This is an ※extreme※ edge‐case which code is unlikely to ever encounter in
 						const obj = nObj(Desc[Ꝟ])
 						if ( this.resourceMap == Ꝋ )
 							return Reflect.defineProperty(O, P, { [Ꝟ]: obj })
-						else if ( __PN `rdf:nil`.equals(O) ) return false
+						else if ( __RDF·nil.equals(O) ) return false
 						else {
 							let ꝟr = this.getTarget(O)
 							for ( let ꝟndx = 0 ; ꝟndx < ndx ; ++ꝟndx ) {
-								const rest = ꝟr.any(__PN `rdf:rest`, $ =>
-									!__PN `rdf:nil`.equals($))
+								const rest = ꝟr.any(__RDF·rest, $ =>
+									!__RDF·nil.equals($))
 								if ( rest == Ꝋ ) {
 									const ñ = cdr(ꝟr)
 									const r = (( ) => {
@@ -877,17 +877,17 @@ This is an ※extreme※ edge‐case which code is unlikely to ever encounter in
 											while ( rM.has(`${ ñ }${ ꝟ }`) ) ++ꝟ
 											return new ꞰR(`${ ñ }${ ꝟ }`) }
 										else return new ꞰR (ñ) })()
-									r[__PN `rdf:rest`] = __PN `rdf:nil`
-									if ( !Reflect.defineProperty(ꝟr, __PNS `rdf:rest`, { [Ꝟ]: r }) )
+									r[__RDF·rest] = __RDF·nil
+									if ( !Reflect.defineProperty(ꝟr, S͢(__RDF·rest), { [Ꝟ]: r }) )
 										return false
-									ꝟr = ꝟr[__PN `rdf:rest`] } }
-							return Reflect.defineProperty(ꝟr, __PNS `rdf:first`, { [Ꝟ]: obj }) } }
+									ꝟr = ꝟr[__RDF·rest] } }
+							return Reflect.defineProperty(ꝟr, S͢(__RDF·first), { [Ꝟ]: obj }) } }
 					else {
 						const
 							oⱢ𝒫 = dſ𝒫(O, Ɫ)
 							, _oⱢ𝒫Ꝟ = oⱢ𝒫[Ꝟ]
 						if ( ndx >= _oⱢ𝒫Ꝟ && !oⱢ[ꝶ] ) return false
-						if ( !this.defineProperty(O, __PNS `rdf:_${ ndx + 1 }`, Desc ) ) return false
+						if ( !this.defineProperty(O, S͢(__PN `rdf:_${ ndx + 1 }`), Desc ) ) return false
 						if ( ndx >= _oⱢ𝒫Ꝟ ) return this.defineProperty(O, Ɫ,
 							{ [Ꝯ]: oⱢ𝒫[Ꝯ], [ꝴ]: oⱢ𝒫[ꝴ], [Ꝟ]: ndx + 1, [ꝶ]: 1 }) }
 					return true }
@@ -899,20 +899,20 @@ This is an ※extreme※ edge‐case which code is unlikely to ever encounter in
 						if ( this.resourceMap == Ꝋ ) {
 							const $ꝕ = this.getPrototypeOf(O)
 							if ( $ꝕ == ꞰRC[Ꝕ] || $ꝕ instanceof ꞰRC )
-								if ( __PNS `rdf:first` == P )
+								if ( S͢(__RDF·first) == P )
 									return Reflect.defineProperty(O, `0`, { [Ꝟ]: nObj($Ꝟ) })
-								else if ( __PNS `rdf:rest` == P )
+								else if ( S͢(__RDF·rest) == P )
 									try {
 										A͢[Ꝕ].splice.call(O, 1, Infinity,
 											A͢[Ꝕ].map.call($Ꝟ, nObj))
 										return true }
 									catch ( ɛ ) { return false } }
-						else if ( __PNS `rdf:rest` == P && __PN `rdf.nil`.equals($Ꝟ) ) {
-							const r = this.get(O, __PNS `rdf:rest`, O)
+						else if ( S͢(__RDF·rest) == P && __RDF·nil.equals($Ꝟ) ) {
+							const r = this.get(O, S͢(__RDF·rest), O)
 							if ( r != Ꝋ
-								&& !Reflect.has(r, __PNS `rdf:first`)
-								&& __PN `rdf.nil`.equals(Reflect.get(r, __PNS `rdf:rest`, r))
-								&& !Reflect.deleteProperty(r, __PNS `rdf:rest`) ) return false }
+								&& !Reflect.has(r, S͢(__RDF·first))
+								&& __RDF·nil.equals(Reflect.get(r, S͢(__RDF·rest), r))
+								&& !Reflect.deleteProperty(r, S͢(__RDF·rest)) ) return false }
 						else if ( $Ꝟ instanceof ꞰR )
 							this.getTarget(O).parent.addAll($Ꝟ)
 						else if ( hasꞆ.call($Ꝟ, ꞰBN) && A͢.ʔ($Ꝟ) )
@@ -926,13 +926,13 @@ This is an ※extreme※ edge‐case which code is unlikely to ever encounter in
 					const rM = this.resourceMap
 					if ( rM == Ꝋ ) return Reflect.deleteProperty(O, S͢(ndx))
 					else {
-						let ꝟr = __PN `rdf:nil`.equals(O) ? Ꝋ : this.getTarget(O)
+						let ꝟr = __RDF·nil.equals(O) ? Ꝋ : this.getTarget(O)
 						for ( let ꝟndx = 0
 							; ꝟndx < ndx && ꝟr != Ꝋ
-							; ꝟr = ꝟr.any(__PN `rdf:rest`, $ => !__PN `rdf:nil`.equals($)) ) ++ꝟndx
-						return ꝟr == Ꝋ || __PN `rdf:nil`.equals(ꝟr) ? true
-							: Reflect.deleteProperty(ꝟr, __PNS `rdf:first`) } }
-				else return this.deleteProperty(O, __PNS `rdf:_${ ndx + 1 }`) }
+							; ꝟr = ꝟr.any(__RDF·rest, $ => !__RDF·nil.equals($)) ) ++ꝟndx
+						return ꝟr == Ꝋ || __RDF·nil.equals(ꝟr) ? true
+							: Reflect.deleteProperty(ꝟr, S͢(__RDF·first)) } }
+				else return this.deleteProperty(O, S͢(__PN `rdf:_${ ndx + 1 }`)) }
 			deleteProperty ( O, P ) {
 				return !O͢.isExtensible(O) || P != Ɫ && dſ𝒫(O, P) != Ꝋ
 					? Reflect.delete(O, P)
@@ -952,12 +952,12 @@ This is an ※extreme※ edge‐case which code is unlikely to ever encounter in
 				if ( $ꝕ == ꞰRC[Ꝕ] || $ꝕ instanceof ꞰRC ) {
 					if ( this.resourceMap == Ꝋ ) return Reflect.get(O, S͢(ndx), Receiver)
 					else {
-						let ꝟr = __PN `rdf:nil`.equals(O) ? Ꝋ : this.getTarget(O)
+						let ꝟr = __RDF·nil.equals(O) ? Ꝋ : this.getTarget(O)
 						for ( let ꝟndx = 0
 							; ꝟndx < ndx && ꝟr != Ꝋ
-							; ꝟr = ꝟr.any(__PN `rdf:rest`, $ => !__PN `rdf:nil`.equals($)) ) ++ꝟndx
-						return ꝟr == Ꝋ ? Ꝋ : ꝟr[__PN `rdf:first`] } }
-				else return this.get(O, __PNS `rdf:_${ ndx + 1 }`, Receiver) }
+							; ꝟr = ꝟr.any(__RDF·rest, $ => !__RDF·nil.equals($)) ) ++ꝟndx
+						return ꝟr == Ꝋ ? Ꝋ : ꝟr[__RDF·first] } }
+				else return this.get(O, S͢(__PN `rdf:_${ ndx + 1 }`), Receiver) }
 			getLength ( O, Receiver ) {
 				const $ꝕ = this.getPrototypeOf(O)
 				return $ꝕ == ꞰRC[Ꝕ] || $ꝕ instanceof ꞰRC
@@ -968,9 +968,9 @@ This is an ※extreme※ edge‐case which code is unlikely to ever encounter in
 				if ( rM == Ꝋ ) return  Reflect.get(O, Ɫ, O)
 				else {
 					let ꝟndx = 0
-					for ( let ꝟr = __PN `rdf:nil`.equals(O) ? Ꝋ : this.getTarget(O)
+					for ( let ꝟr = __RDF·nil.equals(O) ? Ꝋ : this.getTarget(O)
 						; ꝟr != Ꝋ
-						; ꝟr = ꝟr.any(__PN `rdf:rest`, $ => !__PN `rdf:nil`.equals($)) ) ++ꝟndx
+						; ꝟr = ꝟr.any(__RDF·rest, $ => !__RDF·nil.equals($)) ) ++ꝟndx
 					return ꝟndx } }
 			getOwnPropertyDescriptor ( O, P ) {
 				if ( !O͢.isExtensible(O) || P != Ɫ && dſ𝒫(O, P) != Ꝋ )
@@ -999,9 +999,9 @@ This is an ※extreme※ edge‐case which code is unlikely to ever encounter in
 				return O͢.isExtensible(O) && O instanceof ꞰR
 					? this.resourceMap == Ꝋ
 						? Array.isArray(this) ? ꞰRC[Ꝕ] : ꞰR[Ꝕ]
-						: this.a(O, __PN `rdf:List`)
-						|| this.has(O, __PN `rdf:first`)
-						|| this.has(O, __PN `rdf:rest`) ? ꞰⱢRC[Ꝕ]
+						: this.a(O, __RDF·List)
+						|| this.has(O, __RDF·first)
+						|| this.has(O, __RDF·rest) ? ꞰⱢRC[Ꝕ]
 						: ꞰⱢR[Ꝕ]
 					: Reflect.getPrototypeOf(O) }
 			getTarget ( target ) {
@@ -1024,12 +1024,12 @@ This is an ※extreme※ edge‐case which code is unlikely to ever encounter in
 				if ( $ꝕ == ꞰRC[Ꝕ] || $ꝕ instanceof ꞰRC ) {
 					if ( this.resourceMap == Ꝋ ) return Reflect.has(O, S͢(ndx))
 					else {
-						let ꝟr = __PN `rdf:nil`.equals(O) ? Ꝋ : this.getTarget(O)
+						let ꝟr = __RDF·nil.equals(O) ? Ꝋ : this.getTarget(O)
 						for ( let ꝟndx = 0
 							; ꝟndx < ndx && ꝟr != Ꝋ
-							; ꝟr = ꝟr.any(__PN `rdf:rest`, $ => __PN `rdf:nil`.equals($)) ) ++ꝟndx
+							; ꝟr = ꝟr.any(__RDF·rest, $ => __RDF·nil.equals($)) ) ++ꝟndx
 						return ꝟr != Ꝋ } }
-				else return this.has(O, __PNS `rdf:_${ ndx + 1 }`) }
+				else return this.has(O, S͢(__PN `rdf:_${ ndx + 1 }`)) }
 			ownKeys ( O ) {
 				if ( !O͢.isExtensible(O) ) return Reflect.ownKeys(O)
 				else {
@@ -1088,9 +1088,9 @@ This is an ※extreme※ edge‐case which code is unlikely to ever encounter in
 							const rs = new Array ($ɫ - ꝟɫ)
 							for ( let ꝟr = this.get(O, ꝟɫ - 1, O)
 								; ꝟr != Ꝋ
-								; ꝟr = ꝟr.any(__PN `rdf:rest`, $ => !__PN `rdf:nil`.equals($)) ) rs.push(ꝟr)
+								; ꝟr = ꝟr.any(__RDF·rest, $ => !__RDF·nil.equals($)) ) rs.push(ꝟr)
 							for ( let ꝟr of rs.reverse() ) {
-								if ( !Reflect.defineProperty(ꝟr, __PNS `rdf:rest`, { [Ꝟ]: __PN `rdf:nil` }) ) return false } }
+								if ( !Reflect.defineProperty(ꝟr, S͢(__RDF·rest), { [Ꝟ]: __RDF·nil }) ) return false } }
 						return true } } }
 			setLength ( O, V ) {
 				const $ꝕ = this.getPrototypeOf(O)
@@ -1140,7 +1140,7 @@ This is an ※extreme※ edge‐case which code is unlikely to ever encounter in
 									, subject: $sbj }) }
 						else if ( V != Ꝋ ) O[ʃAd3](
 							{ object: V
-							, predicate: __PN `rdf:value`
+							, predicate: __RDF·value
 							, subject: $sbj })
 						return true } } }
 			deleteProperty ( O, P ) {
@@ -1391,7 +1391,7 @@ This is an ※extreme※ edge‐case which code is unlikely to ever encounter in
 				const
 					$iterator = hasꞆ.call(bid, ꞰBN) ? iterator ?? bid : iterator
 					, ðˢ = ꝯﬆʞ(Array, $iterator == Ꝋ ? [ Ꝋ ] : A͢($iterator, nObj), new.target)
-				if ( ðˢ[Ɫ] < 1 ) return __PN `rdf:nil`
+				if ( ðˢ[Ɫ] < 1 ) return __RDF·nil
 				else {
 					const _ðˢ = $℘s(
 						Reflect.ownKeys(ðˢ).reduce(( ꝵ, $ ) => $℘(ꝵ, $, { [Ꝯ]: 0, [ꝶ]: 0 }), ðˢ),
@@ -1435,7 +1435,7 @@ This is an ※extreme※ edge‐case which code is unlikely to ever encounter in
 			toDOMNode ( document ) {
 				const ɫ = this?.[Ɫ]
 				if ( ɫ == Ꝋ || ɫ == 1/0 || A͢.ɫ(this) < 1 )
-					return (__PN `rdf:nil`).toDOMNode(document)
+					return (__RDF·nil).toDOMNode(document)
 				else {
 					const
 						$doc = document == Ꝋ ? الرشآء.defaultDocument : document
@@ -1454,17 +1454,17 @@ This is an ※extreme※ edge‐case which code is unlikely to ever encounter in
 								$nº1 == Ꝋ ? Ꝋ :
 									{ localName: `li`
 									, attributes:
-										{ [lʔ ? `property` : `rel`]: __PNS `rdf:first`
+										{ [lʔ ? `property` : `rel`]: S͢(__RDF·first)
 										, lang: typeof _ɫᵹ == `string` ? _ɫᵹ : Ꝋ
 										, datatype: __ꝺꞆ != Ꝋ ?
-											[ __PNS `rdf:HTML`
-											, __PNS `rdf:XMLLiteral` ].indexOf(__ꝺꞆ) >= 0
-											? __PNS `rdf:XMLLiteral` : __ꝺꞆ : Ꝋ }
+											[ S͢(__RDF·HTML)
+											, S͢(__RDF·XMLLiteral) ].indexOf(__ꝺꞆ) >= 0
+											? S͢(__RDF·XMLLiteral) : __ꝺꞆ : Ꝋ }
 									, content: defaultMethodOf(`toDOMNode`, $nº1)($doc) }
 							,
 								$rest == Ꝋ ? Ꝋ :
 									{ localName: `li`
-									, attributes: { rel: __PNS `rdf:rest` }
+									, attributes: { rel: S͢(__RDF·rest) }
 									, content: defaultMethodOf(`toDOMNode`, $rest)($doc) } ] } }` } }
 			toNT ( ) { return ꞰBN[Ꝕ].toNT.call(this) }
 			toString ( ) { return ꞰBN[Ꝕ].toString.call(this) }
@@ -1475,12 +1475,12 @@ This is an ※extreme※ edge‐case which code is unlikely to ever encounter in
 					, rest = get𝒫.call(this, `rest`, ꞰBNC)
 					, sbj = nSbj(this)
 				if ( nº1 != Ꝋ ) {
-					yield new Ʞ3 (sbj, __PN `rdf:first`,
+					yield new Ʞ3 (sbj, __RDF·first,
 						hasꞆ.call(nº1, ꞰBN) && A͢.ʔ(nº1) ? new ꞰBN (nº1) : nº1)
 					if ( hasꞆ.call(nº1, ꞰBN) && A͢.ʔ(nº1) )
 						yield *ꞰBNC[Ꝕ].triples.call(nº1) }
 				if ( rest != Ꝋ ) {
-					yield new Ʞ3 (sbj, __PN `rdf:rest`,
+					yield new Ʞ3 (sbj, __RDF·rest,
 						hasꞆ.call(rest, ꞰBN) && A͢.ʔ(rest) ? new ꞰBN (rest) : rest)
 					if ( hasꞆ.call(rest, ꞰBN) && A͢.ʔ(rest) )
 						yield *ꞰBNC[Ꝕ].triples.call(rest) } }
@@ -1497,13 +1497,13 @@ This is an ※extreme※ edge‐case which code is unlikely to ever encounter in
 					, $ɫᵹ = value.language
 					, ñꝞ = $ñꝞ == Ꝋ ? value[Ꝟ] : $ñꝞ
 					, ꝺꞆℹ = new ꞰÑN (datatype == Ꝋ
-						? $ꝺꞆ == Ꝋ ? __PN `xsd:string` : $ꝺꞆ
+						? $ꝺꞆ == Ꝋ ? __XSD·string : $ꝺꞆ
 						: datatype)
 					, ɫᵹ = S͢(language == Ꝋ
 						? $ɫᵹ == Ꝋ ? `` : $ɫᵹ
 						: language).toLowerCase()
 					, _ðˢ = $℘s(ꝯﬆʞ(ꞰRDFN, [ ꞰL ], new.target),
-						{ datatype: { [Ꝟ]: ɫᵹ ? __PN `rdf:langString` : ꝺꞆℹ }
+						{ datatype: { [Ꝟ]: ɫᵹ ? __RDF·langString : ꝺꞆℹ }
 						, language: { [Ꝟ]: ɫᵹ }
 						, nominalValue: { [Ꝯ]: 0, [Ꝟ]: S͢(ñꝞ == Ꝋ ? value : ñꝞ) } })
 				return new.target === ꞰL ? O͢.freeze(_ðˢ) : _ðˢ }
@@ -1511,10 +1511,10 @@ This is an ※extreme※ edge‐case which code is unlikely to ever encounter in
 			get datatype ( ) {
 				const
 					$ꝺꞆ𝒫 = dſ𝒫(this, `datatype`)
-					, ꝺꞆ = $ꝺꞆ𝒫 == Ꝋ ? __PN `xsd:string` : $ꝺꞆ𝒫[Ꝟ]
+					, ꝺꞆ = $ꝺꞆ𝒫 == Ꝋ ? __XSD·string : $ꝺꞆ𝒫[Ꝟ]
 					, ɫᵹ = get𝒫.call(this, `language`, ꞰL)
-				return typeof ɫᵹ == `string` && ɫᵹ != `` ? __PN `rdf:langString`
-					: ꝺꞆ == Ꝋ ? __PN `xsd:string` : new ꞰÑN (ꝺꞆ) }
+				return typeof ɫᵹ == `string` && ɫᵹ != `` ? __RDF·langString
+					: ꝺꞆ == Ꝋ ? __XSD·string : new ꞰÑN (ꝺꞆ) }
 			get language ( ) {
 				const $ɫᵹ𝒫 = dſ𝒫(this, `language`)
 					, ɫᵹ = $ɫᵹ𝒫 == Ꝋ ? `` : $ɫᵹ𝒫[Ꝟ]
@@ -1526,34 +1526,34 @@ This is an ※extreme※ edge‐case which code is unlikely to ever encounter in
 					, ꝺꞆ = S͢(get𝒫.call(this, `datatype`, ꞰL))
 					, usedHint = [ `number`, `string` ].indexOf(hint) < 0 ? `default` : hint
 				if (
-					[ __PNS `rdf:HTML`
-					, __PNS `rdf:XMLLiteral` ].indexOf(ꝺꞆ) >= 0 ) {
+					[ S͢(__RDF·HTML)
+					, S͢(__RDF·XMLLiteral) ].indexOf(ꝺꞆ) >= 0 ) {
 					const $Ꝟ = ꞰL[Ꝕ].valueOf.call(this)
 					if ( $Ꝟ != Ꝋ ) {
 						const txt = $Ꝟ.textContent
 						return txt == Ꝋ ? ñꝞ : txt } }
 				else return [ `number`, `default` ].indexOf(usedHint) >= 0
 					?
-						[ __PNS `xsd:decimal`
-						, __PNS `xsd:integer`
-						, __PNS `xsd:long`
-						, __PNS `xsd:int`
-						, __PNS `xsd:short`
-						, __PNS `xsd:byte`
-						, __PNS `xsd:nonNegativeInteger`
-						, __PNS `xsd:positiveInteger`
-						, __PNS `xsd:unsignedLong`
-						, __PNS `xsd:unsignedInt`
-						, __PNS `xsd:unsignedShort`
-						, __PNS `xsd:unsignedByte`
-						, __PNS `xsd:nonPositiveInteger`
-						, __PNS `xsd:negativeInteger` ].indexOf(ꝺꞆ) >= 0
+						[ S͢(__XSD·decimal)
+						, S͢(__XSD·integer)
+						, S͢(__XSD·long)
+						, S͢(__XSD·int)
+						, S͢(__XSD·short)
+						, S͢(__XSD·byte)
+						, S͢(__XSD·nonNegativeInteger)
+						, S͢(__XSD·positiveInteger)
+						, S͢(__XSD·unsignedLong)
+						, S͢(__XSD·unsignedInt)
+						, S͢(__XSD·unsignedShort)
+						, S͢(__XSD·unsignedByte)
+						, S͢(__XSD·nonPositiveInteger)
+						, S͢(__XSD·negativeInteger) ].indexOf(ꝺꞆ) >= 0
 						? +ñꝞ
-						: ꝺꞆ == __PNS `xsd:float` || ꝺꞆ == __PNS `xsd:double`
+						: ꝺꞆ == S͢(__XSD·float) || ꝺꞆ == S͢(__XSD·double)
 						? ñꝞ == `+INF` || ñꝞ == `INF` ? 1/0
 							: ñꝞ == `-INF` ? -1/0
 							: +ñꝞ
-						: ꝺꞆ == __PNS `xsd:boolean` ? usedHint == `default`
+						: ꝺꞆ == S͢(__XSD·boolean) ? usedHint == `default`
 							? !(ñꝞ == `false` || ñꝞ == `0`)
 							: +!(ñꝞ == `false` || ñꝞ == `0`)
 						: ñꝞ
@@ -1584,36 +1584,36 @@ This is an ※extreme※ edge‐case which code is unlikely to ever encounter in
 					, ꝺꞆ = get𝒫.call(this, `datatype`, ꞰL)
 				return typeof ɫᵹ == `string` && ɫᵹ != ``
 					? `${ turtify(ñꝞ == Ꝋ ? `` : S͢(ñꝞ)) }@${ ɫᵹ }`
-					: ꝺꞆ == __PNS`xsd:string` ? `${ turtify(ñꝞ == Ꝋ ? `` : S͢(ñꝞ)) }`
+					: __XSD·string.equals(ꝺꞆ) ? `${ turtify(ñꝞ == Ꝋ ? `` : S͢(ñꝞ)) }`
 					: `${ turtify(ñꝞ == Ꝋ ? `` : S͢(ñꝞ)) }^^${ ꝺꞆ.toNT() }` }
 			toTurtle ( ) {  //  get RDF Turtle
 				const
 					ñꝞ = get𝒫.call(this, `nominalValue`, ꞰRDFN)
 					, ꝺꞆ = get𝒫.call(this, `datatype`, ꞰL)
-				return ꝺꞆ == __PNS `xsd:integer`
+				return ꝺꞆ == S͢(__XSD·integer)
 					? ñꝞ
-					: ꝺꞆ == __PNS `xsd:decimal`
+					: ꝺꞆ == S͢(__XSD·decimal)
 					? ñꝞ[ñꝞ[Ɫ] - 1] == `.` ? `${ ñꝞ }0`
 						: ñꝞ.includes(`.`) ? ñꝞ
 						: `${ ñꝞ }.0`
-					: ꝺꞆ == __PNS `xsd:double`
+					: ꝺꞆ == S͢(__XSD·double)
 					&& [ `INF`, `+INF`, `-INF`, `NaN` ].indexOf(ñꝞ) < 0
 					? /e/i.test(ñꝞ) ? ñꝞ: `${ ñꝞ }e1`
-					: ꝺꞆ == __PNS `xsd:boolean`
+					: ꝺꞆ == S͢(__XSD·boolean)
 					? ñꝞ == `true` || ñꝞ == `1` ? `true` : `false`
 					: ꞰL[Ꝕ].toNT.call(this) }
 			valueOf ( ) {  //  get native type
 				const
 					ñꝞ = get𝒫.call(this, `nominalValue`, ꞰRDFN)
 					, ꝺꞆ = S͢(get𝒫.call(this, `datatype`, ꞰL))
-				if ( ꝺꞆ == __PNS `xsd:anyURI` )
+				if ( ꝺꞆ == S͢(__XSD·anyURI) )
 					return new WHATWG·URL (ñꝞ)
-				else if ( ꝺꞆ == __PNS `xsd:base64Binary` )
+				else if ( ꝺꞆ == S͢(__XSD·base64Binary) )
 					return a2b(ñꝞ)
-				else if ( ꝺꞆ == __PNS `xsd:hexBinary` )
+				else if ( ꝺꞆ == S͢(__XSD·hexBinary) )
 					return Uint8Array.from(ñꝞ.split(/(?=(?:[^]{2})*$)/),
 						pair => parseInt(pair, 16)).buffer
-				else if ( ꝺꞆ == __PNS `rdf:XMLLiteral` )
+				else if ( ꝺꞆ == S͢(__RDF·XMLLiteral) )
 					try {
 						const
 							$DOMParser = typeof DOMParser == `undefined`
@@ -1627,7 +1627,7 @@ This is an ※extreme※ edge‐case which code is unlikely to ever encounter in
 							( ꝵ, ĩ ) => (ꝵ.insertBefore(ĩ, ꝵ.firstChild), ꝵ),
 							doc.createDocumentFragment()) }
 					catch ( ɛ ) { return ñꝞ }
-				else if ( ꝺꞆ == __PNS `rdf:HTML` )
+				else if ( ꝺꞆ == S͢(__RDF·HTML) )
 					try {
 						const
 							$DOMParser = typeof DOMParser == `undefined`
@@ -1681,7 +1681,7 @@ If you want to use this constructor to create objects which do not inherit from 
 			get members ( ) { return A͢(nº1MethodOf.call(this, `entries`, this, ꞰR[Ꝕ])()).length }
 			get size ( ) { return get𝒫.call(this, `members`, ꞰR).size }
 			[Ʃ͢.iterator] ( ) { return ꞰR[Ꝕ].triples.call(this) }
-			a ( Ꞇ ) { return ꞰR[Ꝕ].matches.call(this, __PN `rdf:type`, nSbj(Ꞇ)) }
+			a ( Ꞇ ) { return ꞰR[Ꝕ].matches.call(this, __RDF·type, nSbj(Ꞇ)) }
 			add ( predicate, object ) {
 				this[predicate] = object
 				return this }
@@ -1717,7 +1717,7 @@ If you want to use this constructor to create objects which do not inherit from 
 						ꝯﬆʞ(ꞰR, [ this ], ꝯﬆʞr.call(this, ꞰR))) }
 			*entries ( ) {
 				yield *A͢[Ꝕ].entries.call(this)
-				const $member = this[__PN `rdf:member`]
+				const $member = this[__RDF·member]
 				if ( $member != Ꝋ )
 					if ( $member instanceof Set )
 						for ( const member of $member ) {
@@ -1794,10 +1794,10 @@ If you want to use this constructor to create objects which do not inherit from 
 												{ [$lʔ ? `property` : `rel`]: p
 												, lang: typeof ɫᵹ == `string` ? ɫᵹ : Ꝋ
 												, datatype: ꝺꞆ != Ꝋ ?
-													[ __PNS `rdf:HTML`
-													, __PNS `rdf:XMLLiteral` ]
+													[ S͢(__RDF·HTML)
+													, S͢(__RDF·XMLLiteral) ]
 													.indexOf(ꝺꞆ) >= 0
-													? __PNS `rdf:XMLLiteral` : ꝺꞆ : Ꝋ }
+													? S͢(__RDF·XMLLiteral) : ꝺꞆ : Ꝋ }
 											, content: defaultMethodOf(`toDOMNode`, obj)(doc) }) })) },
 							[ ]) } ] } }` }
 			*triples ( ) {
@@ -1823,7 +1823,7 @@ If you want to use this constructor to create objects which do not inherit from 
 							, defaultMethodOf(`valueOf`, obj)() ]) })) }
 			*values ( ) {
 				yield *A͢[Ꝕ].values.call(this)
-				const $member = this[__PN `rdf:member`]
+				const $member = this[__RDF·member]
 				if ( $member != Ꝋ )
 					if ( $member instanceof Set )
 						for ( const member of $member ) {
@@ -1876,19 +1876,19 @@ Subject is guaranteed (by the Resource constructor) to be a blank node; this is 
 				return $℘(ðˢ, `data`, { [Ꝟ]: new ꞰRꝹ (ðˢ) }) }
 			static [Ʃ͢.hasInstance] ( instance ) {
 				return instance instanceof ꞰR
-					&& (ꞰR[Ꝕ].a.call(instance, __PN `rdf:List`)
-						|| ꞰR[Ꝕ].has.call(instance, __PN `rdf:first`)
-						|| ꞰR[Ꝕ].has.call(instance, __PN `rdf:rest`)) }
-			get first ( ) { return this[__PN `rdf:first`] }
-			set first ( $ ) { this[__PN `rdf:first`] = $ }
+					&& (ꞰR[Ꝕ].a.call(instance, __RDF·List)
+						|| ꞰR[Ꝕ].has.call(instance, __RDF·first)
+						|| ꞰR[Ꝕ].has.call(instance, __RDF·rest)) }
+			get first ( ) { return this[__RDF·first] }
+			set first ( $ ) { this[__RDF·first] = $ }
 			get length ( ) {
 				let ꝟlen = 0
 				for ( let ꝟr = get𝒫.call(this, `rest`, ꞰRC)
-					; vr != Ꝋ && !ꞰRDFN[Ꝕ].equals.call(__PN `rdf:nil`, ꝟr)
+					; vr != Ꝋ && !ꞰRDFN[Ꝕ].equals.call(__RDF·nil, ꝟr)
 					; ꝟr = get𝒫.call(ꝟr, `rest`, ꞰRC) ) ++ꝟlen
 				return ꝟlen }
-			get rest ( ) { return this[__PN `rdf:rest`] }
-			set rest ( $ ) { this[__PN `rdf:rest`] = $ }
+			get rest ( ) { return this[__RDF·rest] }
+			set rest ( $ ) { this[__RDF·rest] = $ }
 			get size ( ) { return get𝒫.call(this, `length`, ꞰRC) } }
 		, ꞰⱢRC = mixin.call(class LinkedResourceCollection extends ꞰⱢR { }, ꞰRC)
 		, ꞰRꝹ = class ResourceData {
@@ -1901,13 +1901,13 @@ Subject is guaranteed (by the Resource constructor) to be a blank node; this is 
 			get textDescription ( ) {
 				const
 					$r = this.resource
-					, desc = $r == Ꝋ ? Ꝋ : $r[__PN `rdfs:comment`]
+					, desc = $r == Ꝋ ? Ꝋ : $r[__RDFS·comment]
 				return desc == Ꝋ ? null : get𝒫.call(desc, `text`, ꞰRDFN) }
 			get textLabel ( ) { }
 			get textValue ( ) {
 				const
 					$r = this.resource
-					, _Ꝟ = $r == Ꝋ ? Ꝋ : $r[__PN `rdf:value`]
+					, _Ꝟ = $r == Ꝋ ? Ꝋ : $r[__RDF·value]
 				return _Ꝟ == Ꝋ ? null : get𝒫.call(_Ꝟ, `text`, ꞰRDFN) }
 			createDescription ( document ) { }
 			createLabel ( document ) { }
@@ -2237,7 +2237,55 @@ Subject is guaranteed (by the Resource constructor) to be a blank node; this is 
 			, xml: ℹ `http://www.w3.org/XML/1998/namespace`
 			, xsd: ℹ `http://www.w3.org/2001/XMLSchema#` })
 		, __PN = pxÑ.bind(_ꝯ)
-		, __PNS = $ => S͢(pxÑ.call(_ꝯ, $))
+		, __RDF·HTML = pxÑ.call(_ꝯ, `rdf:HTML`)
+		, __RDF·List = pxÑ.call(_ꝯ, `rdf:List`)
+		, __RDF·XMLLiteral = pxÑ.call(_ꝯ, `rdf:XMLLiteral`)
+		, __RDF·first = pxÑ.call(_ꝯ, `rdf:first`)
+		, __RDF·langString = pxÑ.call(_ꝯ, `rdf:langString`)
+		, __RDF·member = pxÑ.call(_ꝯ, `rdf:member`)
+		, __RDF·nil = pxÑ.call(_ꝯ, `rdf:nil`)
+		, __RDF·rest = pxÑ.call(_ꝯ, `rdf:rest`)
+		, __RDF·type = pxÑ.call(_ꝯ, `rdf:type`)
+		, __RDF·value = pxÑ.call(_ꝯ, `rdf:value`)
+		, __RDFS·comment = pxÑ.call(_ꝯ, `rdfs:comment`)
+		, __XSD·anyURI = pxÑ.call(_ꝯ, `xsd:anyURI`)
+		, __XSD·base64Binary = pxÑ.call(_ꝯ, `xsd:base64Binary`)
+		, __XSD·boolean = pxÑ.call(_ꝯ, `xsd:boolean`)
+		, __XSD·byte = pxÑ.call(_ꝯ, `xsd:byte`)
+		, __XSD·dateTime = pxÑ.call(_ꝯ, `xsd:dateTime`)
+		, __XSD·date = pxÑ.call(_ꝯ, `xsd:date`)
+		, __XSD·dayTimeDuration = pxÑ.call(_ꝯ, `xsd:dayTimeDuration`)
+		, __XSD·decimal = pxÑ.call(_ꝯ, `xsd:decimal`)
+		, __XSD·double = pxÑ.call(_ꝯ, `xsd:double`)
+		, __XSD·duration = pxÑ.call(_ꝯ, `xsd:duration`)
+		, __XSD·float = pxÑ.call(_ꝯ, `xsd:float`)
+		, __XSD·gDay = pxÑ.call(_ꝯ, `xsd:gDay`)
+		, __XSD·gMonth = pxÑ.call(_ꝯ, `xsd:gMonth`)
+		, __XSD·gMonthDay = pxÑ.call(_ꝯ, `xsd:gMonthDay`)
+		, __XSD·gYearMonth = pxÑ.call(_ꝯ, `xsd:gYearMonth`)
+		, __XSD·gYear = pxÑ.call(_ꝯ, `xsd:gYear`)
+		, __XSD·hexBinary = pxÑ.call(_ꝯ, `xsd:hexBinary`)
+		, __XSD·integer = pxÑ.call(_ꝯ, `xsd:integer`)
+		, __XSD·int = pxÑ.call(_ꝯ, `xsd:int`)
+		, __XSD·language = pxÑ.call(_ꝯ, `xsd:language`)
+		, __XSD·long = pxÑ.call(_ꝯ, `xsd:long`)
+		, __XSD·NCName = pxÑ.call(_ꝯ, `xsd:NCName`)
+		, __XSD·NMTOKEN = pxÑ.call(_ꝯ, `xsd:NMTOKEN`)
+		, __XSD·Name = pxÑ.call(_ꝯ, `xsd:Name`)
+		, __XSD·negativeInteger = pxÑ.call(_ꝯ, `xsd:negativeInteger`)
+		, __XSD·nonNegativeInteger = pxÑ.call(_ꝯ, `xsd:nonNegativeInteger`)
+		, __XSD·nonPositiveInteger = pxÑ.call(_ꝯ, `xsd:nonPositiveInteger`)
+		, __XSD·normalizedString = pxÑ.call(_ꝯ, `xsd:normalizedString`)
+		, __XSD·positiveInteger = pxÑ.call(_ꝯ, `xsd:positiveInteger`)
+		, __XSD·short = pxÑ.call(_ꝯ, `xsd:short`)
+		, __XSD·string = pxÑ.call(_ꝯ, `xsd:string`)
+		, __XSD·time = pxÑ.call(_ꝯ, `xsd:time`)
+		, __XSD·token = pxÑ.call(_ꝯ, `xsd:token`)
+		, __XSD·unsignedByte = pxÑ.call(_ꝯ, `xsd:unsignedByte`)
+		, __XSD·unsignedInt = pxÑ.call(_ꝯ, `xsd:unsignedInt`)
+		, __XSD·unsignedLong = pxÑ.call(_ꝯ, `xsd:unsignedLong`)
+		, __XSD·unsignedShort = pxÑ.call(_ꝯ, `xsd:unsignedShort`)
+		, __XSD·yearMonthDuration = pxÑ.call(_ꝯ, `xsd:yearMonthDuration`)
 	return $℘s(الرشآء,
 		{ BlankNode: { [Ꝯ]: 1, [Ꝟ]: phony(ꞰBN) }
 		, BlankNodeCollection: { [Ꝯ]: 1, [Ꝟ]: phony(ꞰBNC) }
