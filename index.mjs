@@ -118,8 +118,9 @@ This is more exacting than ECMAScript’s definition of an arraylike object, bec
 			_sbj[predicate] = object
 			return this }
 		, adActn = function addAction ( { test, action } ) {  //  push new action to this
-			this?.push?.(new Ʞ3A ( test, action ))
-			return this }
+			const $actn = new Ʞ3A ( test, action )
+			this?.push?.($actn)
+			return $actn }
 		, b2a = $ => {  //  (big‐endian) base64 from typed array / buffer / string
 			const
 				$buf = $ instanceof ArrayBuffer ? $
@@ -1915,7 +1916,7 @@ Subject is guaranteed (by the Resource constructor) to be a blank node; this is 
 			toDescriptionString ( ) { }
 			toString ( ) { }
 			valueOf ( ) { } }
-		, ꞰꝾ = class Graph {  //  RDF Interfaces Graph
+		, ꞰꝾ = class Graph {  //  RDF Interfaces Graph; RDF/JS Dataset
 			constructor ( actions ) {
 				const
 					$actns = actions == Ꝋ ? [ ]
@@ -1939,6 +1940,7 @@ Subject is guaranteed (by the Resource constructor) to be a blank node; this is 
 				else return [ ] }
 			get empty ( ) { return A͢.ɫ(nº1MethodOf.call(this, `toArray`, this, ꞰꝾ[Ꝕ])()) == 0 }
 			get length ( ) { return A͢.ɫ(nº1MethodOf.call(this, `toArray`, this, ꞰꝾ[Ꝕ])()) }
+			get size ( ) { return  A͢.ɫ(nº1MethodOf.call(this, `toArray`, this, ꞰꝾ[Ꝕ])()) }
 			[Ʃ͢.iterator] ( ) { return nº1MethodOf.call(this, `triples`, this, ꞰꝾ[Ꝕ])() }
 			add ( triple ) {
 				const
@@ -1955,9 +1957,9 @@ Subject is guaranteed (by the Resource constructor) to be a blank node; this is 
 				const $adActn = this[ʃAdActn]
 				if ( $adActn == Ꝋ ) throw ꞆƐ͢(l10n `الرشآء: Graph actions not addable.`)
 				else {
-					$adActn.call(this, action)
+					const $actn = $adActn.call(this, action)
 					if ( run ) nº1MethodOf.call(this, `toArray`, this, ꞰꝾ[Ꝕ])()
-						.forEach($3 => new Ʞ3A (action.test, action.action).run($3, this))
+						.forEach($3 => $actn.run($3, this))
 					return this } }
 			addAll ( graph ) {  //  needn’t actually be a graph
 				const
@@ -1990,26 +1992,40 @@ Subject is guaranteed (by the Resource constructor) to be a blank node; this is 
 						, ꝿ = ꞰꝾ[Ꝕ].addAll.call(ꝯﬆʞ(ꞰꝾ, [ ], ꝯﬆʞr.call(this, ꞰꝾ)), this)
 					if ( $actns ) for ( const actn of $actns.call(this) ) { ꝿ.addAction(actn) }
 					return ꝿ } }
+			delete ( triple ) {
+				return ꞰꝾ[Ꝕ].removeMatches.call(this,
+					triple.subject, triple.predicate, triple.object) }
+			deleteMatches ( subject = null, predicate = null, object = null ) {
+				return ꞰꝾ[Ꝕ].removeMatches.call(this, subject, predicate, object) }
 			every ( callback ) {
+				const $callback = O͢.freeze(new Ʞ3F (callback))
 				return nº1MethodOf.call(this, `toArray`, this, ꞰꝾ[Ꝕ])()
-					.every($3 => new Ʞ3F (callback).test($3)) }
+					.every($3 => $callback.test($3)) }
 			filter ( callback ) {
 				const
 					$actns = this[ʃActns]
+					, $callback = O͢.freeze(new Ʞ3F (callback))
 					, ꝿ = nº1MethodOf.call(this, `toArray`, this, ꞰꝾ[Ꝕ])().reduce(
-						( ꝿ, $3 ) => new Ʞ3F (callback).test($3) ? ꞰꝾ[Ꝕ].add.call(ꝿ, $3) : ꝿ,
+						( ꝿ, $3 ) => $callback.test($3)
+							? nº1MethodOf.call(ꝿ, `add`, ꝿ, ꞰꝾ[Ꝕ])($3)
+							: ꝿ,
 						ꝯﬆʞ(ꞰꝾ, [ ], ꝯﬆʞr.call(this, ꞰꝾ)))
 				if ( $actns ) for ( const actn of $actns.call(this) ) { ꝿ.addAction(actn) }
 				return ꝿ }
 			forEach ( callback ) {
+				const $callback = O͢.freeze(new Ʞ3C (callback))
 				return nº1MethodOf.call(this, `toArray`, this, ꞰꝾ[Ꝕ])()
-					.forEach($3 => (new Ʞ3C (callback)).run($3, this)) }
+					.forEach($3 => $callback.run($3, this)) }
 			get ( subject ) {
 				const sbj = nSbj(subject)
 				return sbj == Ꝋ ? Ꝋ : this[sbj] }
-			has ( subject ) {
-				const sbj = nSbj(subject)
-				return sbj == Ꝋ ? false : this[sbj] != Ꝋ }
+			has ( subjectOrTriple ) {
+				const { object, predicate, subject } = subjectOrTriple ?? { }
+				if ( subject != null && predicate != null && object != null )
+					return this.matches(subject, predicate, object)
+				else {
+					const sbj = nSbj(subject)
+					return sbj == Ꝋ ? false : this[sbj] != Ꝋ } }
 			lock ( ) { return O͢.preventExtensions(this) }
 			match ( subject, predicate, object, limit = 0 ) {
 				const
@@ -2024,9 +2040,23 @@ Subject is guaranteed (by the Resource constructor) to be a blank node; this is 
 						&& (lmt == 0 || lmt >= ++ꝟcnt) ) ꝿ.add($3) })
 				if ( $actns ) for ( const actn of $actns.call(this) ) { ꝿ.addAction(actn) }
 				return ꝿ }
+			map ( map ) {
+				const
+					$actns = this[ʃActns]
+					, $map = O͢.freeze(new Ʞ3M (map))
+					, ꝿ = nº1MethodOf.call(this, `toArray`, this, ꞰꝾ[Ꝕ])().map($3 =>
+						$map.map($3, this)).reduce(
+							( ꝿ, $3 ) => nº1MethodOf.call(ꝿ, `add`, ꝿ, ꞰꝾ[Ꝕ])($3),
+							ꝯﬆʞ(ꞰꝾ, [ ], ꝯﬆʞr.call(this, ꞰꝾ)))
+				if ( $actns ) for ( const actn of $actns.call(this) ) { ꝿ.addAction(actn) }
+				return ꝿ }
 			matches ( subject, predicate, object ) {
 				return ꞰꝾ[Ꝕ].match.call(this, subject, predicate, object, 1).length > 0 }
 			merge ( graph ) { return ꞰꝾ[Ꝕ].addAll.call(ꞰꝾ[Ꝕ].clone.call(this), graph) }
+			reduce ( run, initialValue ) {
+				const $run = O͢.freeze(new Ʞ3R (run))
+				return nº1MethodOf.call(this, `toArray`, this, ꞰꝾ[Ꝕ])().reduce(( ꝵ, $3 ) =>
+						$run.run(ꝵ, $3, this), initialValue) }
 			remove ( triple ) {
 				const $rm3Match = this[ʃRm3Match]
 				if ( $rm3Match == Ꝋ ) throw ꞆƐ͢(l10n `الرشآء: Graph not deletable.`)
@@ -2053,8 +2083,9 @@ Subject is guaranteed (by the Resource constructor) to be a blank node; this is 
 					else throw ꞆƐ͢(l10n `الرشآء: Subject does not match.`)
 					return this } }
 			some ( callback ) {
+				const $callback = O͢.freeze(new Ʞ3F (callback))
 				return nº1MethodOf.call(this, `toArray`, this, ꞰꝾ[Ꝕ])()
-					.some($3 => (new Ʞ3F (callback)).test($3)) }
+					.some($3 => $callback.test($3)) }
 			toArray ( ) {
 				const $rs = this[ʃRs]
 				if ( $rs != Ꝋ ) return A͢($rs.call(this)).reduce(( ꝵ, r ) =>
@@ -2072,6 +2103,7 @@ Subject is guaranteed (by the Resource constructor) to be a blank node; this is 
 				return nº1MethodOf.call(this, `toArray`, this, ꞰꝾ[Ꝕ])()
 					.map(Function[Ꝕ].call.bind(Ʞ3[Ꝕ].toNT))
 					.join `\n` }
+			toString ( ) { return ꞰꝾ[Ꝕ].toNT.call(this) }
 			toTurtle ( ) { return ꞰꝾ[Ꝕ].toNT.call(this) }
 			*tripleActions ( ) {
 				const $actns = this[ʃActns]
@@ -2164,21 +2196,36 @@ Subject is guaranteed (by the Resource constructor) to be a blank node; this is 
 					object: defaultMethodOf(`valueOf`, obj)()
 					, predicate: defaultMethodOf(`valueOf`, p)()
 					, subject: defaultMethodOf(`valueOf`, sbj)() } } }
-		, Ʞ3F = class TripleFilter {  //  RDF Interfaces; cannot modify passed triple
+		, Ʞ3F = class TripleFilter {  //  RDF Interfaces TripleFilter; RDF/JS QuadFilterIteratee
 			constructor ( test ) {
-				const $tester = test.test
 				return $℘(this, `test`, { [ꝴ]: 1, [Ꝟ]: triple =>
-					!!($tester != Ꝋ ? $tester(Ʞ3[Ꝕ].clone.call(triple))
-						: test(Ʞ3[Ꝕ].clone.call(triple))) }) }
+					!!(test.test ?? test)(Ʞ3[Ꝕ].clone.call(triple)) }) }
 			test ( triple ) {
 				const test = nº1𝒫Of.call(this, `test`)
 				return test == Ꝋ ? this(triple) : test.call(this, triple) } }
-		, Ʞ3C = class TripleCallback { //  RDF Interfaces TripleCallback; can modify passed graph but not triple
+		, Ʞ3M = class TripleMap {  //  RDF/JS QuadMapIteratee
+			constructor ( map ) {
+				return $℘(this, `map`, { [ꝴ]: 1, [Ꝟ]: ( triple, graph ) =>
+					(map.map ?? map)(Ʞ3[Ꝕ].clone.call(triple), graph) }) }
+			map ( triple, graph ) {
+				const map = nº1𝒫Of.call(this, `map`)
+				return map == Ꝋ ? this(triple, graph) : map.call(this, triple, graph) } }
+		, Ʞ3R = class TripleReduce {  //  RDF/JS QuadReduceIteratee
+			constructor ( run ) {
+				return $℘(this, `run`, { [ꝴ]: 1, [Ꝟ]: ( accumulator, triple, graph ) =>
+					!!(run.run ?? run)(accumulator, Ʞ3[Ꝕ].clone.call(triple), graph) }) }
+			run ( accumulator, triple, graph ) {
+				const run = nº1𝒫Of.call(this, `run`)
+				return run == Ꝋ ? this(accumulator, triple, graph)
+					: run.call(this, accumulator, triple, graph) } }
+		, Ʞ3C = class TripleCallback { //  RDF Interfaces TripleCallback
 			constructor ( run ) {
 				const $runner = run.run
-				return $℘(this, `run`, { [ꝴ]: 1, [Ꝟ]: ( triple, graph ) =>
-					$runner != Ꝋ ? $runner(Ʞ3[Ꝕ].clone.call(triple), graph)
-						: run(Ʞ3[Ꝕ].clone.call(triple), graph) }) } }
+				return $℘(this, `run`, { [ꝴ]: 1, [Ꝟ]: ( triple, graph ) => {
+					(run.run ?? run)(Ʞ3[Ꝕ].clone.call(triple), graph) } }) }
+			run ( triple, graph ) {
+				const run = nº1𝒫Of.call(this, `run`)
+				return run == Ꝋ ? this(triple, graph) : run.call(this, triple, graph) } }
 		, Ʞ3A = class TripleAction {  //  RDF Interfaces TripleAction
 			constructor ( test, action ) {
 				const
