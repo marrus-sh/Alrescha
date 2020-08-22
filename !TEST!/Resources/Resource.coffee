@@ -420,16 +420,12 @@ describe "Resources", -> describe "Resource", ->
 
 		describe "matches()", ->
 
-			it "returns false for no predicate", ->
+			it "checks all when no predicate", ->
 				resource = new Resource "example:sbj"
 				resource["example:p"] = "example object"
 				expect resource.matches null, "example object"
-					.is.false
-
-			it "returns false for undefined object", ->
-				resource = new Resource "example:sbj"
-				resource["example:p"] = "example object"
-				expect resource.matches "example:p"
+					.is.true
+				expect resource.matches null, "none object"
 					.is.false
 
 			it "checks predicate presence for null object", ->

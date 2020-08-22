@@ -400,6 +400,7 @@ This is more exacting than ECMAScript’s definition of an arraylike object, bec
 		, ʃAd3 = Ʃ͢ `addTriple`
 		, ʃAdActn = Ʃ͢ `addAction`
 		, ʃRm3Match = Ʃ͢ `removeTripleMatches`
+		, ʃR = Ʃ͢ `getResource`
 		, ʃRs = Ʃ͢ `resourceIterator`
 		, Ɫ = `length`
 		, ẞ = `substring`
@@ -1731,10 +1732,12 @@ If you want to use this constructor to create objects which do not inherit from 
 			has ( predicate ) { return isIRI(predicate) && this[predicate] != Ꝋ }
 			*keys ( ) { yield *A͢[Ꝕ].keys.call(this) }
 			lock ( ) { return O͢.preventExtensions(this) }
-			matches ( predicate, object ) {
-				if ( predicate == Ꝋ ) return false
-				else if ( object === null ) return !!dſ𝒫(this, predicate)
-				else if ( object === Ꝋ ) return false
+			matches ( predicate = null, object = null ) {
+				if ( predicate == Ꝋ ) {
+					for ( const p of nº1MethodOf.call(this, `predicates`, this, ꞰR[Ꝕ])() ) {
+						if ( ꞰR[Ꝕ].matches.call(this, p, object) ) return true }
+					return false }
+				else if ( object == Ꝋ ) return !!dſ𝒫(this, predicate)
 				else if ( object instanceof Set )
 					return !A͢(object).some($ => !ꞰR[Ꝕ].matches.call(this, predicate, $))
 				else {
@@ -1930,6 +1933,7 @@ Subject is guaranteed (by the Resource constructor) to be a blank node; this is 
 						, [ʃActns]: { [Ꝟ]: actns.bind($actns) }
 						, [ʃAdActn]: { [Ꝯ]: 1, [Ꝟ]: adActn.bind($actns) }
 						, [ʃRm3Match]: { [Ꝯ]: 1, [Ꝟ]: rm3Match.bind(rM) }
+						, [ʃR]: { [Ꝯ]: 1, [Ꝟ]: Reflect.get.bind(Reflect, this) }
 						, [ʃRs]: { [Ꝟ]: rs.bind(rM) } }), new ꞰꝾPX (rM))
 					return $℘(ðˢ, ʃAd3, { [Ꝯ]: 1, [Ꝟ]: ad3.bind(rM, ðˢ) }) }
 			get [Ʃ͢.toStringTag] ( ) { return ꞰꝾ.name }
@@ -1998,7 +2002,7 @@ Subject is guaranteed (by the Resource constructor) to be a blank node; this is 
 					triple.subject, triple.predicate, triple.object) }
 			deleteMatches ( subject = null, predicate = null, object = null ) {
 				return ꞰꝾ[Ꝕ].removeMatches.call(this, subject, predicate, object) }
-			deleteSubject ( subject ) {
+			deleteResource ( subject ) {
 				const sbj = nSbj(subject)
 				return ꞰꝾ[Ꝕ].removeMatches.call(this, sbj, null, null) }
 			difference ( other ) {
@@ -2023,13 +2027,14 @@ Subject is guaranteed (by the Resource constructor) to be a blank node; this is 
 				const $callback = O͢.freeze(new Ʞ3C (callback))
 				return nº1MethodOf.call(this, `toArray`, this, ꞰꝾ[Ꝕ])()
 					.forEach($3 => $callback.run($3, this)) }
-			getSubject ( subject ) {
+			getResource ( subject ) {
 				const sbj = nSbj(subject)
-				return sbj == Ꝋ ? Ꝋ : this[sbj] }
+				return sbj == Ꝋ ? Ꝋ : this[ʃR]?.(sbj) }
 			has ( triple ) { return this.matches(triple.subject, triple.predicate, triple.object) }
-			hasSubject ( subject ) {
+			hasResource ( subject ) {
 				const sbj = nSbj(subject)
-				return sbj == Ꝋ ? false : this[sbj] != Ꝋ }
+				return sbj == Ꝋ ? false
+					: nº1MethodOf.call(this, `getResource`, this, ꞰꝾ[Ꝕ])(sbj) != Ꝋ }
 			intersection ( other ) {
 				return ꞰꝾ[Ꝕ].filter($3 => nº1MethodOf.call(other, `has`, other, ꞰꝾ[Ꝕ])($3)) }
 			lock ( ) { return O͢.preventExtensions(this) }
@@ -2043,21 +2048,34 @@ Subject is guaranteed (by the Resource constructor) to be a blank node; this is 
 							ꝯﬆʞ(ꞰꝾ, [ ], ꝯﬆʞr.call(this, ꞰꝾ)))
 				if ( $actns ) for ( const actn of $actns.call(this) ) { ꝿ.addAction(actn) }
 				return ꝿ }
-			match ( subject, predicate, object, limit = 0 ) {
+			match ( subject = null, predicate = null, object = null, limit = 0 ) {
 				const
 					$actns = this[ʃActns]
 					, lmt = limit >> 0
 					, ꝿ = ꝯﬆʞ(ꞰꝾ, [ ], ꝯﬆʞr.call(this, ꞰꝾ))
 				let ꝟcnt = 0
 				nº1MethodOf.call(this, `toArray`, this, ꞰꝾ[Ꝕ])().forEach($3 => {
-					if ( (subject === null || ꞰRDFN[Ꝕ].equals.call($3.subject, subject))
-						&& (predicate == null || ꞰRDFN[Ꝕ].equals.call($3.predicate, predicate))
-						&& (object == null || ꞰRDFN[Ꝕ].equals.call($3.object, object))
+					if ( (subject == Ꝋ || ꞰRDFN[Ꝕ].equals.call($3.subject, subject))
+						&& (predicate == Ꝋ || ꞰRDFN[Ꝕ].equals.call($3.predicate, predicate))
+						&& (object == Ꝋ || ꞰRDFN[Ꝕ].equals.call($3.object, object))
 						&& (lmt == 0 || lmt >= ++ꝟcnt) ) ꝿ.add($3) })
 				if ( $actns ) for ( const actn of $actns.call(this) ) { ꝿ.addAction(actn) }
 				return ꝿ }
 			matches ( subject, predicate, object ) {
-				return ꞰꝾ[Ꝕ].match.call(this, subject, predicate, object, 1).length > 0 }
+				const
+					$r = nº1MethodOf.call(this, `getResource`, this, ꞰꝾ[Ꝕ])(subject)
+					, $rs = this[ʃRs]
+				if ( $r != Ꝋ )
+					if ( predicate == Ꝋ && object == Ꝋ ) return true
+					else return ꞰR[Ꝕ].matches.call($r, predicate, object)
+				else if ( $rs != Ꝋ ) {
+					for ( const r of $rs.call(this) ) {
+						if ( ꞰRDFN[Ꝕ].equals.call(r, subject) )
+							return ꞰR[Ꝕ].matches.call(r, predicate, object)
+						else if ( subject == null && ꞰR[Ꝕ].matches.call(r, predicate, object) )
+							return true }
+					return false }
+				else return ꞰꝾ[Ꝕ].match.call(this, subject, predicate, object, 1).length > 0 }
 			merge ( graph ) { return ꞰꝾ[Ꝕ].addAll.call(ꞰꝾ[Ꝕ].clone.call(this), graph) }
 			async normalized ( ) { throw ꞆƐ͢(l10n `الرشآء: Unsupported method.`) }
 			reduce ( run, initialValue ) {
@@ -2079,7 +2097,7 @@ Subject is guaranteed (by the Resource constructor) to be a blank node; this is 
 			*resources ( ) {
 				const $rs = this[ʃRs]
 				if ( $rs != Ꝋ ) yield *$rs.call(this) }
-			setSubject ( subject, resource ) {
+			setResource ( subject, resource ) {
 				const $ad3 = this[ʃAd3]
 				if ( $ad3 == Ꝋ ) throw ꞆƐ͢(l10n `الرشآء: Graph not addable.`)
 				else {
@@ -2401,5 +2419,6 @@ Subject is guaranteed (by the Resource constructor) to be a blank node; this is 
 			{ actionIterator: { [Ꝟ]: ʃActns }
 			, addAction: { [Ꝟ]: ʃAdActn }
 			, addTriple: { [Ꝟ]: ʃAd3 }
+			, getResource: { [Ꝟ]: ʃR }
 			, removeTripleMatches: { [Ꝟ]: ʃRm3Match }
 			, resourceIterator: { [Ꝟ]: ʃRs } }) } }) })()
