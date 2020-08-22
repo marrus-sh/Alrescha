@@ -938,7 +938,7 @@ describe "Graphs", -> describe "Graph", ->
 				expect (Array.from do instance.resources).map ( $ ) => $.nominalValue
 					.does.have.members [ "example:sbj", "example:otherSbj" ]
 
-		describe "set()", ->
+		describe "setSubject()", ->
 
 			it "sets", ->
 				instance = do createGraph
@@ -948,7 +948,7 @@ describe "Graphs", -> describe "Graph", ->
 					object: "example object"
 				resource = new Resource "example:sbj"
 				resource["example:p"] = "a different object"
-				instance.set "example:sbj", resource
+				instance.setSubject "example:sbj", resource
 				expect instance["example:sbj"]
 					.instanceof Resource
 					.which.has.property "example:p"
@@ -959,7 +959,7 @@ describe "Graphs", -> describe "Graph", ->
 				instance = do createGraph
 				resource = new Resource "example:otherSbj"
 				resource["example:p"] = "a different object"
-				do expect -> instance.set "example:sbj", resource
+				do expect -> instance.setSubject "example:sbj", resource
 					.does.throw
 
 			it "removes when setting to undefined", ->
@@ -968,7 +968,7 @@ describe "Graphs", -> describe "Graph", ->
 					subject: "example:sbj"
 					predicate: "example:p"
 					object: "example object"
-				instance.set "example:sbj", undefined
+				instance.setSubject "example:sbj", undefined
 				expect instance
 					.does.not.have.property "example:sbj"
 
@@ -982,13 +982,13 @@ describe "Graphs", -> describe "Graph", ->
 					test: ( $ )-> $.subject.nominalValue isnt "example:dupSbj"
 				resource = new Resource "example:sbj"
 				resource["example:p"] = "a different object"
-				instance.set "example:sbj", resource
+				instance.setSubject "example:sbj", resource
 				expect instance
 					.does.not.have.property "example:dupSbj"
 
 			it "returns this", ->
 				instance = do createGraph
-				expect instance.set "example:sbj", undefined
+				expect instance.setSubject "example:sbj", undefined
 					.does.equal instance
 
 		describe "some()", ->

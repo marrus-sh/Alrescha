@@ -362,7 +362,7 @@ This is more exacting than ECMAScript’s definition of an arraylike object, bec
 							return ꝟꝵ } }
 					else {
 						const ꝵ = object === null
-							? sbj.hasOwnProperty(predicate) && delete sbj[predicate]
+							? sbj[𝒫](predicate) && delete sbj[predicate]
 							: sbj.remove(predicate, object)
 						if ( sbj.empty ) this.delete($sbj)
 						return ꝵ } }
@@ -1992,11 +1992,18 @@ Subject is guaranteed (by the Resource constructor) to be a blank node; this is 
 						, ꝿ = ꞰꝾ[Ꝕ].addAll.call(ꝯﬆʞ(ꞰꝾ, [ ], ꝯﬆʞr.call(this, ꞰꝾ)), this)
 					if ( $actns ) for ( const actn of $actns.call(this) ) { ꝿ.addAction(actn) }
 					return ꝿ } }
+			async contains ( other ) { throw ꞆƐ͢(l10n `الرشآء: Unsupported method.`) }
 			delete ( triple ) {
 				return ꞰꝾ[Ꝕ].removeMatches.call(this,
 					triple.subject, triple.predicate, triple.object) }
 			deleteMatches ( subject = null, predicate = null, object = null ) {
 				return ꞰꝾ[Ꝕ].removeMatches.call(this, subject, predicate, object) }
+			deleteSubject ( subject ) {
+				const sbj = nSbj(subject)
+				return ꞰꝾ[Ꝕ].removeMatches.call(this, sbj, null, null) }
+			difference ( other ) {
+				return ꞰꝾ[Ꝕ].filter($3 => !nº1MethodOf.call(other, `has`, other, ꞰꝾ[Ꝕ])($3)) }
+			async equals ( other ) { throw ꞆƐ͢(l10n `الرشآء: Unsupported method.`) }
 			every ( callback ) {
 				const $callback = O͢.freeze(new Ʞ3F (callback))
 				return nº1MethodOf.call(this, `toArray`, this, ꞰꝾ[Ꝕ])()
@@ -2016,17 +2023,26 @@ Subject is guaranteed (by the Resource constructor) to be a blank node; this is 
 				const $callback = O͢.freeze(new Ʞ3C (callback))
 				return nº1MethodOf.call(this, `toArray`, this, ꞰꝾ[Ꝕ])()
 					.forEach($3 => $callback.run($3, this)) }
-			get ( subject ) {
+			getSubject ( subject ) {
 				const sbj = nSbj(subject)
 				return sbj == Ꝋ ? Ꝋ : this[sbj] }
-			has ( subjectOrTriple ) {
-				const { object, predicate, subject } = subjectOrTriple ?? { }
-				if ( subject != null && predicate != null && object != null )
-					return this.matches(subject, predicate, object)
-				else {
-					const sbj = nSbj(subject)
-					return sbj == Ꝋ ? false : this[sbj] != Ꝋ } }
+			has ( triple ) { return this.matches(triple.subject, triple.predicate, triple.object) }
+			hasSubject ( subject ) {
+				const sbj = nSbj(subject)
+				return sbj == Ꝋ ? false : this[sbj] != Ꝋ }
+			intersection ( other ) {
+				return ꞰꝾ[Ꝕ].filter($3 => nº1MethodOf.call(other, `has`, other, ꞰꝾ[Ꝕ])($3)) }
 			lock ( ) { return O͢.preventExtensions(this) }
+			map ( map ) {
+				const
+					$actns = this[ʃActns]
+					, $map = O͢.freeze(new Ʞ3M (map))
+					, ꝿ = nº1MethodOf.call(this, `toArray`, this, ꞰꝾ[Ꝕ])().map($3 =>
+						$map.map($3, this)).reduce(
+							( ꝿ, $3 ) => nº1MethodOf.call(ꝿ, `add`, ꝿ, ꞰꝾ[Ꝕ])($3),
+							ꝯﬆʞ(ꞰꝾ, [ ], ꝯﬆʞr.call(this, ꞰꝾ)))
+				if ( $actns ) for ( const actn of $actns.call(this) ) { ꝿ.addAction(actn) }
+				return ꝿ }
 			match ( subject, predicate, object, limit = 0 ) {
 				const
 					$actns = this[ʃActns]
@@ -2040,19 +2056,10 @@ Subject is guaranteed (by the Resource constructor) to be a blank node; this is 
 						&& (lmt == 0 || lmt >= ++ꝟcnt) ) ꝿ.add($3) })
 				if ( $actns ) for ( const actn of $actns.call(this) ) { ꝿ.addAction(actn) }
 				return ꝿ }
-			map ( map ) {
-				const
-					$actns = this[ʃActns]
-					, $map = O͢.freeze(new Ʞ3M (map))
-					, ꝿ = nº1MethodOf.call(this, `toArray`, this, ꞰꝾ[Ꝕ])().map($3 =>
-						$map.map($3, this)).reduce(
-							( ꝿ, $3 ) => nº1MethodOf.call(ꝿ, `add`, ꝿ, ꞰꝾ[Ꝕ])($3),
-							ꝯﬆʞ(ꞰꝾ, [ ], ꝯﬆʞr.call(this, ꞰꝾ)))
-				if ( $actns ) for ( const actn of $actns.call(this) ) { ꝿ.addAction(actn) }
-				return ꝿ }
 			matches ( subject, predicate, object ) {
 				return ꞰꝾ[Ꝕ].match.call(this, subject, predicate, object, 1).length > 0 }
 			merge ( graph ) { return ꞰꝾ[Ꝕ].addAll.call(ꞰꝾ[Ꝕ].clone.call(this), graph) }
+			async normalized ( ) { throw ꞆƐ͢(l10n `الرشآء: Unsupported method.`) }
 			reduce ( run, initialValue ) {
 				const $run = O͢.freeze(new Ʞ3R (run))
 				return nº1MethodOf.call(this, `toArray`, this, ꞰꝾ[Ꝕ])().reduce(( ꝵ, $3 ) =>
@@ -2072,7 +2079,7 @@ Subject is guaranteed (by the Resource constructor) to be a blank node; this is 
 			*resources ( ) {
 				const $rs = this[ʃRs]
 				if ( $rs != Ꝋ ) yield *$rs.call(this) }
-			set ( subject, resource ) {
+			setSubject ( subject, resource ) {
 				const $ad3 = this[ʃAd3]
 				if ( $ad3 == Ꝋ ) throw ꞆƐ͢(l10n `الرشآء: Graph not addable.`)
 				else {
@@ -2091,6 +2098,7 @@ Subject is guaranteed (by the Resource constructor) to be a blank node; this is 
 				if ( $rs != Ꝋ ) return A͢($rs.call(this)).reduce(( ꝵ, r ) =>
 					ꝵ.concat(A͢(nº1MethodOf.call(r, `triples`, r, ꞰR[Ꝕ])())), [ ])
 				else return [ ] }
+			async toCanonical ( ) { throw ꞆƐ͢(l10n `الرشآء: Unsupported method.`) }
 			toDOMNode ( document ) {
 				const
 					$rs = this[ʃRs]
@@ -2113,6 +2121,7 @@ Subject is guaranteed (by the Resource constructor) to be a blank node; this is 
 			*triples ( ) {
 				const $rs = this[ʃRs]
 				if ( $rs != Ꝋ ) for ( const r of $rs.call(this) ) { yield *r.triples() } }
+			union ( graph ) { return ꞰꝾ[Ꝕ].addAll.call(ꞰꝾ[Ꝕ].clone.call(this), graph) }
 			valueOf ( ) { return new Set (nº1MethodOf.call(this, `toArray`, this, ꞰꝾ[Ꝕ])()
 				.map($3 => Ʞ3[Ꝕ].valueOf.call($3))) } }
 		, Ʞ3 = class Triple extends ꞰꝾ {  //  RDF/JS & RDF Interfaces
@@ -2386,7 +2395,8 @@ Subject is guaranteed (by the Resource constructor) to be a blank node; this is 
 			, "الرشآء: Subject does not match.": `The nominal value of the given resource does not match.`
 			, "الرشآء: Turtle literal subject error.": `RDF Turtle parser received a literal for a subject at position $1.`
 			, "الرشآء: Turtle unnamed predicate error.": `RDF Turtle parser received a predicate at position $1 which is not a named node.`
-			, "الرشآء: Turtle missing term error.": `RDF Turtle parser expected a term at position $1, but none was found.` } }
+			, "الرشآء: Turtle missing term error.": `RDF Turtle parser expected a term at position $1, but none was found.`
+			, "الرشآء: Unsupported method.": `The current environment lacks the necessary APIs for this method.` } }
 		, symbols: { [Ꝯ]: 1, [Ꝟ]: O͢.create(O͢[Ꝕ],
 			{ actionIterator: { [Ꝟ]: ʃActns }
 			, addAction: { [Ꝟ]: ʃAdActn }
