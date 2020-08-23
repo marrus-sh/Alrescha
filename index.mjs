@@ -1805,7 +1805,7 @@ If you want to use this constructor to create objects which do not inherit from 
 							, predicates: { [Ꝟ]: ꞰPM[Ꝕ].keys.bind(pM) }  //  optimization
 							, remove: { [Ꝟ]: ꞰPM[Ꝕ].delete.bind(pM) } }),  //  optimization
 							new ꞰRPX (Ꝋ, pM))
-					return $℘(ðˢ, `data`, { [Ꝟ]: new ꞰRꝹ (ðˢ) }) } }
+					return ðˢ } }
 			static [Ʃ͢.hasInstance] ( instance ) {
 				return Function.prototype[Ʃ͢.hasInstance].call(this, instance) }
 			get empty ( ) {
@@ -1992,7 +1992,7 @@ There are fewer optimizations for LinkedResource to ensure resource removal and 
 						, predicates: { [Ꝟ]: ꞰPM[Ꝕ].keys.bind($pM) } }),  //  optimization
 						rPx)
 				$℘(rPx, `revoke`, { [Ꝯ]: 0, [Ꝟ]: revoke })
-				return $℘(proxy, `data`, { [Ꝟ]: new ꞰRꝹ (proxy) }) } }
+				return proxy } }
 		, ꞰRC = class ResourceCollection extends ꞰR {
 			constructor ( subject ) {
 /*  ⁂  *\
@@ -2014,7 +2014,7 @@ Subject is guaranteed (by the Resource constructor) to be a blank node; this is 
 						, text: { get: dſ𝒫(ꞰRDFN[Ꝕ], `text`).get }
 						, [Ꝟ]: { get: dſ𝒫(ꞰRDFN[Ꝕ], Ꝟ).get } }),
 						new ꞰRPX (Ꝋ, pM))
-				return $℘(ðˢ, `data`, { [Ꝟ]: new ꞰRꝹ (ðˢ) }) }
+				return ðˢ }
 			static [Ʃ͢.hasInstance] ( instance ) {
 				return instance instanceof ꞰR
 					&& (ꞰR[Ꝕ].a.call(instance, __RDF·List)
@@ -2032,30 +2032,6 @@ Subject is guaranteed (by the Resource constructor) to be a blank node; this is 
 			set rest ( $ ) { this[__RDF·rest] = $ }
 			get size ( ) { return get𝒫.call(this, `length`, ꞰRC) } }
 		, ꞰⱢRC = mixin.call(class LinkedResourceCollection extends ꞰⱢR { }, ꞰRC)
-		, ꞰRꝹ = class ResourceData {
-			constructor ( resource ) {
-				return $℘s(this, {
-					resource: { [Ꝟ]: resource }
-					, textDescription: { get: dſ𝒫(ꞰRꝹ[Ꝕ], `textDescription`).get }
-					, textLabel: { get: dſ𝒫(ꞰRꝹ[Ꝕ], `textLabel`).get }
-					, textValue: { get: dſ𝒫(ꞰRꝹ[Ꝕ], `textDescription`).get } }) }
-			get textDescription ( ) {
-				const
-					$r = this.resource
-					, desc = $r == Ꝋ ? Ꝋ : $r[__RDFS·comment]
-				return desc == Ꝋ ? null : get𝒫.call(desc, `text`, ꞰRDFN) }
-			get textLabel ( ) { }
-			get textValue ( ) {
-				const
-					$r = this.resource
-					, _Ꝟ = $r == Ꝋ ? Ꝋ : $r[__RDF·value]
-				return _Ꝟ == Ꝋ ? null : get𝒫.call(_Ꝟ, `text`, ꞰRDFN) }
-			createDescription ( document ) { }
-			createLabel ( document ) { }
-			createValue ( document ) { }
-			toDescriptionString ( ) { }
-			toString ( ) { }
-			valueOf ( ) { } }
 		, ꞰꝾ = class Graph {  //  RDF Interfaces Graph; RDF/JS Dataset
 			constructor ( actions ) {
 				const
