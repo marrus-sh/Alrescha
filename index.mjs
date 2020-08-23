@@ -441,19 +441,88 @@ This is more exacting than ECMAScript’s definition of an arraylike object, bec
 		, ʃRs = Ʃ͢ `resourceIterator`
 		, Ɫ = `length`
 		, ẞ = `substring`
-		, ℹ = function ( $, ...$s ) {  //  make NamedNode
+		, ℹ = $℘s(function ( $, ...$s ) {  //  make NamedNode
 			if ( $ instanceof WHATWG·URL || hasꞆ.call($, ꞰÑN) ) return new ꞰÑN ($)
 			else {
 				const
-					$base = this?.baseURI == Ꝋ ? `` : S͢(this.baseURI)
+					$base = this?.baseURI == Ꝋ ? `` : new ꞰÑN (this.baseURI)
 					, $src = (typeof $ == `string` ? $ : $[𝒫] `raw` ? S͢.raw($, ...$s)
 						: S͢($)).replace(/\\(?:U([0-9A-Fa-f]{8})|u([0-9A-Fa-f]{4}))/g,
 						(N, Ⅰ, Ⅱ) => S͢.fromCodePoint(parseInt(Ⅰ || Ⅱ, 0x10)))
-				return new ꞰÑN (/^[A-Za-z][-0-9A-Z+.a-z]*:/u.test($src) ? $src
-					: $src[0] == `/` ? `${ $base.match(/^[^?#\x2F]*/gu)[0] }${ $src }`
-					: $src[0] == `?` ? `${ $base.match(/^[^?#]*/gu)[0] }${ $src }`
-					: $src[0] == `#` ? `${ $base.match(/^[^#]*/gu)[0] }${ $src }`
-					: `${ $base.match(/^[^?#]+(?=\x2F)|[^?#\x2F]*/gu)[0] }/${ $src }`) } }
+					, match = ℹ.rx.exec($src)
+				if ( match == Ꝋ ) throw ꞆƐ͢(l10n `الرشآء: NamedNode invalid IRI. `)
+				else if ( match[1] != Ꝋ ) return new ꞰÑN ($src)
+				else {
+					const
+							[ irelative·ref
+							, irelative·part
+							, iauthority
+							, iuserinfo
+							, ihost
+							, port
+							, ipath·abempty
+							, ipath·absolute
+							, ipath·noscheme
+							, ipath·empty
+							, iquery
+							, ifragment ] = match.slice(14)
+						, _path = (ipath·abempty ?? ipath·absolute ?? ipath·noscheme
+							?? ipath·empty)
+					let authority, path, query
+					if ( iauthority != Ꝋ ) {
+						authority = iauthority
+						path = ℹ.un·(_path)
+						query = iquery }
+					else {
+						if ( _path == `` ){
+							path = $base.path
+							query = iquery ?? $base.query }
+						else {
+							if ( _path.startsWith(`/`) ) path = ℹ.un·(_path)
+							else path = ℹ.un·(
+								$base.authority != Ꝋ && $base.path == `` ? `/${ _path }`
+									: `${ $base.path.substring(0,
+										$base.path.lastIndexOf(`/`) + 1) }${ _path }`)
+							query = iquery }
+						authority = $base.authority }
+					const parts = [ $base.scheme, `:` ]
+					if ( authority != Ꝋ ) {
+						parts.push(`//`)
+						parts.push(authority) }
+					parts.push(path)
+					if ( query != Ꝋ ) {
+						parts.push(`?`)
+						parts.push(query) }
+					if ( ifragment != Ꝋ ) {
+						parts.push(`#`)
+						parts.push(ifragment) }
+					return new ꞰÑN (parts.join(``)) } } },
+			{ un·: { value: path => {
+				let
+					npt = path
+					, out = [ ]
+				while ( npt != `` ) {
+					if ( npt.startsWith(`../`) ) npt = npt.substring(3)
+					else if ( npt.startsWith(`./`) ) npt = npt.substring(2)
+					else if ( npt.startsWith(`/./`) ) npt = `/${ npt.substring(3) }`
+					else if ( npt == `/.` ) npt = `/`
+					else if ( npt.startsWith(`/../`) ) {
+						npt = `/${ npt.substring(4) }`
+						out = out.slice(0, -1) }
+					else if ( npt == `/..`) {
+						npt = `/`
+						out = out.slice(0, -1) }
+					else if ( npt == `.` || npt == `..` ) break
+					else {
+						const nextPathNdx = npt.indexOf(`/`, 1)
+						if ( nextPathNdx == -1 ) {
+							out.push(npt)
+							break }
+						else {
+							out.push(npt.substring(0, nextPathNdx))
+							npt = npt.substring(nextPathNdx) } } }
+				return out.join(``) } }
+			, rx: { value: RX͢(`^(?:${ IRI·reference })$`, `u`) } })
 		, Ꝋ = undefined
 		, Ꝕ = `prototype`
 		, ꝕ = Object.getPrototypeOf.bind(Object)
