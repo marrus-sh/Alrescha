@@ -25,3 +25,7 @@ exports['namedNodes["rdfjs"].toDOMNode()'] = `
 exports['namedNodes["bad"].toDOMNode()'] = `
 <a href="example.com/path/doc?query#hash" xmlns="http://www.w3.org/1999/xhtml">example.com/path/doc?query#hash</a>
 `
+
+exports['namedNodes["full"].toDOMNode()'] = `
+<a href="http://user:pass@foo:21/bar;par?b#c" xmlns="http://www.w3.org/1999/xhtml">http://user:pass@foo:21/bar;par?b#c</a>
+`

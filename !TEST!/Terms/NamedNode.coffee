@@ -29,6 +29,9 @@ describe "Terms", -> describe "NamedNode", ->
 		instances.hash = Object.create NamedNode::,
 			interfaceName: value: "NamedNode"
 			nominalValue: value: "https://example.com/path/doc?query#hash"
+		instances.full = Object.create NamedNode::,
+			interfaceName: value: "NamedNode"
+			nominalValue: value: "http://user:pass@foo:21/bar;par?b#c"
 		instances.rdfjs = Object.create NamedNode::,
 			termType: value: "NamedNode"
 			value: value: "https://example.com"
@@ -82,23 +85,42 @@ describe "Terms", -> describe "NamedNode", ->
 			expect instances.base.text
 				.does.equal do instances.base.toString
 
-		it "has URL properties", ->
-			url = new URL instances.hash
-			for prop in [
-				"hash"
-				"host"
-				"hostname"
-				"href"
-				"origin"
-				"password"
-				"pathname"
-				"port"
-				"protocol"
-				"search"
-				"username"
-			]
-				expect (do instances.hash.clone)[prop]
-					.does.equal url[prop]
+		it "has IRI properties", ->
+			expect (Array.from instances.full), "… has correct parts"
+				.has.ordered.members [ "user:pass@foo:21", "bar;par" ]
+			expect instances.full, "… has correct iri"
+				.does.have.property "iri"
+				.which.does.equal "http://user:pass@foo:21/bar;par?b#c"
+			expect instances.full, "… has correct absolute"
+				.does.have.property "absolute"
+				.which.does.equal "http://user:pass@foo:21/bar;par?b"
+			expect instances.full, "… has correct scheme"
+				.does.have.property "scheme"
+				.which.does.equal "http"
+			expect instances.full, "… has correct hierarchicalPart"
+				.does.have.property "hierarchicalPart"
+				.which.does.equal "//user:pass@foo:21/bar;par"
+			expect instances.full, "… has correct authority"
+				.does.have.property "authority"
+				.which.does.equal "user:pass@foo:21"
+			expect instances.full, "… has correct userinfo"
+				.does.have.property "userinfo"
+				.which.does.equal "user:pass"
+			expect instances.full, "… has correct host"
+				.does.have.property "host"
+				.which.does.equal "foo"
+			expect instances.full, "… has correct port"
+				.does.have.property "port"
+				.which.does.equal "21"
+			expect instances.full, "… has correct path"
+				.does.have.property "path"
+				.which.does.equal "/bar;par"
+			expect instances.full, "… has correct query"
+				.does.have.property "query"
+				.which.does.equal "b"
+			expect instances.full, "… has correct fragment"
+				.does.have.property "fragment"
+				.which.does.equal "c"
 
 		describe "clone()", ->
 

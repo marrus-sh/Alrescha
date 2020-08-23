@@ -48,31 +48,71 @@ export default (( ) => {  //  strict IIFE, though unnecessary
 		, STRING_LITERAL_LONG_QUOTE = $ꝛ `"""(?:(?:"|"")?(?:[^"\\]|${ ECHAR }|${ UCHAR }))*"""`
 		, WS = $ꝛ `[\x20\x09\x0D\x0A]`
 		, ANON = $ꝛ `\[(?:${ WS })*\]`
-		, A͢ = $℘s(Array.from.bind(Array),
-			{ [Symbol.hasInstance]: { value: $ => $ instanceof Array }
-			, M̃: { value: $℘s(( ) => { },  // metaärray
-				{ [Symbol.hasInstance]: { value: function hasInstance ( $ ) {
-					return $ == Array || Function[Ꝕ][Ʃ͢.hasInstance].call(this, $) } }
-				, prototype: { value: Array } }) }
-			, prototype: { value: Array.prototype }
-			, ɫ: { value: $ => {  // LengthOfArrayLike
+		, sub·delims = $ꝛ `[!\$&'()*+,;=]`
+		, gen·delims = $ꝛ `[:/?#\[\]@]`
+		, reserved = $ꝛ `${ gen·delims }|${ sub·delims }`
+		, unreserved = $ꝛ `[A-Za-z0-9\-\._~]`
+		, pct·encoded = $ꝛ `%[0-9A-Fa-f][0-9A-Fa-f]`
+		, dec·octet = $ꝛ `[0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5]`
+		, IPv4address = $ꝛ `(?:${ dec·octet })\.(?:${ dec·octet })\.(?:${ dec·octet })\.(?:${ dec·octet })`
+		, h16 = $ꝛ `[0-9A-Fa-f]{1,4}`
+		, ls32 = $ꝛ `(?:${ h16 }):(?:${ h16 })|${ IPv4address }`
+		, IPv6address = $ꝛ `(?:(?:${ h16 }):){6}(?:${ ls32 })|::(?:(?:${ h16 }):){5}(?:${ ls32 })|(?:${ h16 })?::(?:(?:${ h16 }):){4}(?:${ ls32 })|(?:(?:(?:${ h16 }):){0,1}(?:${ h16 }))?::(?:(?:${ h16 }):){3}(?:${ ls32 })|(?:(?:(?:${ h16 }):){0,2}(?:${ h16 }))?::(?:(?:${ h16 }):){2}(?:${ ls32 })|(?:(?:(?:${ h16 }):){0,3}(?:${ h16 }))?::(?:${ h16 }):(?:${ ls32 })|(?:(?:(?:${ h16 }):){0,4}(?:${ h16 }))?::(?:${ ls32 })|(?:(?:(?:${ h16 }):){0,5}(?:${ h16 }))?::(?:${ h16 })|(?:(?:(?:${ h16 }):){0,6}(?:${ h16 }))?::`
+		, IPvFuture = $ꝛ `v[0-9A-Fa-f]{1,}\.(?:${ unreserved }|${ sub·delims }|:)`
+		, IP·literal = $ꝛ `\[(?:${ IPv6address }|${ IPvFuture })\]`
+		, port = $ꝛ `[0-9]*`
+		, scheme = $ꝛ `[A-Za-z][A-Za-z0-9+\-\.]*`
+		, iprivate = $ꝛ `[\u{E000}-\u{F8FF}\u{F0000}-\u{FFFFD}\u{100000}-\u{10FFFD}]`
+		, ucschar = $ꝛ `[\u{A0}-\u{D7FF}\u{F900}-\u{FDCF}\u{FDF0}-\u{FFEF}\u{10000}-\u{1FFFD}\u{20000}-\u{2FFFD}\u{30000}-\u{3FFFD}\u{40000}-\u{4FFFD}\u{50000}-\u{5FFFD}\u{60000}-\u{6FFFD}\u{70000}-\u{7FFFD}\u{80000}-\u{8FFFD}\u{90000}-\u{9FFFD}\u{A0000}-\u{AFFFD}\u{B0000}-\u{BFFFD}\u{C0000}-\u{CFFFD}\u{D0000}-\u{DFFFD}\u{E0000}-\u{EFFFD}]`
+		, iunreserved = $ꝛ `[A-Za-z0-9\-\._~]|${ ucschar }`
+		, ipchar = $ꝛ `${ iunreserved }|${ pct·encoded }|${ sub·delims }|[:@]`
+		, ifragment = $ꝛ `(?:${ ipchar }|[/?])*`
+		, iquery = $ꝛ `(?:${ ipchar }|${ iprivate }|[/?])*`
+		, isegment·nz·nc = $ꝛ `(?:${ iunreserved }|${ pct·encoded }|${ sub·delims }|@)+`
+		, isegment·nz = $ꝛ `(?:${ ipchar })+`
+		, isegment = $ꝛ `(?:${ ipchar })*`
+		, ipath·empty = $ꝛ ``
+		, ipath·rootless = $ꝛ `(?:${ isegment·nz })(?:/(?:${ isegment }))*`
+		, ipath·noscheme = $ꝛ `(?:${ isegment·nz·nc })(?:/(?:${ isegment }))*`
+		, ipath·absolute = $ꝛ `/(?:(?:${ isegment·nz })(?:/(?:${ isegment }))*)?`
+		, ipath·abempty = $ꝛ `(?:/(?:${ isegment }))*`
+		, ipath = $ꝛ `${ ipath·abempty }|${ ipath·absolute }|${ ipath·noscheme }|${ ipath·rootless }|${ ipath·empty }`
+		, ireg·name = $ꝛ `(?:${ iunreserved }|${ pct·encoded }|${ sub·delims })*`
+		, ihost = $ꝛ `${ IP·literal }|${ IPv4address }|${ ireg·name }`
+		, iuserinfo = $ꝛ `(?:${ iunreserved }|${ pct·encoded }|${ sub·delims }|:)*`
+		, iauthority = $ꝛ `(?:(${ iuserinfo })@)?(${ ihost })(?::(${ port }))?`
+		, irelative·part = $ꝛ `//(${ iauthority })(${ ipath·abempty })|(${ ipath·absolute })|(${ ipath·noscheme })|(${ ipath·empty })`
+		, irelative·ref = $ꝛ `(${ irelative·part })(?:\?(${ iquery }))?(?:#(${ ifragment }))?`
+		, ihier·part = $ꝛ `//(${ iauthority })(${ ipath·abempty })|(${ ipath·absolute })|(${ ipath·rootless })|(${ ipath·empty })`
+		, absolute·IRI = $ꝛ `(${ scheme }):(${ ihier·part })(?:\?(${ iquery }))?`
+		, IRI = $ꝛ `(${ scheme }):(${ ihier·part })(?:\?(${ iquery }))?(?:#(${ ifragment }))?`
+		, IRI·reference = $ꝛ `(${ IRI })|(${ irelative·ref })`
+		, A͢ = Object.setPrototypeOf(
+			$℘s(Array.from.bind(Array),
+				{ [Symbol.hasInstance]: { value: $ => $ instanceof Array }
+				, M̃: { value: $℘s(( ) => { },  // metaärray
+					{ [Symbol.hasInstance]: { value: function hasInstance ( $ ) {
+						return $ == Array || Function[Ꝕ][Ʃ͢.hasInstance].call(this, $) } }
+					, prototype: { value: Array } }) }
+				, prototype: { value: Array.prototype }
+				, ɫ: { value: $ => {  // LengthOfArrayLike
 /*  ⁂  *\
 
 This produces larger lengths than can actually be stored in arrays, because no such restrictions exist on arraylike methods.  Use isNdx() to determine if a value is an actual array index.
 
 \*  ⁂  */
-				const ɫ = +$[Ɫ]
-				return ɫ == 0/0 || ɫ <= 0 ? 0
-					: Math.min(Math.max(ɫ, 0), 9007199254740991) } }
-			, ʔ: { value: $ => {  //  is argument a collection‐like object?
+					const ɫ = +$[Ɫ]
+					return ɫ == 0/0 || ɫ <= 0 ? 0
+						: Math.min(Math.max(ɫ, 0), 9007199254740991) } }
+				, ʔ: { value: $ => {  //  is argument a collection‐like object?
 /*  ⁂  *\
 
 This is more exacting than ECMAScript’s definition of an arraylike object, because it requires the .length property to not be undefined.  It also explicitly excludes Resources which are not collections, even though all Resources are arraylike.
 
 \*  ⁂  */
-				try { return typeof $ == `object` && $ != Ꝋ && Ɫ in $ && (+$[Ɫ], true)
-					&& !(Function[Ꝕ][Ʃ͢.hasInstance].call(ꞰR, $) && !ꞰRC[Ʃ͢.hasInstance]($)) }
-				catch ( ɛ ) { return false } } } })
+					try { return typeof $ == `object` && $ != Ꝋ && Ɫ in $ && (+$[Ɫ], true)
+						&& !(Function[Ꝕ][Ʃ͢.hasInstance].call(ꞰR, $) && !ꞰRC[Ʃ͢.hasInstance]($)) }
+					catch ( ɛ ) { return false } } } }), Array)
 		, O͢ = Object
 		, RX͢ = RegExp
 		, S͢ = String
@@ -157,7 +197,7 @@ This is more exacting than ECMAScript’s definition of an arraylike object, bec
 		, getꞆ = function ( ) {  //  internal constructor for this
 			if ( hasꞆ.call(this, ꞰÑN) ) return ꞰÑN
 			else if ( hasꞆ.call(this, ꞰBN) )
-				if ( Array.isArray(this) ) return ꞰBNC
+				if ( A͢.isArray(this) ) return ꞰBNC
 				else return ꞰBN
 			else if ( hasꞆ.call(this, ꞰL) ) return ꞰL
 			else if ( this?.interfaceName != Ꝋ ) return ꞰRDFN
@@ -193,17 +233,14 @@ This is more exacting than ECMAScript’s definition of an arraylike object, bec
 								if ( $Ꝟ !== Ꝋ ) elt.setAttribute(attr, attributes[attr]) })
 						if ( content != Ꝋ )
 							elt.appendChild(content.nodeName != Ꝋ ? content
-								: Array.isArray(content)
+								: A͢.isArray(content)
 								? htm4ÐˢDoc.call(this, new Array (content.length), ...content)
 								: typeof content == `object`
 								? htm4ÐˢDoc.call(this, [ , ], content)
 								: this.createTextNode(content))
 						if ( typeof handler == `function` ) handler.call(element) } } }
 			return fm̃t }
-		, isIRI = $ => {  //  is $ an IRI?
-			try { new ꞰÑN ($) }
-			catch { return false }
-			return true }
+		, isIRI = $℘($ => isIRI.rx.test(S͢($)), `rx`, { value: RX͢(`^(?:${ IRI })$`, `u`) })
 		, isNdx = $ => {  //  is $ a valid array index?
 			if ( typeof $ != `string` ) return false
 			else {
@@ -1000,7 +1037,7 @@ This is an ※extreme※ edge‐case which code is unlikely to ever encounter in
 			getPrototypeOf ( O ) {
 				return O͢.isExtensible(O) && O instanceof ꞰR
 					? this.resourceMap == Ꝋ
-						? Array.isArray(this) ? ꞰRC[Ꝕ] : ꞰR[Ꝕ]
+						? A͢.isArray(this) ? ꞰRC[Ꝕ] : ꞰR[Ꝕ]
 						: this.a(O, __RDF·List)
 						|| this.has(O, __RDF·first)
 						|| this.has(O, __RDF·rest) ? ꞰⱢRC[Ꝕ]
@@ -1302,30 +1339,61 @@ This is an ※extreme※ edge‐case which code is unlikely to ever encounter in
 			valueOf ( document ) {
 				return hasꞆ.call(this, ꞰL) ? ꞰL[Ꝕ].valueOf.call(this, document)
 					: get𝒫.call(this, `nominalValue`, ꞰRDFN) } }
-		, ꞰÑN = Reflect.ownKeys(WHATWG·URL[Ꝕ]).reduce(( ꝵ, $ ) => {  //  Node.js needs symbols
-			if ( !($ in ꝵ[Ꝕ]) ) {  //  check whole prototype chain
-				const
-					$𝒫 = dſ𝒫(WHATWG·URL[Ꝕ], $)
-					, getter = $𝒫.get
-				if ( getter != Ꝋ ) $℘(ꝵ[Ꝕ], $, { [Ꝯ]: 1, get ( ) {
-					try { return getter.call(this) }  //  this maybe wasn’t properly constructed
-					catch ( ɛ ) { new URL (this)[$] } } })
-				else if ( $𝒫.set == Ꝋ ) $℘(ꝵ[Ꝕ], $, $𝒫) }  //  hoping URL hasn’t mutating methods
-			return ꝵ }, class NamedNode extends ꞰRDFN {  //  RDF/JS & RDF Interfaces NamedNode
+		, ꞰÑN = class NamedNode extends ꞰRDFN {  //  RDF/JS & RDF Interfaces NamedNode
 			constructor ( value ) {
-				const $ℹ = hasꞆ.call(value, ꞰÑN) ? get𝒫.call(value, `nominalValue`, ꞰRDFN) : S͢(value)
-				if ( /(?![-:\x2F?#\[\]@!$&\x27()*+,;=0-9A-Za-z._~\xA0-\uD7FF\uE000-\uFDCF\uFDF0-\uFFEF\u{10000}-\u{1FFFD}\u{20000}-\u{2FFFD}\u{30000}-\u{3FFFD}\u{40000}-\u{4FFFD}\u{50000}-\u{5FFFD}\u{60000}-\u{6FFFD}\u{70000}-\u{7FFFD}\u{80000}-\u{8FFFD}\u{90000}-\u{9FFFD}\u{A0000}-\u{AFFFD}\u{B0000}-\u{BFFFD}\u{C0000}-\u{CFFFD}\u{D0000}-\u{DFFFD}\u{E0000}-\u{EFFFD}\u{F0000}-\u{FFFFD}\u{100000}-\u{10FFFD}]|%[0-9A-Fa-f]{2})[^]/u.test( $ℹ ) )
-					throw ꞆƐ͢(l10n `الرشآء: NamedNode invalid IRI. `)
-				const _ðˢ = $℘s((( ) => {
-					try { return ꝯﬆʞ(WHATWG·URL, [ $ℹ], new.target) }
-					catch ( ɛ ) { throw ꞆƐ͢(l10n `الرشآء: NamedNode invalid IRI. `) } })(),
-					{ interfaceName: { [Ꝟ]: `NamedNode` }
-					, nominalValue: { [Ꝯ]: 0, [Ꝟ]: $ℹ }
-					, termType: { [Ꝟ]: `NamedNode` }
-					, text: { get: dſ𝒫(ꞰRDFN[Ꝕ], `text`).get }
-					, Ꝟ: { get: dſ𝒫(ꞰRDFN[Ꝕ], Ꝟ).get } })
-				return new.target === ꞰÑN ? O͢.freeze(_ðˢ) : _ðˢ }
+				const
+					$ℹ = hasꞆ.call(value, ꞰÑN) ? get𝒫.call(value, `nominalValue`, ꞰRDFN) : S͢(value)
+					, match = isIRI.rx.exec($ℹ)
+				if ( match == Ꝋ ) throw ꞆƐ͢(l10n `الرشآء: NamedNode invalid IRI. `)
+				else {
+					const
+							[ IRI
+							, scheme
+							, ihier·part
+							, iauthority
+							, iuserinfo
+							, ihost
+							, port
+							, ipath·abempty
+							, ipath·absolute
+							, ipath·rootless
+							, ipath·empty
+							, iquery
+							, ifragment ] = match
+						, _ðˢ = $℘s(ꝯﬆʞ(ꞰRDFN, [ ꞰÑN ], new.target),
+							{ [Ʃ͢.iterator]: { [Ꝟ]: A͢[Ꝕ][Ʃ͢.iterator].bind(
+								ihier·part.substring(ihier·part.search(/[^\x2F]/u),
+									ihier·part.search(/[^\x2F]\x2F*$/u) + 1).split(`/`)) }
+							, absolute: { [Ꝟ]: `${ scheme }:${ ihier·part }${ iquery == Ꝋ ? ``
+								: `?${ iquery }` }` }
+							, authority: { [Ꝟ]: iauthority }
+							, fragment: { [Ꝟ]: ifragment }
+							, hierarchicalPart: { [Ꝟ]: ihier·part }
+							, host: { [Ꝟ]: ihost }
+							, iri: { [Ꝟ]: IRI }
+							, nominalValue: { [Ꝯ]: 0, [Ꝟ]: $ℹ }
+							, path: { [Ꝟ]: ipath·abempty ?? ipath·absolute ?? ipath·rootless
+								?? ipath·empty }
+							, parts: { get: dſ𝒫(ꞰÑN[Ꝕ], `parts`).get }
+							, port: { [Ꝟ]: port }
+							, query: { [Ꝟ]: iquery }
+							, scheme: { [Ꝟ]: scheme }
+							, userinfo: { [Ꝟ]: iuserinfo } })
+					return new.target === ꞰÑN ? O͢.freeze(_ðˢ) : _ðˢ } }
 			static [Ʃ͢.hasInstance] ( instance ) { return hasꞆ.call(instance, ꞰÑN) }
+			get absolute ( ) { return new ꞰÑN (this).absolute }
+			get authority ( ) { return new ꞰÑN (this).authority }
+			get fragment ( ) { return new ꞰÑN (this).fragment }
+			get hierarchicalPart ( ) { return new ꞰÑN (this).hierarchicalPart }
+			get host ( ) { return new ꞰÑN (this).host }
+			get iri ( ) { return new ꞰÑN (this).iri }
+			get path ( ) { return new ꞰÑN (this).path }
+			get parts ( ) { return A͢(nº1MethodOf.call(this, Ʃ͢.iterator, this, ꞰÑN[Ꝕ])) }
+			get port ( ) { return new ꞰÑN (this).port }
+			get query ( ) { return new ꞰÑN (this).query }
+			get scheme ( ) { return new ꞰÑN (this).scheme }
+			get userinfo ( ) { return new ꞰÑN (this).userinfo }
+			*[Ʃ͢.iterator] ( ) { yield *new ꞰÑN (this)[Ʃ͢.iterator]() }
 			clone ( ) {
 				return this == Ꝋ ? Ꝋ : ꝯﬆʞ(ꞰÑN,
 					[ get𝒫.call(this, `nominalValue`, ꞰRDFN) ],
@@ -1364,7 +1432,7 @@ This is an ※extreme※ edge‐case which code is unlikely to ever encounter in
 				return `<${ S͢[Ꝕ].replace.call(
 					get𝒫.call(this, `nominalValue`, ꞰRDFN),
 					/>/g, `\u003E`) }>` }
-			toTurtle ( ) { return ꞰÑN[Ꝕ].toNT.call(this) } })
+			toTurtle ( ) { return ꞰÑN[Ꝕ].toNT.call(this) } }
 		, ꞰBN = class BlankNode extends ꞰRDFN {  //  RDF/JS & RDF Interfaces BlankNode
 			constructor ( value ) {
 				const _ðˢ = $℘(ꝯﬆʞ(ꞰRDFN, [ ꞰBN ], new.target), `nominalValue`, { [Ꝯ]: 0, [Ꝟ]:

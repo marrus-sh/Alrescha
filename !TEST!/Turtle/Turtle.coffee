@@ -3,6 +3,8 @@
 { cwd } = require "process"
 
 describe "Turtle", ->
+	this.timeout 5000
+
 	Graph = null
 	isomorphic = null
 	manifest = null
