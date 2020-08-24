@@ -1671,23 +1671,38 @@ This is an ※extreme※ edge‐case which code is unlikely to ever encounter in
 					if ( $Ꝟ != Ꝋ ) {
 						const txt = $Ꝟ.textContent
 						return txt == Ꝋ ? ñꝞ : txt } }
-				else return [ `number`, `default` ].indexOf(usedHint) >= 0
-					?
-						[ S͢(__XSD·decimal)
-						, S͢(__XSD·integer)
-						, S͢(__XSD·long)
-						, S͢(__XSD·int)
-						, S͢(__XSD·short)
-						, S͢(__XSD·byte)
-						, S͢(__XSD·nonNegativeInteger)
-						, S͢(__XSD·positiveInteger)
-						, S͢(__XSD·unsignedLong)
-						, S͢(__XSD·unsignedInt)
-						, S͢(__XSD·unsignedShort)
-						, S͢(__XSD·unsignedByte)
-						, S͢(__XSD·nonPositiveInteger)
-						, S͢(__XSD·negativeInteger) ].indexOf(ꝺꞆ) >= 0
-						? +ñꝞ
+				else if ( [ `number`, `default` ].includes(usedHint) )
+					if ( ꝺꞆ == S͢(__XSD·dateTime)
+						|| ꝺꞆ == S͢(__XSD·dateTimeStamp)
+						|| ꝺꞆ == S͢(__XSD·gYear)
+						|| ꝺꞆ == S͢(__XSD·gYearMonth) ) {
+							const
+								[ $sign, $unsigned ] = ñꝞ[0] = `-` ? [ `-`, ñꝞ.substring(1) ]
+									: [ `+`, ñꝞ ]
+								, [ year ] = $unsigned.split(`-`, 1)
+							return year.length != 4
+								? Date.parse(`${ $sign }${ year.padStart(6, `0`) }${
+									$unsigned.substring(year.length) }`)
+								: Date.parse(ñꝞ) }
+					else return ꝺꞆ == S͢(__XSD·gMonth) || ꝺꞆ == S͢(__XSD·gMonthDay)
+						? Date.parse(`1992-${ ñꝞ }`)
+						: ꝺꞆ == S͢(__XSD·gDay) ? Date.parse(`1992-12-${ ñꝞ }`)
+						: ꝺꞆ == S͢(__XSD·time) ? Date.parse(`1992-12-31${ ñꝞ }`)
+						:
+							[ S͢(__XSD·decimal)
+							, S͢(__XSD·integer)
+							, S͢(__XSD·long)
+							, S͢(__XSD·int)
+							, S͢(__XSD·short)
+							, S͢(__XSD·byte)
+							, S͢(__XSD·nonNegativeInteger)
+							, S͢(__XSD·positiveInteger)
+							, S͢(__XSD·unsignedLong)
+							, S͢(__XSD·unsignedInt)
+							, S͢(__XSD·unsignedShort)
+							, S͢(__XSD·unsignedByte)
+							, S͢(__XSD·nonPositiveInteger)
+							, S͢(__XSD·negativeInteger) ].includes(ꝺꞆ) ? +ñꝞ
 						: ꝺꞆ == S͢(__XSD·float) || ꝺꞆ == S͢(__XSD·double)
 						? ñꝞ == `+INF` || ñꝞ == `INF` ? 1/0
 							: ñꝞ == `-INF` ? -1/0
@@ -1696,7 +1711,7 @@ This is an ※extreme※ edge‐case which code is unlikely to ever encounter in
 							? !(ñꝞ == `false` || ñꝞ == `0`)
 							: +!(ñꝞ == `false` || ñꝞ == `0`)
 						: ñꝞ
-					: ñꝞ }
+				else return ñꝞ }
 			clone ( ) {
 				return this == Ꝋ ? Ꝋ : ꝯﬆʞ(ꞰL,
 					[ get𝒫.call(this, `nominalValue`, ꞰRDFN)
@@ -1745,14 +1760,7 @@ This is an ※extreme※ edge‐case which code is unlikely to ever encounter in
 				const
 					ñꝞ = get𝒫.call(this, `nominalValue`, ꞰRDFN)
 					, ꝺꞆ = S͢(get𝒫.call(this, `datatype`, ꞰL))
-				if ( ꝺꞆ == S͢(__XSD·anyURI) )
-					return new WHATWG·URL (ñꝞ)
-				else if ( ꝺꞆ == S͢(__XSD·base64Binary) )
-					return a2b(ñꝞ)
-				else if ( ꝺꞆ == S͢(__XSD·hexBinary) )
-					return Uint8Array.from(ñꝞ.split(/(?=(?:[^]{2})*$)/),
-						pair => parseInt(pair, 16)).buffer
-				else if ( ꝺꞆ == S͢(__RDF·XMLLiteral) )
+				if ( ꝺꞆ == S͢(__RDF·XMLLiteral) )
 					try {
 						const
 							$DOMParser = typeof DOMParser == `undefined`
@@ -1780,8 +1788,28 @@ This is an ※extreme※ edge‐case which code is unlikely to ever encounter in
 							( ꝵ, ĩ ) => (ꝵ.insertBefore(ĩ, ꝵ.firstChild), ꝵ),
 							doc.createDocumentFragment()) }
 					catch ( ɛ ) { return ñꝞ }
-				// TK: Dates
-				else return ꞰL[Ꝕ][Ʃ͢.toPrimitive].call(this, `default`) } }
+				else if ( ꝺꞆ == S͢(__XSD·dateTime)
+					|| ꝺꞆ == S͢(__XSD·dateTimeStamp)
+					|| ꝺꞆ == S͢(__XSD·gYear)
+					|| ꝺꞆ == S͢(__XSD·gYearMonth) ) {
+						const
+							[ $sign, $unsigned ] = ñꝞ[0] = `-` ? [ `-`, ñꝞ.substring(1) ]
+								: [ `+`, ñꝞ ]
+							, [ year ] = $unsigned.split(`-`, 1)
+						if ( year.length != 4)
+							return new Date (`${ $sign }${ year.padStart(6, `0`) }${
+								$unsigned.substring(year.length) }`)
+						else return new Date (ñꝞ) }
+				else return  ꝺꞆ == S͢(__XSD·gMonth) || ꝺꞆ == S͢(__XSD·gMonthDay)
+					? new Date (`1992-${ ñꝞ }`)
+					: ꝺꞆ == S͢(__XSD·gDay) ? new Date (`1992-12-${ ñꝞ }`)
+					: ꝺꞆ == S͢(__XSD·time) ? new Date (`1992-12-31${ ñꝞ }`)
+					: ꝺꞆ == S͢(__XSD·anyURI) ? new WHATWG·URL (ñꝞ)
+					: ꝺꞆ == S͢(__XSD·base64Binary) ? a2b(ñꝞ)
+					: ꝺꞆ == S͢(__XSD·hexBinary)
+					? Uint8Array.from(ñꝞ.split(/(?=(?:[^]{2})*$)/),
+						pair => parseInt(pair, 16)).buffer
+					: ꞰL[Ꝕ][Ʃ͢.toPrimitive].call(this, `default`) } }
 		, ꞰR = class Resource extends ꞰRDFN {  //  subject node with predicate+object pairs
 			constructor ( subject ) {
 /*  ⁂  *\
@@ -2440,6 +2468,7 @@ Subject is guaranteed (by the Resource constructor) to be a blank node; this is 
 		, __XSD·boolean = pxÑ.call(_ꝯ, `xsd:boolean`)
 		, __XSD·byte = pxÑ.call(_ꝯ, `xsd:byte`)
 		, __XSD·dateTime = pxÑ.call(_ꝯ, `xsd:dateTime`)
+		, __XSD·dateTimeStamp = pxÑ.call(_ꝯ, `xsd:dateTimeStamp`)
 		, __XSD·date = pxÑ.call(_ꝯ, `xsd:date`)
 		, __XSD·dayTimeDuration = pxÑ.call(_ꝯ, `xsd:dayTimeDuration`)
 		, __XSD·decimal = pxÑ.call(_ꝯ, `xsd:decimal`)
