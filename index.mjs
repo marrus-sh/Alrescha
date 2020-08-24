@@ -305,7 +305,8 @@ This is more exacting than ECMAScript’s definition of an arraylike object, bec
 						: ꝵ.size == 1 ? ꝵ.values().next()[Ꝟ]
 						: ꝵ }
 				else return $ instanceof WHATWG·URL ? new ꞰÑN ($)
-				//  TK: Dates
+					: $ instanceof Date
+					? new ꞰL (Date[Ꝕ].toJSON.call($), __XSD·dateTimeStamp)
 					: $ instanceof DataView
 					|| $ instanceof ꝕ(Uint8Array)
 					|| $ instanceof ArrayBuffer
@@ -2526,10 +2527,12 @@ Subject is guaranteed (by the Resource constructor) to be a blank node; this is 
 		, TripleAction: { [Ꝯ]: 1, [Ꝟ]: phony(Ʞ3A) }
 		, TripleCallback: { [Ꝯ]: 1, [Ꝟ]: phony(Ʞ3C) }
 		, TripleFilter: { [Ꝯ]: 1, [Ꝟ]: phony(Ʞ3F) }
-		, baseURI: { [Ꝯ]: 1, [ꝴ]: 1, [Ꝟ]: null, [ꝶ]: 1 }
+		, baseURI: { [Ꝯ]: 1, [ꝴ]: 1, [Ꝟ]:
+			typeof document == `undefined` ? null : document.baseURI, [ꝶ]: 1 }
 		, context: { [Ꝯ]: 1, [ꝴ]: 1, [Ꝟ]: _ꝯ }
 		, createGraph: { [Ꝯ]: 1, [Ꝟ]: ( ) => new ꞰꝾ }
-		, defaultDocument: { [Ꝯ]: 1, [ꝴ]: 1, [Ꝟ]: typeof document == `undefined` ? Ꝋ : document, [ꝶ]: 1 }
+		, defaultDocument: { [Ꝯ]: 1, [ꝴ]: 1, [Ꝟ]:
+			typeof document == `undefined` ? null : document, [ꝶ]: 1 }
 		, l10n: { [Ꝯ]: 1, [Ꝟ]: l10n }
 		, pname: { [Ꝯ]: 1, [Ꝟ]: pxÑ }
 		, strings: { [Ꝯ]: 1, [Ꝟ]:
