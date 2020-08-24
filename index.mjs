@@ -26,7 +26,9 @@ export default (( ) => {  //  strict IIFE, though unnecessary
 		, IRIREF = $ꝛ `<(?:[^\x00-\x20<>\x22\x7B\x7D|^\x60\\]|${ UCHAR })*>`
 		, PN_CHARS_BASE = $ꝛ `[A-Za-z\xC0-\xD6\xD8-\xF6\xF8-\u02FF\u0370-\u037D\u037F-\u1FFF\u200C-\u200D\u2070-\u218F\u2C00-\u2FEF\u3001-\uD7FF\uF900-\uFDCF\uFDF0-\uFFFD\u{10000}-\u{EFFFF}]`
 		, PN_CHARS_U = $ꝛ `${ PN_CHARS_BASE }|_`
+		, NT·PN_CHARS_U = $ꝛ `${ PN_CHARS_BASE }|_|:`
 		, PN_CHARS = $ꝛ `${ PN_CHARS_U }|[-0-9\xB7\u0300-\u036F\u203F-\u2040]`
+		, NT·PN_CHARS = $ꝛ `${ NT·PN_CHARS_U }|[-0-9\xB7\u0300-\u036F\u203F-\u2040]`
 		, PN_PREFIX = $ꝛ `(?:${ PN_CHARS_BASE })(?:(?:${ PN_CHARS }|\.)*(?:${ PN_CHARS }))?`
 		, PNAME_NS = $ꝛ `(?:${ PN_PREFIX })?:`
 		, PERCENT = $ꝛ `%(?:${ HEX }){2}`
@@ -35,6 +37,7 @@ export default (( ) => {  //  strict IIFE, though unnecessary
 		, PN_LOCAL = $ꝛ `(?:${ PN_CHARS_U }|[:0-9]|${ PLX })(?:(?:${ PN_CHARS }|[.:]|${ PLX })*(?:${ PN_CHARS }|:|${ PLX }))?`
 		, PNAME_LN = $ꝛ `(?:${ PNAME_NS })(?:${ PN_LOCAL })`
 		, BLANK_NODE_LABEL = $ꝛ `_:(?:${ PN_CHARS_U }|[0-9])(?:(?:${ PN_CHARS }|\.)*(?:${ PN_CHARS }))?`
+		, NT·BLANK_NODE_LABEL = $ꝛ `_:(?:${ NT·PN_CHARS_U }|[0-9])(?:(?:${ NT·PN_CHARS }|\.)*(?:${ NT·PN_CHARS }))?`
 		, LANGTAG = $ꝛ `@[a-zA-Z]+(?:-[a-zA-Z0-9]+)*`
 		, EOL = $ꝛ `[\x0D\x0A]+`
 		, INTEGER = $ꝛ `[+-]?[0-9]+`
@@ -276,18 +279,18 @@ This is more exacting than ECMAScript’s definition of an arraylike object, bec
 			let ꝟndx = 0
 			ꝯſꝸ(empty)
 			while ( ꝟndx < $src[Ɫ] ) {
-				const sbj = ꝯſꝸ(RX͢($ꝛ `${ IRIREF }|${ BLANK_NODE_LABEL }`, `uy`))
+				const sbj = ꝯſꝸ(RX͢($ꝛ `${ IRIREF }|${ NT·BLANK_NODE_LABEL }`, `uy`))
 				ꝯſꝸ(whitespace)
 				const p = ꝯſꝸ(RX͢($ꝛ `${ IRIREF }`, `uy`))
 				ꝯſꝸ(whitespace)
-				const obj = ꝯſꝸ(RX͢($ꝛ `${ IRIREF }|${ BLANK_NODE_LABEL }|(?:${ STRING_LITERAL_QUOTE })(?:(?:${ $WHITESPACE })(?:\^\^(?:${ $WHITESPACE })(?:${ IRIREF })|${ LANGTAG }))?`, `uy`))
+				const obj = ꝯſꝸ(RX͢($ꝛ `${ IRIREF }|${ NT·BLANK_NODE_LABEL }|(?:${ STRING_LITERAL_QUOTE })(?:(?:${ $WHITESPACE })(?:\^\^(?:${ $WHITESPACE })(?:${ IRIREF })|${ LANGTAG }))?`, `uy`))
 				ꝯſꝸ(whitespace)
 				ꝯſꝸ(RX͢($ꝛ `\.(?:${ $WHITESPACE })(?:${ EOL })`, `uy`))
 				ꝿ.add(new Ʞ3 (ꞇObj(sbj), ꞇObj(p), ꞇObj(obj)))
 				ꝯſꝸ(empty) }
 			return ꝿ }
 		, n3Obj = function fromNT ( $ ) {  //  make object from N‑Triples
-			if ( !RX͢($ꝛ `^${ IRIREF }|${ BLANK_NODE_LABEL }|(?:${ STRING_LITERAL_QUOTE })${ whitespace }(?:\^\^${ whitespace }(?:${ IRIREF })|${ LANGTAG })?$`).test( $ ) )
+			if ( !RX͢($ꝛ `^${ IRIREF }|${ NT·BLANK_NODE_LABEL }|(?:${ STRING_LITERAL_QUOTE })${ whitespace }(?:\^\^${ whitespace }(?:${ IRIREF })|${ LANGTAG })?$`).test( $ ) )
 					throw ꞆƐ͢(l10n `الرشآء: Invalid node. ${ `RDF N‑Triples` }${ $ }`)
 				return ꞇObj($) }
 		, nObj = function fromValue ( $ ) {  //  new valid object from given
@@ -556,14 +559,14 @@ This is more exacting than ECMAScript’s definition of an arraylike object, bec
 		, ꝴ = `enumerable`
 		, ꝶ = `writable`
 		, ꞆƐ͢ = TypeError
-		, ꞇObj = function fromTurtle ( $, ...$s ) {  //  make object from RDF Turtle
+		, ꞇObj = function fromTurtle ( $, ...$s ) {  //  make object from RDF Turtle or N‐Triples
 			const
 				$WHITESPACE = $ꝛ `(?:${ WS }|#(?:(?!${ EOL })[^])*)*`
 				, $src = typeof $ == `string` ? $ : $[𝒫] `raw` ? S͢.raw($, ...$s) : S͢($)
 				, ɫ = $src[Ɫ]
 				if ( RX͢($ꝛ `^(?:${ IRIREF }|${ PNAME_LN }|${ PNAME_NS })$`, "u").test($src) )
 					return $src[0] == "<" ? ℹ.call(this, $src.slice(1, -1)) : pxÑ.call(this, $src)
-				else if ( RX͢($ꝛ `^(?:${ BLANK_NODE_LABEL }|${ ANON })$`, "u").test($src) )
+				else if ( RX͢($ꝛ `^(?:${ NT·BLANK_NODE_LABEL }|${ ANON })$`, "u").test($src) )
 					return new ꞰBN ($src[0] == "_" ? $src[ẞ](2) : "")
 				else if ( RX͢($ꝛ `^(?:${ DOUBLE }|${ DECIMAL }|${ INTEGER })$`, "u").test($src) )
 					return !/[.e]/i.test($src) ? new ꞰL ($src, null, __XSD·integer)
@@ -667,7 +670,7 @@ This is more exacting than ECMAScript’s definition of an arraylike object, bec
 								{ baseURI: ꝟbℹ, context: ꝯ },
 								$src[ẞ](ꝟndx, ꝟndx = $ndx))
 							, ñꝞ = $n[Ꝟ]
-						return $n instanceof ꞰBN ? ñꝞ == "" ? new ꞰBN (++ꝟbid)
+						return $n instanceof ꞰBN ? ñꝞ == `` ? new ꞰBN (++ꝟbid)
 								: bidM[𝒫](ñꝞ) ? new ꞰBN (bidM[ñꝞ])
 								: new ꞰBN (bidM[ñꝞ] = ++ꝟbid)
 							: $n }
@@ -1499,9 +1502,10 @@ This is an ※extreme※ edge‐case which code is unlikely to ever encounter in
 					, attributes: { href: ñꝞ }
 					, content: ñꝞ } }` }
 			toNT ( ) {
-				return `<${ S͢[Ꝕ].replace.call(
-					get𝒫.call(this, `nominalValue`, ꞰRDFN),
-					/>/g, `\u003E`) }>` }
+				return `<${ get𝒫.call(this, `nominalValue`, ꞰRDFN).replace(
+					/[\x00-\x20\x22\x3C\x3E\x5C\x5E\x60\x7B-\x7D]/gu, $ => {
+						const u = $.codePointAt(0)
+						return `\\u${ u.toString(16).toUpperCase().padStart(4, `0`) }` }) }>` }
 			toTurtle ( ) { return ꞰÑN[Ꝕ].toNT.call(this) } }
 		, ꞰBN = class BlankNode extends ꞰRDFN {  //  RDF/JS & RDF Interfaces BlankNode
 			constructor ( value ) {
@@ -1524,8 +1528,24 @@ This is an ※extreme※ edge‐case which code is unlikely to ever encounter in
 					{ localName: `span`
 					, attributes: { resource: bn }
 					, content: bn } }` }
-			toNT ( ) { return `_:${ get𝒫.call(this, `nominalValue`, ꞰRDFN) }` }
-			toTurtle ( ) { return ꞰBN[Ꝕ].toNT.call(this) } }
+			toNT ( ) {
+				const ñꝞ = get𝒫.call(this, `nominalValue`, ꞰRDFN)
+				return `_:${ A͢(ñꝞ).reduce(( ꝵ, $, ndx, $s ) => {
+					ꝵ.push(RX͢(ndx == 0
+						? $ꝛ `${ NT·PN_CHARS_U }|[0-9]`
+						: ndx == $s.length - 1
+						? $ꝛ `${ NT·PN_CHARS }`
+						: $ꝛ `${ NT·PN_CHARS }|\.`, `u`).test($) ? $ : `_`)
+					return ꝵ }, [ ]).join(``) }` }
+			toTurtle ( ) {
+				const ñꝞ = get𝒫.call(this, `nominalValue`, ꞰRDFN)
+				return `_:${ A͢(ñꝞ).reduce(( ꝵ, $, ndx, $s ) => {
+					ꝵ.push(RX͢(ndx == 0
+						? $ꝛ `${ PN_CHARS_U }|[0-9]`
+						: ndx == $s.length - 1
+						? $ꝛ `${ PN_CHARS }`
+						: $ꝛ `${ PN_CHARS }|\.`, `u`).test($) ? $ : `_`)
+					return ꝵ }, [ ]).join(``) }` } }
 		, ꞰBNC = class BlankNode extends ꞰBN {  //  Anonymous collection
 			constructor ( bid, iterator ) {
 				const
@@ -2527,6 +2547,8 @@ Subject is guaranteed (by the Resource constructor) to be a blank node; this is 
 		, TripleAction: { [Ꝯ]: 1, [Ꝟ]: phony(Ʞ3A) }
 		, TripleCallback: { [Ꝯ]: 1, [Ꝟ]: phony(Ʞ3C) }
 		, TripleFilter: { [Ꝯ]: 1, [Ꝟ]: phony(Ʞ3F) }
+		, TripleMap: { [Ꝯ]: 1, [Ꝟ]: phony(Ʞ3M) }
+		, TripleReduce: { [Ꝯ]: 1, [Ꝟ]: phony(Ʞ3R) }
 		, baseURI: { [Ꝯ]: 1, [ꝴ]: 1, [Ꝟ]:
 			typeof document == `undefined` ? null : document.baseURI, [ꝶ]: 1 }
 		, context: { [Ꝯ]: 1, [ꝴ]: 1, [Ꝟ]: _ꝯ }
