@@ -25,8 +25,7 @@ which, yes, is a valid ECMAScript identifier.
 import Al·rishāʼ from "./index.mjs"  //  call it whatever you want
 ```
 
-See [DOCUMENTATION](./DOCUMENTATION.md) for more.
-(To come.)
+See [DOCUMENTATION](./DOCUMENTATION/README.md) for more.
 
 
 ## Features
@@ -52,7 +51,7 @@ See [DOCUMENTATION](./DOCUMENTATION.md) for more.
  +  Does not validate datatypes.
     Operations on literals with invalid datatypes (e.g., `"1.2"^^xsd:integer`) may be somewhat unpredictable.
 
- +  HTML output is not sanitized and may include HTML `SCRIPT` elements or other unsafe things.
+ +  HTML output is not sanitized and may include HTML `<SCRIPT>` elements or other unsafe things.
 
  +  Not optimized for complex reasoning (e.g., OWL) or operations on huge numbers of triples.
     Not suitable for Big Data.
