@@ -1,5 +1,6 @@
 #  Al·rishāʼ Documentation
 
+
 ##  Should I use this library?
 
 If your goal is to walk an RDF graph from resource to resource, reading metadata and building up a codex (or other structured document) as you go, then you may find this library useful.
@@ -28,6 +29,7 @@ However, you should think twice before using Al·rishāʼ if:
     If you want a boring library which performs everything through lengthy chains of method calls and awkward duck‐typing, there are plenty of existing RDF libraries for you.
 
 It should be noted that Al·rishāʼ (in most practical senses) understands both RDF/JS and RDF Interfaces, so it is entirely feasible to generate a graph with Al·rishāʼ, pass that graph over to a different software for processing, and then analyse that result in Al·rishāʼ again.
+
 
 ##  Overview
 
@@ -59,6 +61,7 @@ Generally speaking, Al·rishāʼ is designed for the following workflow:
     	? abstracts.values().next().value[pname `rdf:value`]
     	: abstracts?.[pname `rdf:value`]  //  there may not be any abstracts
     ```
+
 
 ##  Contents
 

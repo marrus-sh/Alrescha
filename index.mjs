@@ -255,10 +255,11 @@ This is more exacting than ECMAScript’s definition of an arraylike object, bec
 				, strs = this?.strings ?? الرشآء.strings
 				, _str = strs[key]
 			return (_str == Ꝋ ? key : S͢(_str)).replace(/\$0*([1-9][0-9]*)/g, (N, Ⅰ) => $s[+Ⅰ - 1]) }
-		, mixin = function mixin ( ...otherClasses ) { otherClasses.reduce(( ꝵ, Ʞ ) =>  //  mixin
-			Reflect.ownKeys(Ʞ[Ꝕ]).reduce(( ꝵ, $ ) => {
-				if ( !($ in ꝵ[Ꝕ]) ) { $℘(ꝵ[Ꝕ], $, dſ𝒫(Ʞ[Ꝕ], $)) }
-				return ꝵ }, ꝵ), this) }
+		, mixin = function mixin ( ...otherClasses ) {  //  mixin
+			return otherClasses.reduce(( ꝵ, Ʞ ) =>
+				Reflect.ownKeys(Ʞ[Ꝕ]).reduce(( ꝵ, $ ) => {
+					if ( !($ in ꝵ[Ꝕ]) ) { $℘(ꝵ[Ꝕ], $, dſ𝒫(Ʞ[Ꝕ], $)) }
+					return ꝵ }, ꝵ), this) }
 		, n3 = function fromNT ( $, ...$s ) {  //  make Set of Resources from N‑Triples
 /*  ⁂  *\
 
@@ -449,13 +450,14 @@ This is more exacting than ECMAScript’s definition of an arraylike object, bec
 			if ( $ instanceof WHATWG·URL || hasꞆ.call($, ꞰÑN) ) return new ꞰÑN ($)
 			else {
 				const
-					$base = this?.baseURI == Ꝋ ? `` : new ꞰÑN (this.baseURI)
+					$base = this?.baseIRI == Ꝋ ? Ꝋ : new ꞰÑN (this.baseIRI)
 					, $src = (typeof $ == `string` ? $ : $[𝒫] `raw` ? S͢.raw($, ...$s)
 						: S͢($)).replace(/\\(?:U([0-9A-Fa-f]{8})|u([0-9A-Fa-f]{4}))/g,
 						(N, Ⅰ, Ⅱ) => S͢.fromCodePoint(parseInt(Ⅰ || Ⅱ, 0x10)))
 					, match = ℹ.rx.exec($src)
-				if ( match == Ꝋ ) throw ꞆƐ͢(l10n `الرشآء: NamedNode invalid IRI. `)
-				else if ( match[1] != Ꝋ ) return new ꞰÑN ($src)
+				if ( match?.[1] != Ꝋ ) return new ꞰÑN ($src)
+				else if ( match == Ꝋ || $base == Ꝋ )
+					throw ꞆƐ͢(l10n `الرشآء: NamedNode invalid IRI. `)
 				else {
 					const
 							[ irelative·ref
@@ -667,7 +669,7 @@ This is more exacting than ECMAScript’s definition of an arraylike object, bec
 					if ( $ndx != Ꝋ ) {
 						const
 							$n = ꞇObj.call(
-								{ baseURI: ꝟbℹ, context: ꝯ },
+								{ baseIRI: ꝟbℹ, context: ꝯ },
 								$src[ẞ](ꝟndx, ꝟndx = $ndx))
 							, ñꝞ = $n[Ꝟ]
 						return $n instanceof ꞰBN ? ñꝞ == `` ? new ꞰBN (++ꝟbid)
@@ -717,7 +719,7 @@ This is more exacting than ECMAScript’s definition of an arraylike object, bec
 						ꝯſꝸ `.` } }
 				, ꝿ = new ꞰꝾ
 			let
-				ꝟbℹ = this == Ꝋ || this.baseURI == Ꝋ ? Ꝋ : this.baseURI
+				ꝟbℹ = this == Ꝋ || this.baseIRI == Ꝋ ? Ꝋ : this.baseIRI
 				, ꝟbid = 0
 				, ꝟndx = 0
 				, ꝟsbj
@@ -2440,6 +2442,7 @@ Subject is guaranteed (by the Resource constructor) to be a blank node; this is 
 			, foaf: ℹ `http://xmlns.com/foaf/0.1/`
 			, gr: ℹ `http://purl.org/goodrelations/v1#`
 			, grddl: ℹ `http://www.w3.org/2003/g/data-view#`
+			, jsonld: ℹ `http://www.w3.org/ns/json-ld#`
 			, ical: ℹ `http://www.w3.org/2002/12/cal/icaltzd#`
 			, ldp: ℹ `http://www.w3.org/ns/ldp#`
 			, ma: ℹ `http://www.w3.org/ns/ma-ont#`
@@ -2527,18 +2530,20 @@ Subject is guaranteed (by the Resource constructor) to be a blank node; this is 
 		{ BlankNode: { [Ꝯ]: 1, [Ꝟ]: phony(ꞰBN) }
 		, BlankNodeCollection: { [Ꝯ]: 1, [Ꝟ]: phony(ꞰBNC) }
 		, Graph: { [Ꝯ]: 1, [Ꝟ]: $℘s(phony(ꞰꝾ),
-			{ baseURI: { [ꝴ]: 1, get: ( ) => الرشآء.baseURI, set: $ => الرشآء.baseURI = $ }
+			{ baseIRI: { [ꝴ]: 1, get: ( ) => الرشآء.baseIRI, set: $ => الرشآء.baseIRI = $ }
 			, context: { [ꝴ]: 1, get: ( ) => الرشآء.context }
 			, fromNT: { [Ꝯ]: 1, [ꝴ]: 1, [Ꝟ]: n3 }
 			, fromTurtle: { [Ꝯ]: 1, [ꝴ]: 1, [Ꝟ]: ꞇꞇl } }) }
 		, LinkedResource: { [Ꝯ]: 1, [Ꝟ]: phony(ꞰⱢR) }
+		, LinkedResourceCollection: { [Ꝯ]: 1, [Ꝟ]: phony(ꞰⱢRC) }
 		, Literal: { [Ꝯ]: 1, [Ꝟ]: phony(ꞰL) }
 		, NamedNode: { [Ꝯ]: 1, [Ꝟ]: phony(ꞰÑN) }
 		, Resource: { [Ꝯ]: 1, [Ꝟ]: $℘s(ꞰR,
-			{ baseURI: { [ꝴ]: 1, get: ( ) => الرشآء.baseURI, set: $ => الرشآء.baseURI = $ }
+			{ baseIRI: { [ꝴ]: 1, get: ( ) => الرشآء.baseIRI, set: $ => الرشآء.baseIRI = $ }
 			, context: { [ꝴ]: 1, get: ( ) => الرشآء.context } }) }
+		, ResourceCollection: { [Ꝯ]: 1, [Ꝟ]: phony(ꞰRC) }
 		, RDFNode: { [Ꝯ]: 1, [Ꝟ]: $℘s(phony(ꞰRDFN),
-			{ baseURI: { [ꝴ]: 1, get: ( ) => الرشآء.baseURI, set: $ => الرشآء.baseURI = $ }
+			{ baseIRI: { [ꝴ]: 1, get: ( ) => الرشآء.baseIRI, set: $ => الرشآء.baseIRI = $ }
 			, context: { [ꝴ]: 1, get: ( ) => الرشآء.context }
 			, fromNT: { [Ꝯ]: 1, [ꝴ]: 1, [Ꝟ]: n3Obj }
 			, fromTurtle: { [Ꝯ]: 1, [ꝴ]: 1, [Ꝟ]: ꞇObj } }) }
@@ -2549,12 +2554,10 @@ Subject is guaranteed (by the Resource constructor) to be a blank node; this is 
 		, TripleFilter: { [Ꝯ]: 1, [Ꝟ]: phony(Ʞ3F) }
 		, TripleMap: { [Ꝯ]: 1, [Ꝟ]: phony(Ʞ3M) }
 		, TripleReduce: { [Ꝯ]: 1, [Ꝟ]: phony(Ʞ3R) }
-		, baseURI: { [Ꝯ]: 1, [ꝴ]: 1, [Ꝟ]:
-			typeof document == `undefined` ? null : document.baseURI, [ꝶ]: 1 }
+		, baseIRI: { [Ꝯ]: 1, [ꝴ]: 1, [Ꝟ]: globalThis?.document?.baseURI, [ꝶ]: 1 }
 		, context: { [Ꝯ]: 1, [ꝴ]: 1, [Ꝟ]: _ꝯ }
 		, createGraph: { [Ꝯ]: 1, [Ꝟ]: ( ) => new ꞰꝾ }
-		, defaultDocument: { [Ꝯ]: 1, [ꝴ]: 1, [Ꝟ]:
-			typeof document == `undefined` ? null : document, [ꝶ]: 1 }
+		, defaultDocument: { [Ꝯ]: 1, [ꝴ]: 1, [Ꝟ]: globalThis?.document, [ꝶ]: 1 }
 		, l10n: { [Ꝯ]: 1, [Ꝟ]: l10n }
 		, pname: { [Ꝯ]: 1, [Ꝟ]: pxÑ }
 		, strings: { [Ꝯ]: 1, [Ꝟ]:
@@ -2569,7 +2572,7 @@ Subject is guaranteed (by the Resource constructor) to be a blank node; this is 
 			, "الرشآء: Invalid predicate.": `'$1' is not a valid predicate for a Triple.`
 			, "الرشآء: Invalid subject.": `'$1' is not a valid subject for a Triple.`
 			, "الرشآء: Al·rishāʼ.": `Al·rishāʼ`
-			, "الرشآء: Al·rishāʼ version.": `1.01 [WIP]`
+			, "الرشآء: Al·rishāʼ version.": `1.01`
 			, "الرشآء: NamedNode invalid IRI.": `NamedNode must have a valid IRI name.`
 			, "الرشآء: Nonextensible predicate addition error.": `Cannot add predicate: Object is not extensible.`
 			, "الرشآء: Nonextensible predicate clearing error.": `Cannot clear predicate: Object is not extensible.`
