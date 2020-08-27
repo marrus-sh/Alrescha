@@ -1,51 +1,51 @@
-exports['literals["simple"].toDOMNode()'] = `
+exports['literals["simple"].toHTML()'] = `
 A string
 `
 
-exports['literals["en"].toDOMNode()'] = `
+exports['literals["en"].toHTML()'] = `
 A string
 `
 
-exports['literals["en_US"].toDOMNode()'] = `
+exports['literals["en_US"].toHTML()'] = `
 A string
 `
 
-exports['literals["sco"].toDOMNode()'] = `
+exports['literals["sco"].toHTML()'] = `
 A streng
 `
 
-exports['literals["true"].toDOMNode()'] = `
+exports['literals["true"].toHTML()'] = `
 1
 `
 
-exports['literals["integer"].toDOMNode()'] = `
+exports['literals["integer"].toHTML()'] = `
 1
 `
 
-exports['literals["decimal"].toDOMNode()'] = `
+exports['literals["decimal"].toHTML()'] = `
 1.
 `
 
-exports['literals["double"].toDOMNode()'] = `
+exports['literals["double"].toHTML()'] = `
 1.1
 `
 
-exports['literals["ninf"].toDOMNode()'] = `
+exports['literals["ninf"].toHTML()'] = `
 -INF
 `
 
-exports['literals["uri"].toDOMNode()'] = `
+exports['literals["uri"].toHTML()'] = `
 http://example.com
 `
 
-exports['literals["base64"].toDOMNode()'] = `
+exports['literals["base64"].toHTML()'] = `
 YmFzZTY0
 `
 
-exports['literals["hex"].toDOMNode()'] = `
+exports['literals["hex"].toHTML()'] = `
 686578
 `
 
-exports['literals["bad"].toDOMNode()'] = `
+exports['literals["bad"].toHTML()'] = `
 0
 `

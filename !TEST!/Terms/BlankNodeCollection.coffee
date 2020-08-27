@@ -177,11 +177,11 @@ describe "Terms", -> describe "BlankNodeCollection", ->
 				expect RDFNode::equals.call instances.collection, String do instances.collection.valueOf
 					.is.false
 
-		describe "toDOMNode()", ->
+		describe "toHTML()", ->
 
 			it "generates a correct DOM node", ->
 				for own key, instance of instances
-					snapshot "blankNodeCollections[\"#{ key }\"].toDOMNode()", serializer.serializeToString do instance.toDOMNode
+					snapshot "blankNodeCollections[\"#{ key }\"].toHTML()", serializer.serializeToString do instance.toHTML
 
 		describe "toNT()", ->
 

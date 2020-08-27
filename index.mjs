@@ -114,7 +114,8 @@ This is more exacting than ECMAScript’s definition of an arraylike object, bec
 
 \*  ⁂  */
 					try { return typeof $ == `object` && $ != Ꝋ && Ɫ in $ && (+$[Ɫ], true)
-						&& !(Function[Ꝕ][Ʃ͢.hasInstance].call(ꞰR, $) && !ꞰRC[Ʃ͢.hasInstance]($)) }
+						&& !(Function[Ꝕ][Ʃ͢.hasInstance].call(ꞰR, $)
+							&& !ꞰRC[Ʃ͢.hasInstance]($)) }
 					catch ( ɛ ) { return false } } } }), Array)
 		, O͢ = Object
 		, RX͢ = RegExp
@@ -1332,7 +1333,7 @@ This is an ※extreme※ edge‐case which code is unlikely to ever encounter in
 						$ñꝞ𝒫 = dſ𝒫(this, Ꝟ)
 						, ñꝞ = this[Ꝟ]
 					return [ ꞰBN, ꞰL, ꞰÑN ].some(hasꞆ.bind(this))
-						|| this[𝒫] `interfaceName`
+						|| this[𝒫](`interfaceName`)
 						? ꞰRDFN[Ꝕ].clone.call(this)
 						: ꝯﬆʞ(ꞰT,
 							[ S͢(this.termType)
@@ -1391,12 +1392,12 @@ This is an ※extreme※ edge‐case which code is unlikely to ever encounter in
 					=== get𝒫.call(toCompare, `nominalValue`, ꞰRDFN)
 					&& (!hasꞆ.call(this, ꞰL) || ꞰL[Ꝕ].equals.call(this, toCompare))
 					: toCompare === ꞰRDFN[Ꝕ].valueOf.call(this) }
-			toDOMNode ( document ) {
-				return hasꞆ.call(this, ꞰÑN) ? ꞰÑN[Ꝕ].toDOMNode.call(this, document)
-					: hasꞆ.call(this, ꞰL) ? ꞰL[Ꝕ].toDOMNode.call(this, document)
+			toHTML ( document ) {
+				return hasꞆ.call(this, ꞰÑN) ? ꞰÑN[Ꝕ].toHTML.call(this, document)
+					: hasꞆ.call(this, ꞰL) ? ꞰL[Ꝕ].toHTML.call(this, document)
 					: hasꞆ.call(this, ꞰBN) ?
-						 A͢.ʔ(this) ? ꞰBNC[Ꝕ].toDOMNode.call(this, document)
-						 : ꞰBN[Ꝕ].toDOMNode.call(this, document)
+						 A͢.ʔ(this) ? ꞰBNC[Ꝕ].toHTML.call(this, document)
+						 : ꞰBN[Ꝕ].toHTML.call(this, document)
 					: null }
 			toNT ( ) {
 				return hasꞆ.call(this, ꞰÑN) ? ꞰÑN[Ꝕ].toNT.call(this)
@@ -1496,7 +1497,7 @@ This is an ※extreme※ edge‐case which code is unlikely to ever encounter in
 					ñꝞ = get𝒫.call(this, Ꝟ, ꞰRDFN)
 					, _ndx = ñꝞ.indexOf(`#`)
 				return _ndx != -1 ? ñꝞ[ẞ](_ndx + 1) : null }
-			toDOMNode ( document ) {
+			toHTML ( document ) {
 				const ñꝞ = get𝒫.call(this, `nominalValue`, ꞰRDFN)
 				return htm4ÐˢDoc.bind(
 					document == Ꝋ ? الرشآء.defaultDocument : document)`${
@@ -1523,7 +1524,7 @@ This is an ※extreme※ edge‐case which code is unlikely to ever encounter in
 				return ꞰT[Ꝕ].equals.call(this, other)
 					&& get𝒫.call(this, `value`, ꞰRDFN)
 					=== get𝒫.call(other, `value`, ꞰRDFN) }
-			toDOMNode ( document ) {
+			toHTML ( document ) {
 				const bn = `_:${ get𝒫.call(this, `nominalValue`, ꞰRDFN) }`
 				return htm4ÐˢDoc.bind(
 					document == Ꝋ ? الرشآء.defaultDocument : document) `${
@@ -1594,10 +1595,10 @@ This is an ※extreme※ edge‐case which code is unlikely to ever encounter in
 			*entries ( ) { yield *A͢[Ꝕ].entries.call(this) }
 			equals ( other ) { return ꞰBN[Ꝕ].equals.call(this, other) }
 			*keys ( ) { yield *A͢[Ꝕ].keys.call(this) }
-			toDOMNode ( document ) {
+			toHTML ( document ) {
 				const ɫ = this?.[Ɫ]
 				if ( ɫ == Ꝋ || ɫ == 1/0 || A͢.ɫ(this) < 1 )
-					return (__RDF·nil).toDOMNode(document)
+					return (__RDF·nil).toHTML(document)
 				else {
 					const
 						$doc = document == Ꝋ ? الرشآء.defaultDocument : document
@@ -1622,12 +1623,12 @@ This is an ※extreme※ edge‐case which code is unlikely to ever encounter in
 											[ S͢(__RDF·HTML)
 											, S͢(__RDF·XMLLiteral) ].indexOf(__ꝺꞆ) >= 0
 											? S͢(__RDF·XMLLiteral) : __ꝺꞆ : Ꝋ }
-									, content: defaultMethodOf(`toDOMNode`, $nº1)($doc) }
+									, content: defaultMethodOf(`toHTML`, $nº1)($doc) }
 							,
 								$rest == Ꝋ ? Ꝋ :
 									{ localName: `li`
 									, attributes: { rel: S͢(__RDF·rest) }
-									, content: defaultMethodOf(`toDOMNode`, $rest)($doc) } ] } }` } }
+									, content: defaultMethodOf(`toHTML`, $rest)($doc) } ] } }` } }
 			toNT ( ) { return ꞰBN[Ꝕ].toNT.call(this) }
 			toString ( ) { return ꞰBN[Ꝕ].toString.call(this) }
 			toTurtle ( ) { return ꞰBN[Ꝕ].toTurtle.call(this) }
@@ -1748,7 +1749,7 @@ This is an ※extreme※ edge‐case which code is unlikely to ever encounter in
 					&& get𝒫.call(this, `language`, ꞰL)
 					=== get𝒫.call(other, `language`, ꞰL)
 					&& getꞆ.call(ꝺꞆ)[Ꝕ].equals.call(ꝺꞆ, get𝒫.call(other, `datatype`, ꞰL)) }
-			toDOMNode ( document ) {
+			toHTML ( document ) {
 				const
 					$Ꝟ = ꞰL[Ꝕ].valueOf.call(this)
 					, doc = document == Ꝋ ? الرشآء.defaultDocument : document
@@ -1958,7 +1959,7 @@ If you want to use this constructor to create objects which do not inherit from 
 					else return false }
 				else return false }
 			set ( predicate, object ) { return $℘(this, predicate, { [Ꝟ]: object }) }
-			toDOMNode ( document ) {
+			toHTML ( document ) {
 				const doc = document == Ꝋ ? الرشآء.defaultDocument : document
 				return htm4ÐˢDoc.bind(doc)`${
 					{ localName: `details`
@@ -1966,13 +1967,13 @@ If you want to use this constructor to create objects which do not inherit from 
 					, content:
 						[
 							{ localName: `summary`
-							, content: defaultMethodOf(`toDOMNode`, this)(doc) }
+							, content: defaultMethodOf(`toHTML`, this)(doc) }
 						, { localName: `dl`, content: A͢(this.predicates()).reduce(
 							( ꝵ, p ) => {
 								const $obj = this[p]
 								return ꝵ.concat([
 									{ localName: `dt`
-									, content: defaultMethodOf(`toDOMNode`, p)(doc) } ],
+									, content: defaultMethodOf(`toHTML`, p)(doc) } ],
 									($obj instanceof Set ? A͢($obj) : [ $obj ]).map(obj => {
 										const
 											$lʔ = hasꞆ.call(obj, ꞰL)
@@ -1990,7 +1991,7 @@ If you want to use this constructor to create objects which do not inherit from 
 													, S͢(__RDF·XMLLiteral) ]
 													.indexOf(ꝺꞆ) >= 0
 													? S͢(__RDF·XMLLiteral) : ꝺꞆ : Ꝋ }
-											, content: defaultMethodOf(`toDOMNode`, obj)(doc) }) })) },
+											, content: defaultMethodOf(`toHTML`, obj)(doc) }) })) },
 							[ ]) } ] } }` }
 			*triples ( ) {
 				for ( const $p of nº1MethodOf.call(this, `predicates`, this, ꞰR[Ꝕ])() ) {
@@ -2281,12 +2282,12 @@ Subject is guaranteed (by the Resource constructor) to be a blank node; this is 
 					ꝵ.concat(A͢(nº1MethodOf.call(r, `triples`, r, ꞰR[Ꝕ])())), [ ])
 				else return [ ] }
 			async toCanonical ( ) { throw ꞆƐ͢(l10n `الرشآء: Unsupported method.`) }
-			toDOMNode ( document ) {
+			toHTML ( document ) {
 				const
 					$rs = this[ʃRs]
 					, doc = document == Ꝋ ? الرشآء.defaultDocument : document
 				if ( $rs != Ꝋ ) return A͢($rs.call(this)).reduce(
-					( ꝵ, r ) => (ꝵ.appendChild(ꞰR[Ꝕ].toDOMNode.call(r, doc)), ꝵ),
+					( ꝵ, r ) => (ꝵ.appendChild(ꞰR[Ꝕ].toHTML.call(r, doc)), ꝵ),
 					doc.createDocumentFragment())
 				else return Ꝋ }
 			toNT ( ) {

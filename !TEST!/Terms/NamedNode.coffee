@@ -186,11 +186,11 @@ describe "Terms", -> describe "NamedNode", ->
 				expect (do instances.hash.id)
 					.does.equal "hash"
 
-		describe "toDOMNode()", ->
+		describe "toHTML()", ->
 
 			it "generates a correct DOM node", ->
 				for own key, instance of instances
-					snapshot "namedNodes[\"#{ key }\"].toDOMNode()", serializer.serializeToString do instance.toDOMNode
+					snapshot "namedNodes[\"#{ key }\"].toHTML()", serializer.serializeToString do instance.toHTML
 
 		describe "toNT()", ->
 

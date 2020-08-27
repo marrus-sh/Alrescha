@@ -241,11 +241,11 @@ describe "Terms", -> describe "Literal", ->
 				expect RDFNode::equals.call instances.double, instances.double.js
 					.is.true
 
-		describe "toDOMNode()", ->
+		describe "toHTML()", ->
 
 			it "generates a correct DOM node", ->
 				for own key, instance of instances
-					snapshot "literals[\"#{ key }\"].toDOMNode()", serializer.serializeToString do instance.toDOMNode
+					snapshot "literals[\"#{ key }\"].toHTML()", serializer.serializeToString do instance.toHTML
 
 		describe "toNT()", ->
 

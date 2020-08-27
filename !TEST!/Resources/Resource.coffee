@@ -552,7 +552,7 @@ describe "Resources", -> describe "Resource", ->
 				expect resource.set "example:p", "a different object"
 					.does.equal resource
 
-		describe "toDOMNode()", ->
+		describe "toHTML()", ->
 
 			it "generates a correct DOM node", ->
 				resource = new Resource "example:sbj"
@@ -566,7 +566,7 @@ describe "Resources", -> describe "Resource", ->
 				],
 					interfaceName: value: "BlankNode"
 					nominalValue: value: "collection"
-				snapshot "resource.toDOMNode()", serializer.serializeToString do resource.toDOMNode
+				snapshot "resource.toHTML()", serializer.serializeToString do resource.toHTML
 
 		describe "toNT()", ->
 

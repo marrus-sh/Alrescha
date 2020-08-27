@@ -143,7 +143,7 @@ describe "Terms", -> describe "RDFNode", ->
 						expect literal.equals do other.clone
 							.equals literal is other
 
-		describe "toDOMNode()", ->
+		describe "toHTML()", ->
 
 			it "generates a DOM node when defined", ->
 				for n in [
@@ -154,13 +154,13 @@ describe "Terms", -> describe "RDFNode", ->
 					instances.bNC
 					instances.nN
 				]
-					expect do n.toDOMNode
+					expect do n.toHTML
 						.does.have.property "nodeType"
 				for n in [
 					instances.instance
 					instances.instançe
 				]
-					expect do n.toDOMNode
+					expect do n.toHTML
 						.is.null
 
 		describe "toNT()", ->
