@@ -1565,7 +1565,7 @@ This is an ※extreme※ edge‐case which code is unlikely to ever encounter in
 					[ cdr(get𝒫.call(this, `nominalValue`, ꞰRDFN))
 					, A͢[Ꝕ].slice.call(this, 1) ],
 					$ꝯﬆʞr instanceof A͢.M̃ ? ꞰBNC : $ꝯﬆʞr) }
-			*[Ʃ͢.iterator] ( ) { yield *A͢[Ꝕ][Ʃ͢.iterator].call(this) }
+			*[Ʃ͢.iterator] ( ) { for ( const $Ꝟ of A͢[Ꝕ][Ʃ͢.iterator].call(this) ) { yield nObj($Ꝟ) } }
 			clone ( ) {
 				if ( this == Ꝋ ) return Ꝋ
 				else {
@@ -1573,7 +1573,8 @@ This is an ※extreme※ edge‐case which code is unlikely to ever encounter in
 					return ꝯﬆʞ(ꞰBNC,
 						[ get𝒫.call(this, `nominalValue`, ꞰRDFN), this ],
 						$ꝯﬆʞr instanceof A͢.M̃ ? ꞰBNC : $ꝯﬆʞr) } }
-			*entries ( ) { yield *A͢[Ꝕ].entries.call(this) }
+			*entries ( ) {
+				for ( const [ ndx, $Ꝟ ] of A͢[Ꝕ].values.call(this) ) { yield [ ndx, nObj($Ꝟ) ] } }
 			equals ( other ) { return ꞰBN[Ꝕ].equals.call(this, other) }
 			*keys ( ) { yield *A͢[Ꝕ].keys.call(this) }
 			toHTML ( document ) {
@@ -1629,10 +1630,15 @@ This is an ※extreme※ edge‐case which code is unlikely to ever encounter in
 					if ( hasꞆ.call(rest, ꞰBN) && A͢.ʔ(rest) )
 						yield *ꞰBNC[Ꝕ].triples.call(rest) } }
 			valueOf ( ) {
-				return $℘s(A͢[Ꝕ].map.call(this, $ => defaultMethodOf(`valueOf`, $)($)),
+				const $Ꝟs = A͢[Ꝕ].map.call(this, $ => {
+					const $Ꝟ = nObj($)
+					return defaultMethodOf(`valueOf`, $Ꝟ)($Ꝟ) })
+				return $℘s($Ꝟs,
 					{ interfaceName: { [Ꝟ]: get𝒫.call(this, `interfaceName`, ꞰRDFN) }
-					, nominalValue: { [Ꝟ]: get𝒫.call(this, `nominalValue`, ꞰRDFN) } }) }
-			*values ( ) { yield *A͢[Ꝕ].values.call(this) } }
+					, nominalValue: { [Ꝟ]: get𝒫.call(this, `nominalValue`, ꞰRDFN) }
+					, toString: { [Ꝟ]: ꞰBN[Ꝕ].toString.bind($Ꝟs) }
+					, valueOf: { [Ꝟ]: ꞰBN[Ꝕ].valueOf.bind($Ꝟs) } }) }
+			*values ( ) { for ( const $Ꝟ of A͢[Ꝕ].values.call(this) ) { yield nObj($Ꝟ) } } }
 		, ꞰL = class Literal extends ꞰRDFN {  //  RDF/JS & RDF Interfaces Literal
 			constructor ( value, language, datatype ) {
 				const
