@@ -1474,29 +1474,10 @@ This is an ※extreme※ edge‐case which code is unlikely to ever encounter in
 				return this == Ꝋ ? Ꝋ : ꝯﬆʞ(ꞰÑN,
 					[ get𝒫.call(this, `nominalValue`, ꞰRDFN) ],
 					ꝯﬆʞr.call(this, ꞰÑN)) }
-			dir ( ) {
-				const
-					ñꝞ = get𝒫.call(this, Ꝟ, ꞰRDFN)
-					, matcher = /[^#]+\x2F/uy
-				return ꝯﬆʞ(ꞰÑN,
-					[ matcher.test(ñꝞ) ? ñꝞ[ẞ](0, matcher.lastIndex) : ñꝞ ],
-					ꝯﬆʞr.call(this, ꞰÑN)) }
-			doc ( ) {
-				const
-					ñꝞ = get𝒫.call(this, Ꝟ, ꞰRDFN)
-					, _ndx = ñꝞ.indexOf(`#`)
-				return ꝯﬆʞ(ꞰÑN,
-					[ _ndx < 0 ? ñꝞ : ñꝞ[ẞ](0, _ndx) ],
-					ꝯﬆʞr.call(this, ꞰÑN)) }
 			equals ( other ) {
 				return ꞰT[Ꝕ].equals.call(this, other)
 					&& get𝒫.call(this, Ꝟ, ꞰRDFN)
 					=== get𝒫.call(other, Ꝟ, ꞰRDFN) }
-			id ( ) {
-				const
-					ñꝞ = get𝒫.call(this, Ꝟ, ꞰRDFN)
-					, _ndx = ñꝞ.indexOf(`#`)
-				return _ndx != -1 ? ñꝞ[ẞ](_ndx + 1) : null }
 			toHTML ( document ) {
 				const ñꝞ = get𝒫.call(this, `nominalValue`, ꞰRDFN)
 				return htm4ÐˢDoc.bind(

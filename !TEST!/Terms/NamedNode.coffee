@@ -150,18 +150,6 @@ describe "Terms", -> describe "NamedNode", ->
 				do expect -> do instance.bad.clone
 					.does.throw
 
-		describe "dir()", ->
-
-			it "correctly gets the dir", ->
-				expect (do instances.hash.dir).equals instances.path
-					.is.true
-
-		describe "doc()", ->
-
-			it "correctly gets the doc", ->
-				expect (do instances.hash.doc).equals instances.query
-					.is.true
-
 		describe "equals()", ->
 
 			it "returns false for non-objects", ->
@@ -179,12 +167,6 @@ describe "Terms", -> describe "NamedNode", ->
 			it "can compare with native strings as an RDFNode", ->
 				expect RDFNode::equals.call instances.base, String do instances.base.valueOf
 					.is.true
-
-		describe "id()", ->
-
-			it "correctly gets the id", ->
-				expect (do instances.hash.id)
-					.does.equal "hash"
 
 		describe "toHTML()", ->
 
