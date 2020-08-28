@@ -38,7 +38,7 @@ Generally speaking, Al·rishāʼ is designed for the following workflow:
 01. Reading in a file and generating a resulting graph.
 
     ```js
-    const graph = Graph.fromTurtle(source)
+    const graph = Al·rishāʼ.Graph.fromTurtle(source)
     ```
 
 02. Identifying a subject node in that graph which meets a particular set of conditions.
@@ -46,7 +46,7 @@ Generally speaking, Al·rishāʼ is designed for the following workflow:
     ```js
     // Get all subjects which have a given type:
     const documents = graph.every(resource =>
-    	resource.a(pname `foaf:document`))
+    	resource.a(Al·rishāʼ.pname `foaf:document`))
 
     // Get a particular subject by name:
     const myDocument = graph[`example:mine`]
@@ -55,11 +55,17 @@ Generally speaking, Al·rishāʼ is designed for the following workflow:
 03. Walking the predicates of that subject node to find new nodes, until all of the desired information is obtained.
 
     ```js
-    const abstracts = myDocument[pname `dc:abstract`]
-    //  Predicates may point to a single resource, or a set of resources.
+    //  Predicates may point to a single resource, a set of resources, or be undefined.
+    const abstracts = myDocument[Al·rishāʼ.pname `dc:abstract`]
     const summary = abstracts instanceof Set
-    	? abstracts.values().next().value[pname `rdf:value`]
-    	: abstracts?.[pname `rdf:value`]  //  there may not be any abstracts
+    	? abstracts.values().next().value[Al·rishāʼ.pname `rdf:value`]
+    	: abstracts?.[Al·rishāʼ.pname `rdf:value`]
+
+    //  When you know a property is functional, you can chain access.
+    const authorName = myDocument[Al·rishāʼ.pname `foaf:maker`]?.[Al·rishāʼ.pname `foaf:name`]
+
+    //  When you only want a single resource, use `.any()`.
+    const title = myDocument.any(Al·rishāʼ.pname `dc:title`)
     ```
 
 

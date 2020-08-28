@@ -1412,8 +1412,8 @@ This is an ※extreme※ edge‐case which code is unlikely to ever encounter in
 					: hasꞆ.call(this, ꞰL) ? ꞰL[Ꝕ].toTurtle.call(this)
 					: hasꞆ.call(this, ꞰBN) ? ꞰBN[Ꝕ].toTurtle.call(this)
 					: null }
-			valueOf ( document ) {
-				return hasꞆ.call(this, ꞰL) ? ꞰL[Ꝕ].valueOf.call(this, document)
+			valueOf ( ) {
+				return hasꞆ.call(this, ꞰL) ? ꞰL[Ꝕ].valueOf.call(this)
 					: get𝒫.call(this, `nominalValue`, ꞰRDFN) } }
 		, ꞰÑN = class NamedNode extends ꞰRDFN {  //  RDF/JS & RDF Interfaces NamedNode
 			constructor ( value ) {
@@ -1674,53 +1674,87 @@ This is an ※extreme※ edge‐case which code is unlikely to ever encounter in
 				const
 					ñꝞ = get𝒫.call(this, `nominalValue`, ꞰRDFN)
 					, ꝺꞆ = S͢(get𝒫.call(this, `datatype`, ꞰL))
-					, usedHint = [ `number`, `string` ].indexOf(hint) < 0 ? `default` : hint
-				if (
-					[ S͢(__RDF·HTML)
-					, S͢(__RDF·XMLLiteral) ].indexOf(ꝺꞆ) >= 0 ) {
+					, usedHint = hint == `number` || hint == `string` ? hint : `default`
+				if ( ꝺꞆ == __RDF·HTML || ꝺꞆ == __RDF·XMLLiteral ) {
 					const $Ꝟ = ꞰL[Ꝕ].valueOf.call(this)
 					if ( $Ꝟ != Ꝋ ) {
 						const txt = $Ꝟ.textContent
 						return txt == Ꝋ ? ñꝞ : txt } }
-				else if ( [ `number`, `default` ].includes(usedHint) )
-					if ( ꝺꞆ == S͢(__XSD·dateTime)
-						|| ꝺꞆ == S͢(__XSD·dateTimeStamp)
-						|| ꝺꞆ == S͢(__XSD·gYear)
-						|| ꝺꞆ == S͢(__XSD·gYearMonth) ) {
+				else if ( usedHint == `number` || usedHint == `default` )
+					if ( ꝺꞆ == __XSD·dateTime
+						|| ꝺꞆ == __XSD·dateTimeStamp
+						|| ꝺꞆ == __XSD·date
+						|| ꝺꞆ == __XSD·gYear
+						|| ꝺꞆ == __XSD·gYearMonth ) {
 							const
-								[ $sign, $unsigned ] = ñꝞ[0] = `-` ? [ `-`, ñꝞ.substring(1) ]
+								[ $sign, $unsigned ] = ñꝞ[0] == `-` ? [ `-`, ñꝞ.substring(1) ]
 									: [ `+`, ñꝞ ]
-								, [ year ] = $unsigned.split(`-`, 1)
-							return year.length != 4
-								? Date.parse(`${ $sign }${ year.padStart(6, `0`) }${
-									$unsigned.substring(year.length) }`)
-								: Date.parse(ñꝞ) }
-					else return ꝺꞆ == S͢(__XSD·gMonth) || ꝺꞆ == S͢(__XSD·gMonthDay)
-						? Date.parse(`1992-${ ñꝞ }`)
-						: ꝺꞆ == S͢(__XSD·gDay) ? Date.parse(`1992-12-${ ñꝞ }`)
-						: ꝺꞆ == S͢(__XSD·time) ? Date.parse(`1992-12-31${ ñꝞ }`)
-						:
-							[ S͢(__XSD·decimal)
-							, S͢(__XSD·integer)
-							, S͢(__XSD·long)
-							, S͢(__XSD·int)
-							, S͢(__XSD·short)
-							, S͢(__XSD·byte)
-							, S͢(__XSD·nonNegativeInteger)
-							, S͢(__XSD·positiveInteger)
-							, S͢(__XSD·unsignedLong)
-							, S͢(__XSD·unsignedInt)
-							, S͢(__XSD·unsignedShort)
-							, S͢(__XSD·unsignedByte)
-							, S͢(__XSD·nonPositiveInteger)
-							, S͢(__XSD·negativeInteger) ].includes(ꝺꞆ) ? +ñꝞ
-						: ꝺꞆ == S͢(__XSD·float) || ꝺꞆ == S͢(__XSD·double)
+								, [ year, month, day ] = $unsigned.split(/[Z+-]/iu, 3)
+								, timestamp = $unsigned.match(
+									/Z|[+-](?:(?:0[0-9]|1[0-3]):[0-5][0-9]|14:00)$/giu)?.[0] ?? ``
+								, _year = $sign == `-` || year.length != 4 ? `${ $sign }${ year.padStart(6, `0`) }` : year
+								, _unsignedyear = year >>> 0
+								, _month = month >>> 0
+							return ꝺꞆ == __XSD·dateTime || ꝺꞆ == __XSD·dateTimeStamp
+								? Date.parse(
+									`${ _year }${ $unsigned.substring(year.length) }`)
+								: ꝺꞆ == __XSD·date
+								? Date.parse(
+									`${ _year }-${ month }-${ day }T00:00${ timestamp }`)
+								: ꝺꞆ == __XSD·gYear
+								? Date.parse(`${ _year }-12-31T00:00${ timestamp }`)
+								: Date.parse(`${ _year }-${ month }-${
+									S͢(_month == 2
+										? _unsignedyear % 400 == 0
+											|| _unsignedyear % 4 == 0
+											&& _unsignedyear % 100 != 0 ? 29 : 28
+										: _month == 4 || _month == 6 || _month == 9
+											|| _month == 11 ? 30
+										: 31).padStart(2, `0`) }T00:00${ timestamp }`) }
+					else if ( ꝺꞆ == __XSD·gMonth || ꝺꞆ == __XSD·gMonthDay ) {
+							const
+								$monthday = ñꝞ.substring(2)
+								, [ month, day ] = $monthday.split(/[Z+-]/iu, 2)
+								, timestamp = $monthday.match(
+									/Z|[+-](?:(?:0[0-9]|1[0-3]):[0-5][0-9]|14:00)$/giu)?.[0] ?? ``
+								, _month = month >>> 0
+							return ꝺꞆ == __XSD·gMonth
+								? Date.parse(`1972-${ month }-${
+									S͢(_month == 2 ? 29
+										: _month == 4 || _month == 6 || _month == 9
+											|| _month == 11 ? 30
+										: 31).padStart(2, `0`) }T00:00${ timestamp }`)
+								: Date.parse(
+									`1972-${ month }-${ day }T00:00${ timestamp }`) }
+					else if ( ꝺꞆ == __XSD·gDay ) {
+							const
+								$day = ñꝞ.substring(3)
+								, [ day ] = $day.split(/[Z+-]/iu, 1)
+								, timestamp = $day.match(
+									/Z|[+-](?:(?:0[0-9]|1[0-3]):[0-5][0-9]|14:00)$/giu)?.[0] ?? ``
+							return Date.parse(`1972-12-${ day }T00:00${ timestamp }`) }
+					else return ꝺꞆ == __XSD·time ? Date.parse(`1972-12-31T${ ñꝞ }`)
+						: ꝺꞆ == __XSD·decimal
+							|| ꝺꞆ == __XSD·integer
+							|| ꝺꞆ == __XSD·long
+							|| ꝺꞆ == __XSD·int
+							|| ꝺꞆ == __XSD·short
+							|| ꝺꞆ == __XSD·byte
+							|| ꝺꞆ == __XSD·nonNegativeInteger
+							|| ꝺꞆ == __XSD·positiveInteger
+							|| ꝺꞆ == __XSD·unsignedLong
+							|| ꝺꞆ == __XSD·unsignedInt
+							|| ꝺꞆ == __XSD·unsignedShort
+							|| ꝺꞆ == __XSD·unsignedByte
+							|| ꝺꞆ == __XSD·nonPositiveInteger
+							|| ꝺꞆ == __XSD·negativeInteger ? +ñꝞ
+						: ꝺꞆ == __XSD·float || ꝺꞆ == __XSD·double
 						? ñꝞ == `+INF` || ñꝞ == `INF` ? 1/0
 							: ñꝞ == `-INF` ? -1/0
 							: +ñꝞ
-						: ꝺꞆ == S͢(__XSD·boolean) ? usedHint == `default`
-							? !(ñꝞ == `false` || ñꝞ == `0`)
-							: +!(ñꝞ == `false` || ñꝞ == `0`)
+						: ꝺꞆ == __XSD·boolean ? usedHint == `string`
+							? S͢(ñꝞ == `true` || ñꝞ == `1`)
+							: ñꝞ == `true` || ñꝞ == `1`
 						: ñꝞ
 				else return ñꝞ }
 			clone ( ) {
@@ -1771,7 +1805,7 @@ This is an ※extreme※ edge‐case which code is unlikely to ever encounter in
 				const
 					ñꝞ = get𝒫.call(this, `nominalValue`, ꞰRDFN)
 					, ꝺꞆ = S͢(get𝒫.call(this, `datatype`, ꞰL))
-				if ( ꝺꞆ == S͢(__RDF·XMLLiteral) )
+				if ( ꝺꞆ == __RDF·XMLLiteral )
 					try {
 						const
 							$DOMParser = typeof DOMParser == `undefined`
@@ -1785,7 +1819,7 @@ This is an ※extreme※ edge‐case which code is unlikely to ever encounter in
 							( ꝵ, ĩ ) => (ꝵ.insertBefore(ĩ, ꝵ.firstChild), ꝵ),
 							doc.createDocumentFragment()) }
 					catch ( ɛ ) { return ñꝞ }
-				else if ( ꝺꞆ == S͢(__RDF·HTML) )
+				else if ( ꝺꞆ == __RDF·HTML )
 					try {
 						const
 							$DOMParser = typeof DOMParser == `undefined`
@@ -1799,26 +1833,62 @@ This is an ※extreme※ edge‐case which code is unlikely to ever encounter in
 							( ꝵ, ĩ ) => (ꝵ.insertBefore(ĩ, ꝵ.firstChild), ꝵ),
 							doc.createDocumentFragment()) }
 					catch ( ɛ ) { return ñꝞ }
-				else if ( ꝺꞆ == S͢(__XSD·dateTime)
-					|| ꝺꞆ == S͢(__XSD·dateTimeStamp)
-					|| ꝺꞆ == S͢(__XSD·gYear)
-					|| ꝺꞆ == S͢(__XSD·gYearMonth) ) {
+				else if ( ꝺꞆ == __XSD·dateTime
+					|| ꝺꞆ == __XSD·dateTimeStamp
+					|| ꝺꞆ == __XSD·date
+					|| ꝺꞆ == __XSD·gYear
+					|| ꝺꞆ == __XSD·gYearMonth ) {
 						const
-							[ $sign, $unsigned ] = ñꝞ[0] = `-` ? [ `-`, ñꝞ.substring(1) ]
+							[ $sign, $unsigned ] = ñꝞ[0] == `-` ? [ `-`, ñꝞ.substring(1) ]
 								: [ `+`, ñꝞ ]
-							, [ year ] = $unsigned.split(`-`, 1)
-						if ( year.length != 4)
-							return new Date (`${ $sign }${ year.padStart(6, `0`) }${
-								$unsigned.substring(year.length) }`)
-						else return new Date (ñꝞ) }
-				else return  ꝺꞆ == S͢(__XSD·gMonth) || ꝺꞆ == S͢(__XSD·gMonthDay)
-					? new Date (`1992-${ ñꝞ }`)
-					: ꝺꞆ == S͢(__XSD·gDay) ? new Date (`1992-12-${ ñꝞ }`)
-					: ꝺꞆ == S͢(__XSD·time) ? new Date (`1992-12-31${ ñꝞ }`)
-					: ꝺꞆ == S͢(__XSD·anyURI) ? new WHATWG·URL (ñꝞ)
-					: ꝺꞆ == S͢(__XSD·base64Binary) ? a2b(ñꝞ)
-					: ꝺꞆ == S͢(__XSD·hexBinary)
-					? Uint8Array.from(ñꝞ.split(/(?=(?:[^]{2})*$)/),
+							, [ year, month, day ] = $unsigned.split(/[Z+-]/iu, 3)
+							, timestamp = $unsigned.match(
+								/Z|[+-](?:(?:0[0-9]|1[0-3]):[0-5][0-9]|14:00)$/giu)?.[0] ?? ``
+							, _year = $sign == `-` || year.length != 4 ? `${ $sign }${ year.padStart(6, `0`) }` : year
+							, _unsignedyear = year >>> 0
+							, _month = month >>> 0
+						return ꝺꞆ == __XSD·dateTime || ꝺꞆ == __XSD·dateTimeStamp
+							? new Date (
+								`${ _year }${ $unsigned.substring(year.length) }`)
+							: ꝺꞆ == __XSD·date
+							? new Date (
+								`${ _year }-${ month }-${ day }T00:00${ timestamp }`)
+							: ꝺꞆ == __XSD·gYear
+							? new Date (`${ _year }-12-31T00:00${ timestamp }`)
+							: new Date (`${ _year }-${ month }-${
+								S͢(_month == 2
+									? _unsignedyear % 400 == 0
+										|| _unsignedyear % 4 == 0
+										&& _unsignedyear % 100 != 0 ? 29 : 28
+									: _month == 4 || _month == 6 || _month == 9
+										|| _month == 11 ? 30
+									: 31).padStart(2, `0`) }T00:00${ timestamp }`) }
+				else if ( ꝺꞆ == __XSD·gMonth || ꝺꞆ == __XSD·gMonthDay ) {
+						const
+							$monthday = ñꝞ.substring(2)
+							, [ month, day ] = $monthday.split(/[Z+-]/iu, 2)
+							, timestamp = $monthday.match(
+								/Z|[+-](?:(?:0[0-9]|1[0-3]):[0-5][0-9]|14:00)$/giu)?.[0] ?? ``
+							, _month = month >>> 0
+						return ꝺꞆ == __XSD·gMonth
+							? new Date (`1972-${ month }-${
+								S͢(_month == 2 ? 29
+									: _month == 4 || _month == 6 || _month == 9
+										|| _month == 11 ? 30
+									: 31).padStart(2, `0`) }T00:00${ timestamp }`)
+							: new Date (
+								`1972-${ month }-${ day }T00:00${ timestamp }`) }
+				else if ( ꝺꞆ == __XSD·gDay ) {
+						const
+							$day = ñꝞ.substring(3)
+							, [ day ] = $day.split(/[Z+-]/iu, 1)
+							, timestamp = $day.match(
+								/Z|[+-](?:(?:0[0-9]|1[0-3]):[0-5][0-9]|14:00)$/giu)?.[0] ?? ``
+						return new Date (`1972-12-${ day }T00:00${ timestamp }`) }
+				else return ꝺꞆ == __XSD·time ? new Date (`1972-12-31T${ ñꝞ }`)
+					: ꝺꞆ == __XSD·anyURI ? new WHATWG·URL (ñꝞ)
+					: ꝺꞆ == __XSD·base64Binary ? a2b(ñꝞ)
+					: ꝺꞆ == __XSD·hexBinary ? Uint8Array.from(ñꝞ.split(/(?=(?:[^]{2})*$)/),
 						pair => parseInt(pair, 16)).buffer
 					: ꞰL[Ꝕ][Ʃ͢.toPrimitive].call(this, `default`) } }
 		, ꞰR = class Resource extends ꞰRDFN {  //  subject node with predicate+object pairs

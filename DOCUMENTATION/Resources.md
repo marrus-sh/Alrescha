@@ -1,1 +1,1 @@
-#  Al·rishāʼ Documentation :: Resources
+#  [Al·rishāʼ Documentation](./) :: Resources

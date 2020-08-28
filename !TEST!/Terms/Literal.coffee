@@ -69,6 +69,36 @@ describe "Terms", -> describe "Literal", ->
 			datatype: value: pname"xsd:double"
 			nT: value: "\"-INF\"^^#{ do pname"xsd:double".toNT }"
 			js: value: -Infinity
+		instances.dt = Object.create Literal::,
+			interfaceName: value: "Literal"
+			nominalValue: value: "1997-10-07T01:15:23-06:00"
+			datatype: value: pname"xsd:dateTime"
+			nT: value: "\"1997-10-07T01:15:23-06:00\"^^#{ do pname"xsd:dateTime".toNT }"
+			js: value: new Date "1997-10-07T01:15:23-06:00"
+		instances.ym = Object.create Literal::,
+			interfaceName: value: "Literal"
+			nominalValue: value: "-0004-02-06:09"
+			datatype: value: pname"xsd:gYearMonth"
+			nT: value: "\"-0004-02-06:09\"^^#{ do pname"xsd:gYearMonth".toNT }"
+			js: value: new Date "-000004-02-29T00:00:00-06:09"
+		instances.m = Object.create Literal::,
+			interfaceName: value: "Literal"
+			nominalValue: value: "--04+02:00"
+			datatype: value: pname"xsd:gMonth"
+			nT: value: "\"--04+02:00\"^^#{ do pname"xsd:gMonth".toNT }"
+			js: value: new Date "1972-04-30T00:00:00+02:00"
+		instances.d = Object.create Literal::,
+			interfaceName: value: "Literal"
+			nominalValue: value: "---31+14:00"
+			datatype: value: pname"xsd:gDay"
+			nT: value: "\"---31+14:00\"^^#{ do pname"xsd:gDay".toNT }"
+			js: value: new Date "1972-12-31T00:00:00+14:00"
+		instances.t = Object.create Literal::,
+			interfaceName: value: "Literal"
+			nominalValue: value: "16:20:00Z"
+			datatype: value: pname"xsd:time"
+			nT: value: "\"16:20:00Z\"^^#{ do pname"xsd:time".toNT }"
+			js: value: new Date "1972-12-31T16:20:00Z"
 		instances.uri = Object.create Literal::,
 			interfaceName: value: "Literal"
 			nominalValue: value: "http://example.com"
@@ -276,6 +306,9 @@ describe "Terms", -> describe "Literal", ->
 					if typeof value isnt "object"
 						expect value
 							.does.equal (instance.js ? instance.nominalValue)
+					else if value instanceof Date
+						expect +value
+							.does.equal +instance.js
 					else if value instanceof URL
 						expect value.href
 							.does.equal instance.js.href

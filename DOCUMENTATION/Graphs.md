@@ -1,1 +1,1 @@
-#  Al·rishāʼ Documentation :: Graphs and Triples
+#  [Al·rishāʼ Documentation](./) :: Graphs and Triples

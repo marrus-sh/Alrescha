@@ -49,3 +49,23 @@ exports['literals["hex"].toHTML()'] = `
 exports['literals["bad"].toHTML()'] = `
 0
 `
+
+exports['literals["dt"].toHTML()'] = `
+1997-10-07T01:15:23-06:00
+`
+
+exports['literals["ym"].toHTML()'] = `
+-0004-02-06:09
+`
+
+exports['literals["m"].toHTML()'] = `
+--04+02:00
+`
+
+exports['literals["d"].toHTML()'] = `
+---31+14:00
+`
+
+exports['literals["t"].toHTML()'] = `
+16:20:00Z
+`

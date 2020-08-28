@@ -1,1 +1,1 @@
-#  Al·rishāʼ Documentation :: Input & Output
+#  [Al·rishāʼ Documentation](./) :: Input & Output

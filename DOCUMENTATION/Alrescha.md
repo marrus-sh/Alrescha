@@ -1,4 +1,4 @@
-#  Al·rishāʼ Documentation :: The Al·rishāʼ Object
+#  [Al·rishāʼ Documentation](./) :: The Al·rishāʼ Object
 
 Al·rishāʼ only exports a single default object, which this documentation will refer to as <dfn>the Al·rishāʼ object</dfn>.
 The properties of this object provide access to the fundamental classes and configuration of the Al·rishāʼ library.
