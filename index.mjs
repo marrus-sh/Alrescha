@@ -924,8 +924,7 @@ This is an ※extreme※ edge‐case which code is unlikely to ever encounter in
 			constructor ( resourceMap, predicateMap ) {
 				return O͢.create(ꞰRPX[Ꝕ],
 					{ predicateMap: { [Ꝟ]: predicateMap }
-					, resourceMap: { [Ꝟ]: resourceMap }
-					, revoke: { [Ꝯ]: 1, [Ꝟ]: Ꝋ } }) }
+					, resourceMap: { [Ꝟ]: resourceMap } }) }
 			a ( O, V ) {  //  is O a V?
 				const $Ꞇ = O͢.isExtensible(O) ? this.predicateMap.get(__RDF·type)
 					: O[__RDF·type]
@@ -934,13 +933,6 @@ This is an ※extreme※ edge‐case which code is unlikely to ever encounter in
 					for ( const Ꞇ of $Ꞇ ) { if ( ꞰRDFN[Ꝕ].equals.call(Ꞇ, V) ) return true }
 					return false }
 				else return ꞰRDFN[Ꝕ].equals.call($Ꞇ, V) }
-			checkForRevocation (O, V) {  //  revoke O if empty and return V
-				const rM = this.resourceMap
-				if ( rM != Ꝋ && V && this.predicateMap.size == 0 ) {
-					const sbj = nSbj(O)
-					if ( sbj != Ꝋ ) rM.delete(S͢(sbj))
-					this.revoke?.call?.(this) }
-				return V }
 			defineProperty ( O, P, Desc ) {
 				if ( !O͢.isExtensible(O) || dſ𝒫(O, P) != Ꝋ )
 					return Reflect.defineProperty(O, P, Desc)
@@ -1033,7 +1025,7 @@ This is an ※extreme※ edge‐case which code is unlikely to ever encounter in
 						else if ( hasꞆ.call($Ꝟ, ꞰBN) && A͢.ʔ($Ꝟ) )
 							for ( const $3 of nº1MethodOf.call($Ꝟ, `triples`, $Ꝟ, ꞰBNC[Ꝕ])() ) {
 								this.getTarget(O).parent.add($3) }
-						return this.checkForRevocation(O, !!this.predicateMap.set(P, $Ꝟ)) } }
+						return !!this.predicateMap.set(P, $Ꝟ) } }
 				else return Reflect.defineProperty(O, P, Desc) }
 			deleteArrayIndex ( O, ndx ) {
 				const $ꝕ = this.getPrototypeOf(O)
@@ -1053,8 +1045,8 @@ This is an ※extreme※ edge‐case which code is unlikely to ever encounter in
 					? Reflect.delete(O, P)
 					: P == Ɫ ? false
 					: isNdx(P) ? this.deleteArrayIndex(O, +P)
-					: isIRI(P) ? this.checkForRevocation(O, this.predicateMap.clear(P) || true)
-					: Reflect.delete(O, P)  }
+					: isIRI(P) ? this.predicateMap.clear(P) || true
+					: Reflect.delete(O, P) }
 			get ( O, P, Receiver ) {
 				return !O͢.isExtensible(O) || P != Ɫ && dſ𝒫(O, P) != Ꝋ
 					? Reflect.get(O, P, Receiver)
@@ -1186,7 +1178,7 @@ This is an ※extreme※ edge‐case which code is unlikely to ever encounter in
 					? Reflect.set(O, P, V, Receiver)
 					: P == Ɫ ? this.setLength(O, V)
 					:  isNdx(P) ? this.setArrayIndex(O, +P, V)
-					: isIRI(P) ? this.checkForRevocation(O, this.setPredicate(O, P, V))
+					: isIRI(P) ? this.setPredicate(O, P, V)
 					: Reflect.set(O, P, V, Receiver) }
 			setArrayIndex ( O, ndx, V ) { return this.defineProperty(O, S͢(ndx), { [Ꝟ]: V }) }
 			setCollectionLength ( O, V ) {
@@ -1272,9 +1264,17 @@ This is an ※extreme※ edge‐case which code is unlikely to ever encounter in
 				if ( !O͢.isExtensible(O) || dſ𝒫(O, P) != Ꝋ || typeof P != `string` )
 					return Reflect.get(O, P, Receiver)
 				else {
-					const sbj = nSbj(P)
-					return sbj == Ꝋ ? Reflect.get(O, P, Receiver)
-						: this.resourceMap.get(S͢(sbj)) } }
+					const $$sbj = nSbj(P)
+					if ( $$sbj == Ꝋ ) return Reflect.get(O, P, Receiver)
+					else {
+						const
+							$sbj = S͢($$sbj)
+							, sbj = this.resourceMap.get($sbj)
+						if ( sbj == Ꝋ ) {
+							const _sbj = new ꞰⱢR (O, P, this.resourceMap)
+							this.resourceMap.set($sbj, _sbj)
+							return _sbj }
+						else return sbj } } }
 			getOwnPropertyDescriptor ( O, P ) {
 				if ( !O͢.isExtensible(O) || dſ𝒫(O, P) != Ꝋ || typeof P != `string` )
 					return Reflect.getOwnPropertyDescriptor(O, P)
@@ -1282,35 +1282,41 @@ This is an ※extreme※ edge‐case which code is unlikely to ever encounter in
 					const $sbj = nSbj(P)
 					if ( $sbj == Ꝋ ) return Reflect.getOwnPropertyDescriptor(O, P)
 					else {
-						const sbj = S͢($sbj)
-						return this.resourceMap.has(sbj) ? { [Ꝯ]: 1, [ꝴ]: 1, get:
-							ꞰPM[Ꝕ].get.bind(this.resourceMap, sbj) }
-							: Ꝋ } } }
+						const
+							sbj = S͢($sbj)
+							, _sbj = this.resourceMap.get(sbj)
+						return _sbj == Ꝋ || _sbj.empty ? Ꝋ : { [Ꝯ]: 1, [ꝴ]: 1, get:
+							ꞰPM[Ꝕ].get.bind(this.resourceMap, sbj) } } } }
 			has ( O, P ) {
 				if ( !O͢.isExtensible(O) || typeof P != `string` ) return Reflect.has(O, P)
 				else if ( dſ𝒫(O, P) != Ꝋ ) return true
 				else {
-					const sbj = nSbj(P)
-					return sbj == Ꝋ ? Reflect.has(O, P)
-						: this.resourceMap.has(S͢(sbj)) } }
+					const
+						sbj = nSbj(P)
+						, _sbj = sbj == Ꝋ ? Ꝋ : this.resourceMap.get(S͢(sbj))
+					return sbj == Ꝋ ? Reflect.has(O, P) : !(_sbj == Ꝋ || _sbj.empty) } }
 			ownKeys ( O ) {
 				if ( !O͢.isExtensible(O) ) return Reflect.ownKeys(O)
-				else return Reflect.ownKeys(O)
-					.concat(A͢(this.resourceMap.keys())) }
+				else {
+					const ꝵ = [ ]
+					for ( const [ sbj, rsrc ] of this.resourceMap.entries() ) {
+						if ( !rsrc.empty ) ꝵ.push(sbj) }
+					return Reflect.ownKeys(O).concat(ꝵ) } }
 			preventExtensions ( O ) {
 				if ( O͢.isExtensible(O) ) {
 					$℘s(O,
 						{ [ʃAd3]: { [Ꝯ]: 0, [Ꝟ]: Ꝋ }
 						, [ʃAdActn]: { [Ꝯ]: 0, [Ꝟ]: Ꝋ }
 						, [ʃRm3Match]: { [Ꝯ]: 0, [Ꝟ]: Ꝋ } })
-					for ( const sbj of this.resourceMap.keys() ) {
-						$℘(O, sbj, { [Ꝯ]: 0, [ꝴ]: 1, get:
+					for ( const [ sbj, rsrc ] of this.resourceMap.entries() ) {
+						O͢.preventExtensions(rsrc)
+						if ( !rsrc.empty ) $℘(O, sbj, { [Ꝯ]: 0, [ꝴ]: 1, get:
 							Map[Ꝕ].get.bind(this.resourceMap, sbj) }) } }
 				return Reflect.preventExtensions(O) }
 			set ( O, P, V, Receiver ) {
 				return !O͢.isExtensible(O) || dſ𝒫(O, P) != Ꝋ || typeof P != `string`
 					? Reflect.set(O, P, V, Receiver)
-					: nSbj(P) ? this.defineProperty(O, P, { [Ꝟ]: V })
+					: nSbj(P) != Ꝋ ? this.defineProperty(O, P, { [Ꝟ]: V })
 					: Reflect.set(O, P, V, Receiver) } }
 		, ꞰT = class Term {  //  RDF/JS Term
 			constructor ( termType, value ) {
@@ -1902,19 +1908,17 @@ If you want to use this constructor to create objects which do not inherit from 
 \*  ⁂  */
 				if ( hasꞆ.call(subject, ꞰBN) && A͢.ʔ(subject) ) return new ꞰRC (subject)
 				else {
-					const
-						pM = new ꞰPM
-						, ðˢ = new Proxy($℘s(nSbj.call(ꞰR, subject),
-							{ clear: { [Ꝟ]: ꞰPM[Ꝕ].clearAll.bind(pM) }  //  optimization
-							, empty: { get: dſ𝒫(ꞰR[Ꝕ], `empty`).get }
-							, graph: { get: dſ𝒫(ꞰR[Ꝕ], `graph`).get }
-							, length: { [Ꝯ]: 1, [Ꝟ]: 0, [ꝶ]: 1 }  //  proxied
-							, members: { get: dſ𝒫(ꞰR[Ꝕ], `members`).get }
-							, size: { get: dſ𝒫(ꞰR[Ꝕ], `size`).get }
-							, predicates: { [Ꝟ]: ꞰPM[Ꝕ].keys.bind(pM) }  //  optimization
-							, remove: { [Ꝟ]: ꞰPM[Ꝕ].delete.bind(pM) } }),  //  optimization
-							new ꞰRPX (Ꝋ, pM))
-					return ðˢ } }
+					const pM = new ꞰPM
+					return new Proxy($℘s(nSbj.call(ꞰR, subject),
+						{ clear: { [Ꝟ]: ꞰPM[Ꝕ].clearAll.bind(pM) }  //  optimization
+						, empty: { get: dſ𝒫(ꞰR[Ꝕ], `empty`).get }
+						, graph: { get: dſ𝒫(ꞰR[Ꝕ], `graph`).get }
+						, length: { [Ꝯ]: 1, [Ꝟ]: 0, [ꝶ]: 1 }  //  proxied
+						, members: { get: dſ𝒫(ꞰR[Ꝕ], `members`).get }
+						, size: { get: dſ𝒫(ꞰR[Ꝕ], `size`).get }
+						, predicates: { [Ꝟ]: ꞰPM[Ꝕ].keys.bind(pM) }  //  optimization
+						, remove: { [Ꝟ]: ꞰPM[Ꝕ].delete.bind(pM) } }),  //  optimization
+						new ꞰRPX (Ꝋ, pM)) } }
 			static [Ʃ͢.hasInstance] ( instance ) {
 				return Function.prototype[Ʃ͢.hasInstance].call(this, instance) }
 			get empty ( ) {
@@ -2090,18 +2094,18 @@ The object produced by this constructor will always have Resource.prototype as i
 There are fewer optimizations for LinkedResource to ensure resource removal and revocation when all properties are deleted.
 
 \*  ⁂  */
-				const
-					$pM = new ꞰPM
-					, rPx = new ꞰRPX (rM, $pM)
-					, { proxy, revoke } =  Proxy.revocable($℘s(nSbj.call(ꞰR, subject),
-						{ empty: { get: dſ𝒫(ꞰR[Ꝕ], `empty`).get }
-						, graph: { get: dſ𝒫(ꞰR[Ꝕ], `graph`).get }
-						, length: { [Ꝯ]: 1, [Ꝟ]: 0 }  //  proxied
-						, parent: { [Ꝟ]: graph }
-						, predicates: { [Ꝟ]: ꞰPM[Ꝕ].keys.bind($pM) } }),  //  optimization
-						rPx)
-				$℘(rPx, `revoke`, { [Ꝯ]: 0, [Ꝟ]: revoke })
-				return proxy } }
+				const pM = new ꞰPM
+				return new Proxy($℘s(nSbj.call(ꞰR, subject),
+					{ clear: { [Ꝟ]: ꞰPM[Ꝕ].clearAll.bind(pM) }  //  optimization
+					, empty: { get: dſ𝒫(ꞰR[Ꝕ], `empty`).get }
+					, graph: { get: dſ𝒫(ꞰR[Ꝕ], `graph`).get }
+					, length: { [Ꝯ]: 1, [Ꝟ]: 0, [ꝶ]: 1 }  //  proxied
+					, parent: { [Ꝟ]: graph }
+					, members: { get: dſ𝒫(ꞰR[Ꝕ], `members`).get }
+					, size: { get: dſ𝒫(ꞰR[Ꝕ], `size`).get }
+					, predicates: { [Ꝟ]: ꞰPM[Ꝕ].keys.bind(pM) }  //  optimization
+					, remove: { [Ꝟ]: ꞰPM[Ꝕ].delete.bind(pM) } }),  //  optimization
+					new ꞰRPX (rM, pM)) } }
 		, ꞰRC = class ResourceCollection extends ꞰR {
 			constructor ( subject ) {
 /*  ⁂  *\
@@ -2155,7 +2159,7 @@ Subject is guaranteed (by the Resource constructor) to be a blank node; this is 
 						, [ʃActns]: { [Ꝟ]: actns.bind($actns) }
 						, [ʃAdActn]: { [Ꝯ]: 1, [Ꝟ]: adActn.bind($actns) }
 						, [ʃRm3Match]: { [Ꝯ]: 1, [Ꝟ]: rm3Match.bind(rM) }
-						, [ʃR]: { [Ꝯ]: 1, [Ꝟ]: Reflect.get.bind(Reflect, this) }
+						, [ʃR]: { [Ꝟ]: Reflect.get.bind(Reflect, this) }
 						, [ʃRs]: { [Ꝟ]: rs.bind(rM) } }), new ꞰꝾPX (rM))
 					return $℘(ðˢ, ʃAd3, { [Ꝯ]: 1, [Ꝟ]: ad3.bind(rM, ðˢ) }) }
 			get [Ʃ͢.toStringTag] ( ) { return ꞰꝾ.name }
@@ -2172,7 +2176,7 @@ Subject is guaranteed (by the Resource constructor) to be a blank node; this is 
 				const
 					$ad3 = this[ʃAd3]
 					, $actns = this[ʃActns]
-				if ( $ad3 == Ꝋ ) throw ꞆƐ͢(l10n `الرشآء: Graph not addable.`)
+				if ( $ad3 == Ꝋ ) throw ꞆƐ͢(l10n `الرشآء: Graph not addable. `)
 				else {
 					$ad3.call(this, triple)
 					if ( $actns != Ꝋ )
@@ -2181,7 +2185,7 @@ Subject is guaranteed (by the Resource constructor) to be a blank node; this is 
 					return this } }
 			addAction ( action, run ) {
 				const $adActn = this[ʃAdActn]
-				if ( $adActn == Ꝋ ) throw ꞆƐ͢(l10n `الرشآء: Graph actions not addable.`)
+				if ( $adActn == Ꝋ ) throw ꞆƐ͢(l10n `الرشآء: Graph actions not addable. `)
 				else {
 					const $actn = $adActn.call(this, action)
 					if ( run ) nº1MethodOf.call(this, `toArray`, this, ꞰꝾ[Ꝕ])()
@@ -2218,7 +2222,7 @@ Subject is guaranteed (by the Resource constructor) to be a blank node; this is 
 						, ꝿ = ꞰꝾ[Ꝕ].addAll.call(ꝯﬆʞ(ꞰꝾ, [ ], ꝯﬆʞr.call(this, ꞰꝾ)), this)
 					if ( $actns ) for ( const actn of $actns.call(this) ) { ꝿ.addAction(actn) }
 					return ꝿ } }
-			async contains ( other ) { throw ꞆƐ͢(l10n `الرشآء: Unsupported method.`) }
+			async contains ( other ) { throw ꞆƐ͢(l10n `الرشآء: Unsupported method. `) }
 			delete ( triple ) {
 				return ꞰꝾ[Ꝕ].removeMatches.call(this,
 					triple.subject, triple.predicate, triple.object) }
@@ -2229,7 +2233,7 @@ Subject is guaranteed (by the Resource constructor) to be a blank node; this is 
 				return ꞰꝾ[Ꝕ].removeMatches.call(this, sbj, null, null) }
 			difference ( other ) {
 				return ꞰꝾ[Ꝕ].filter($3 => !nº1MethodOf.call(other, `has`, other, ꞰꝾ[Ꝕ])($3)) }
-			async equals ( other ) { throw ꞆƐ͢(l10n `الرشآء: Unsupported method.`) }
+			async equals ( other ) { throw ꞆƐ͢(l10n `الرشآء: Unsupported method. `) }
 			every ( callback ) {
 				const $callback = O͢.freeze(new Ʞ3F (callback))
 				return nº1MethodOf.call(this, `toArray`, this, ꞰꝾ[Ꝕ])()
@@ -2299,20 +2303,20 @@ Subject is guaranteed (by the Resource constructor) to be a blank node; this is 
 					return false }
 				else return ꞰꝾ[Ꝕ].match.call(this, subject, predicate, object, 1).length > 0 }
 			merge ( graph ) { return ꞰꝾ[Ꝕ].addAll.call(ꞰꝾ[Ꝕ].clone.call(this), graph) }
-			async normalized ( ) { throw ꞆƐ͢(l10n `الرشآء: Unsupported method.`) }
+			async normalized ( ) { throw ꞆƐ͢(l10n `الرشآء: Unsupported method. `) }
 			reduce ( run, initialValue ) {
 				const $run = O͢.freeze(new Ʞ3R (run))
 				return nº1MethodOf.call(this, `toArray`, this, ꞰꝾ[Ꝕ])().reduce(( ꝵ, $3 ) =>
 						$run.run(ꝵ, $3, this), initialValue) }
 			remove ( triple ) {
 				const $rm3Match = this[ʃRm3Match]
-				if ( $rm3Match == Ꝋ ) throw ꞆƐ͢(l10n `الرشآء: Graph not deletable.`)
+				if ( $rm3Match == Ꝋ ) throw ꞆƐ͢(l10n `الرشآء: Graph not deletable. `)
 				else {
 					$rm3Match.call(this, triple.subject, triple.predicate, triple.object)
 					return this } }
 			removeMatches ( subject, predicate, object ) {
 				const $rm3Match = this[ʃRm3Match]
-				if ( $rm3Match == Ꝋ ) throw ꞆƐ͢(l10n `الرشآء: Graph not deletable.`)
+				if ( $rm3Match == Ꝋ ) throw ꞆƐ͢(l10n `الرشآء: Graph not deletable. `)
 				else {
 					$rm3Match.call(this, subject, predicate, object)
 					return this } }
@@ -2321,13 +2325,13 @@ Subject is guaranteed (by the Resource constructor) to be a blank node; this is 
 				if ( $rs != Ꝋ ) yield *$rs.call(this) }
 			setResource ( subject, resource ) {
 				const $ad3 = this[ʃAd3]
-				if ( $ad3 == Ꝋ ) throw ꞆƐ͢(l10n `الرشآء: Graph not addable.`)
+				if ( $ad3 == Ꝋ ) throw ꞆƐ͢(l10n `الرشآء: Graph not addable. `)
 				else {
 					const r = ꞰR[Ꝕ].clone.call(resource)
 					if ( r == Ꝋ || ꞰRDFN[Ꝕ].equals.call(r, subject) ) {
 						ꞰꝾ[Ꝕ].removeMatches.call(this, subject, null, null)
 						if ( r != Ꝋ ) for ( const $3 of r.triples() ) { $ad3.call(this, $3) } }
-					else throw ꞆƐ͢(l10n `الرشآء: Subject does not match.`)
+					else throw ꞆƐ͢(l10n `الرشآء: Subject does not match. `)
 					return this } }
 			some ( callback ) {
 				const $callback = O͢.freeze(new Ʞ3F (callback))
@@ -2338,7 +2342,7 @@ Subject is guaranteed (by the Resource constructor) to be a blank node; this is 
 				if ( $rs != Ꝋ ) return A͢($rs.call(this)).reduce(( ꝵ, r ) =>
 					ꝵ.concat(A͢(nº1MethodOf.call(r, `triples`, r, ꞰR[Ꝕ])())), [ ])
 				else return [ ] }
-			async toCanonical ( ) { throw ꞆƐ͢(l10n `الرشآء: Unsupported method.`) }
+			async toCanonical ( ) { throw ꞆƐ͢(l10n `الرشآء: Unsupported method. `) }
 			toHTML ( document ) {
 				const
 					$rs = this[ʃRs]

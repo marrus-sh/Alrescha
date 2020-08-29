@@ -97,7 +97,9 @@ describe "Graphs", -> describe "Graph", ->
 				expect instance["example:sbj"]["example:p"]
 					.does.have.property "nominalValue", "example object"
 				expect instance["example:notSbj"]
-					.is.undefined
+					.instanceof Resource
+					.which.has.property "empty"
+					.which.is.true
 
 			it "sets a resource with accessors", ->
 				"use strict"
@@ -111,8 +113,10 @@ describe "Graphs", -> describe "Graph", ->
 				expect instance["example:sbj"]["example:p"]
 					.does.have.property "nominalValue", "a different object"
 				instance["example:sbj"] = null
-				expect instance
-					.does.not.have.own.property "example:sbj"
+				expect instance["example:sbj"]
+					.instanceof Resource
+					.which.has.property "empty"
+					.which.is.true
 
 			it "sets a resource with defineProperty", ->
 				instance = do createGraph
@@ -172,8 +176,10 @@ describe "Graphs", -> describe "Graph", ->
 				expect instance["example:sbj"]["example:p"]
 					.does.have.property "nominalValue", "a different object"
 				Object.defineProperty instance, "example:sbj", value: undefined
-				expect instance
-					.does.not.have.own.property "example:sbj"
+				expect instance["example:sbj"]
+					.instanceof Resource
+					.which.has.property "empty"
+					.which.is.true
 
 			it "deletes a resource with delete", ->
 				instance = do createGraph
@@ -184,7 +190,9 @@ describe "Graphs", -> describe "Graph", ->
 				expect delete instance["example:sbj"]
 					.is.true
 				expect instance["example:sbj"]
-					.is.undefined
+					.instanceof Resource
+					.which.has.property "empty"
+					.which.is.true
 				expect delete instance["example:sbj"]
 					.is.true
 
