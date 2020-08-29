@@ -69,13 +69,6 @@ See [DOCUMENTATION](./DOCUMENTATION/README.md) for more.
 
 ##  Versioning
 
-Al·rishāʼ uses a (somewhat informal) **_version_**, **_draft_**, **_revision_** versioning system.
-Each commit forms a separate revision, and versions and drafts are signified by branch names of the form `vMdN`.
-The following guarantees are made:
-
- +  The (intended/documented) API will not break between *revisions* of a given draft.
-
- +  Output produced by previous *drafts* of a given version will be comprehensible as input to later drafts of the same version, with similar (although potentially refined) meaning.
-    Al·rishāʼ will not introduce incompatibilities on the level of interchange between systems running different drafts of the same version (although it makes no guarantees that the systems themselves will be compatible).
-
-Al·rishāʼ makes no guarantees regarding additions or deletions to its API between drafts, provided input/output compatibility is maintained.
+The current default branch is the latest recommended version for usage.
+Previous versions are kept as older branches.
+The latest version may be patched at any time.

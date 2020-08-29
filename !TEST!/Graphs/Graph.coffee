@@ -956,29 +956,12 @@ describe "Graphs", -> describe "Graph", ->
 					object: "example object"
 				resource = new Resource "example:sbj"
 				resource["example:p"] = "a different object"
-				instance.setResource "example:sbj", resource
+				instance.setResource resource
 				expect instance["example:sbj"]
 					.instanceof Resource
 					.which.has.property "example:p"
 				expect instance["example:sbj"]["example:p"]
 					.does.have.property "nominalValue", "a different object"
-
-			it "throws setting the wrong resource", ->
-				instance = do createGraph
-				resource = new Resource "example:otherSbj"
-				resource["example:p"] = "a different object"
-				do expect -> instance.setResource "example:sbj", resource
-					.does.throw
-
-			it "removes when setting to undefined", ->
-				instance = do createGraph
-				instance.add
-					subject: "example:sbj"
-					predicate: "example:p"
-					object: "example object"
-				instance.setResource "example:sbj", undefined
-				expect instance
-					.does.not.have.property "example:sbj"
 
 			it "does not run actions", ->
 				instance = do createGraph

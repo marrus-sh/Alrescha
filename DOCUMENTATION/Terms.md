@@ -9,17 +9,17 @@ The available types of RDF nodes are as follows:
  +  `Al·rishāʼ.Literal`
 
 These implement the interfaces described in [<cite>RDF Interfaces</cite>](https://www.w3.org/TR/rdf-interfaces/) and [<cite>RDF/JS</cite>](https://rdf.js.org/data-model-spec/), respectively.
-`Al·rishāʼ.BlankNodeCollection` is an Al·rishāʼ extension for representing anonymous collections (as in Turtle); it is an array (in that `Array.isArray()` returns true) and can be iterated over.
+`Al·rishāʼ.BlankNodeCollection` is an Al·rishāʼ extension for representing anonymous collections (as in Turtle); it is an array (in that `Array.isArray()` returns `true`) and can be iterated over.
 
 RDF nodes cannot be created directly with constructors.
-Instead, the factory static methods on `Al·rishāʼ.RDFNode` must be used.
+Instead, the factory static methods on `Al·rishāʼ.RDFNode` can be used.
 These are:
 
  +  `.fromNT()`: Creates a new `Al·rishāʼ.RDFNode` from an N‐Triples representation.
 
  +  `.fromTurtle()`: Creates a new `Al·rishāʼ.RDFNode` from a Turtle representation.
 
-Prototype methods (including `.clone()`) are intentionally generic, and can be used with any object which implements <cite>RDF Interfaces</cite> or <cite>RDF/JS</cite>.
+Term prototype methods are intentionally generic, meaning they can be called on graphs which were not obtained from Al·rishāʼ.
 So, the following code also works and will return an `Al·rishāʼ.Literal`:
 
 ```js
@@ -62,7 +62,7 @@ If Al·rishāʼ is made to generate a named node which does not follow IRI synta
 This does not stop you from creating your own invalid named nodes and assigning them the `Al·rishāʼ.NamedNode` prototype, although some properties and methods will not work.
 
 The `.absolute`, `.authority`, `.fragment`, `.hierarchicalPart`, `.host`, `.iri`, `.path`, `.port`, `.query`, `.scheme`, and `.userinfo` properties provide the corresponding parts of the node·s `.nominalValue`.
-In addition, the `[Ʃ͢.iterator]` property provides an iterator over the components of the `.hierarchicalPart`, and the `.parts` property provides an array of these components.
+In addition, the `[Symbol.iterator]` property provides an iterator over the components of the `.hierarchicalPart`, and the `.parts` property provides an array of these components.
 These are all defined both as own properties and as prototype getters, so an object need not be created by Al·rishāʼ to access them (it need only have the correct prototype).
 However, if you need to access them often, consider using the `.clone()` prototype method to obtain a genuine Al·rishāʼ object, as the own properties are stored directly in memory and thus faster.
 
@@ -87,7 +87,7 @@ The `.valueOf()` prototype method returns a new array of the `.valueOf()` return
 ##  Al·rishāʼ Extensions for Literals
 
 Al·rishāʼ supports a great deal many more datatypes than is required by <cite>RDF Interfaces</cite> or <cite>RDF/JS</cite>.
-The `[Ʃ͢.toPrimitive]()` prototype method converts those datatypes which have ECMAScript primitive equivalents into the corresponding value, and returns the `.nominalValue` otherwise.
+The `[Symbol.toPrimitive]()` prototype method converts those datatypes which have ECMAScript primitive equivalents into the corresponding value, and returns the `.nominalValue` otherwise.
 The supported datatypes are:
 
  +  `rdf:HTML` or `rdf:XMLLiteral`:
@@ -120,4 +120,4 @@ The `.valueOf()` prototype method is not limited to returning primitive values, 
  +  `xsd:base64Binary` or `xsd:hexBinary`:
     An `ArrayBuffer` holding the corresponding binary data.
 
-The value of `.text` prototype getter for `Al·rishāʼ.Literal`s is the value of the `[Ʃ͢.toPrimitive]()` prototype method when called with an argument of `"string"`.
+The value of `.text` prototype getter for `Al·rishāʼ.Literal`s is the value of the `[Symbol.toPrimitive]()` prototype method when called with an argument of `"string"`.

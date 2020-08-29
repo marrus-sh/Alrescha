@@ -113,7 +113,8 @@ This produces larger lengths than can actually be stored in arrays, because no s
 This is more exacting than ECMAScript’s definition of an arraylike object, because it requires the .length property to not be undefined.  It also explicitly excludes Resources which are not collections, even though all Resources are arraylike.
 
 \*  ⁂  */
-					try { return typeof $ == `object` && $ != Ꝋ && Ɫ in $ && (+$[Ɫ], true)
+					try { return (typeof $ == `function` || typeof $ == `object` && $ != Ꝋ)
+						&& Ɫ in $ && (+$[Ɫ], true)
 						&& !(Function[Ꝕ][Ʃ͢.hasInstance].call(ꞰR, $)
 							&& !ꞰRC[Ʃ͢.hasInstance]($)) }
 					catch ( ɛ ) { return false } } } }), Array)
@@ -213,7 +214,8 @@ This is more exacting than ECMAScript’s definition of an arraylike object, bec
 			else return ꞰT }
 		, get𝒫 = function ( property, constructor ) {  //  get property from this or prototype
 			const $Ꝟ = this?.[property]
-			return $Ꝟ == Ꝋ && typeof this == `object` && this != Ꝋ && !(property in this)
+			return $Ꝟ == Ꝋ && (typeof this == `function`
+				|| typeof this == `object` && this != Ꝋ) && !(property in this)
 				? dſ𝒫(constructor[Ꝕ], property).get.call(this)
 				: $Ꝟ }
 		, hasꞆ = function ( $ ) {  //  is $ a particular type of term?
@@ -304,7 +306,8 @@ This is more exacting than ECMAScript’s definition of an arraylike object, bec
 			try {
 				if ( $ == Ꝋ ) return Ꝋ
 				else if ( [ ꞰBN, ꞰÑN, ꞰL ].some(tꞆ => hasꞆ.call($, tꞆ)) ) return nT($)
-				else if ( typeof $ == `object` && Symbol.iterator in $ ) {
+				else if ( (typeof $ == `function` || typeof $ == `object`)
+					&& Symbol.iterator in $ ) {
 					const ꝵ = new Set
 					for ( const ĩ of $ ) {
 						const $obj = nObj(ĩ)
@@ -760,7 +763,7 @@ Not exposed.  Expects node values as provided by PredicateMap, except for .del
 				this[`™`].clear()
 				return Set[Ꝕ].clear.call(this) }
 			delete ( value ) {
-				if ( typeof value == `object` ) {
+				if ( typeof value == `function` || typeof value == `object` ) {
 					const n3 = S͢(ꞰRDFN[Ꝕ].toNT.call(value))
 					if ( n3 != Ꝋ ) {
 						this[`™`].delete(n3)
@@ -1246,7 +1249,7 @@ This is an ※extreme※ edge‐case which code is unlikely to ever encounter in
 									{ object: entry[1]
 									, predicate: entry[0]
 									, subject: $sbj }) }
-						else if ( typeof V == `object` )
+						else if ( typeof V == `function` || typeof V == `object` && V != Ꝋ )
 							for ( const p in V ) {
 								if ( isIRI(p) ) O[ʃAd3](
 									{ object: V[p]
@@ -1398,7 +1401,8 @@ This is an ※extreme※ edge‐case which code is unlikely to ever encounter in
 						, { [Ꝯ]: isꝮ, [ꝴ]: isꝴ, [ꝶ]: isꝶ } = $ñꝞ𝒫 == Ꝋ ? { } : $ñꝞ𝒫
 					return ꝯﬆʞ(ꞰRDFN, [ tꞆ, ñꝞ ], ꝯﬆʞr.call(this, ꞰRDFN)) } }
 			equals ( toCompare ) {
-				return toCompare != Ꝋ && typeof toCompare == `object`
+				return typeof toCompare == `function`
+					|| typeof toCompare == `object` && toCompare != Ꝋ
 					? get𝒫.call(this, `interfaceName`, ꞰRDFN)
 					=== get𝒫.call(toCompare, `interfaceName`, ꞰRDFN)
 					&& get𝒫.call(this, `nominalValue`, ꞰRDFN)
@@ -2163,13 +2167,14 @@ Subject is guaranteed (by the Resource constructor) to be a blank node; this is 
 						, clear: { [Ꝟ]: Map[Ꝕ].clear.bind(rM) }  //  optimization
 						, empty: { get: dſ𝒫(ꞰꝾ[Ꝕ], `empty`).get }
 						, length: { get: dſ𝒫(ꞰꝾ[Ꝕ], `length`).get }
+						, size: { get: dſ𝒫(ꞰꝾ[Ꝕ], `size`).get }
 						, [ʃActns]: { [Ꝟ]: actns.bind($actns) }
 						, [ʃAdActn]: { [Ꝯ]: 1, [Ꝟ]: adActn.bind($actns) }
 						, [ʃRm3Match]: { [Ꝯ]: 1, [Ꝟ]: rm3Match.bind(rM) }
 						, [ʃRs]: { [Ꝟ]: rs.bind(rM) } }), new ꞰꝾPX (rM))
-					return $℘s(ðˢ,
-						{ [ʃAd3]: { [Ꝯ]: 1, [Ꝟ]: ad3.bind(rM, ðˢ) }
-						, [ʃR]: { [Ꝟ]: getR.bind(ðˢ) } }) }
+				return $℘s(ðˢ,
+					{ [ʃAd3]: { [Ꝯ]: 1, [Ꝟ]: ad3.bind(rM, ðˢ) }
+					, [ʃR]: { [Ꝟ]: getR.bind(ðˢ) } }) }
 			get [Ʃ͢.toStringTag] ( ) { return ꞰꝾ.name }
 			get actions ( ) {
 				const $actns = this[ʃActns]
@@ -2261,7 +2266,15 @@ Subject is guaranteed (by the Resource constructor) to be a blank node; this is 
 				const $callback = O͢.freeze(new Ʞ3C (callback))
 				return nº1MethodOf.call(this, `toArray`, this, ꞰꝾ[Ꝕ])()
 					.forEach($3 => $callback.run($3, this)) }
-			getResource ( subject ) { return sbj == Ꝋ ? Ꝋ : this[ʃR]?.(sbj) }
+			getResource ( subject ) {
+				const $getR = this[ʃR]
+				if ( sbj == Ꝋ ) return Ꝋ
+				else if ( $getR != Ꝋ ) return this[ʃR](sbj)
+				else {
+					const r = new ꞰR (sbj)
+					for ( const { object, predicate } of ꞰꝾ[Ꝕ].match.call(this, sbj) ) {
+						r.add(predicate, object) } }
+					return dſ𝒫(ꞰR, `empty`).get.call(r) ? Ꝋ : r }
 			has ( triple ) { return this.matches(triple.subject, triple.predicate, triple.object) }
 			hasResource ( subject ) {
 				return nº1MethodOf.call(this, `getResource`, this, ꞰꝾ[Ꝕ])(sbj) != Ꝋ }
@@ -2295,7 +2308,7 @@ Subject is guaranteed (by the Resource constructor) to be a blank node; this is 
 				const
 					$getR = this[ʃR]
 					, $rs = this[ʃRs]
-				if ( $getR !=  Ꝋ && subject != Ꝋ ) {
+				if ( $getR != Ꝋ && subject != Ꝋ ) {
 					const r = $getR(subject)
 					if ( r != Ꝋ )
 						if ( predicate == Ꝋ && object == Ꝋ ) return true
@@ -2327,15 +2340,15 @@ Subject is guaranteed (by the Resource constructor) to be a blank node; this is 
 			*resources ( ) {
 				const $rs = this[ʃRs]
 				if ( $rs != Ꝋ ) yield *$rs.call(this) }
-			setResource ( subject, resource ) {
+			setResource ( resource ) {
 				const $ad3 = this[ʃAd3]
 				if ( $ad3 == Ꝋ ) throw ꞆƐ͢(l10n `الرشآء: Graph not addable. `)
 				else {
 					const r = ꞰR[Ꝕ].clone.call(resource)
-					if ( r == Ꝋ || ꞰRDFN[Ꝕ].equals.call(r, subject) ) {
-						ꞰꝾ[Ꝕ].removeMatches.call(this, subject, null, null)
-						if ( r != Ꝋ ) for ( const $3 of r.triples() ) { $ad3.call(this, $3) } }
-					else throw ꞆƐ͢(l10n `الرشآء: Subject does not match. `)
+					if ( r != Ꝋ ) {
+						ꞰꝾ[Ꝕ].removeMatches.call(this,
+							get𝒫.call(r, `nominalValue`, ꞰRDFN), null, null)
+						for ( const $3 of r.triples() ) { $ad3.call(this, $3) } }
 					return this } }
 			some ( callback ) {
 				const $callback = O͢.freeze(new Ʞ3F (callback))
