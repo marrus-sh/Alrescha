@@ -198,6 +198,11 @@ This is more exacting than ECMAScript’s definition of an arraylike object, bec
 		, dſ𝒫 = Object.getOwnPropertyDescriptor.bind(Object)
 		, defaultMethodOf = function ( method, $ ) {  //  default prototype method for this
 			return getꞆ.call($)[Ꝕ][method].bind(this === Ꝋ ? $ : this) }
+		, getR = function getResource ( subject ) {
+			const
+				$sbj = nSbj(subject)
+				, sbjDesc = $sbj == Ꝋ ? Ꝋ : dſ𝒫(this, S͢($sbj))
+			return sbjDesc?.get != Ꝋ ? sbjDesc.get() : sbjDesc?.[Ꝟ] }
 		, getꞆ = function ( ) {  //  internal constructor for this
 			if ( hasꞆ.call(this, ꞰÑN) ) return ꞰÑN
 			else if ( hasꞆ.call(this, ꞰBN) )
@@ -383,8 +388,9 @@ This is more exacting than ECMAScript’s definition of an arraylike object, bec
 					try { return new ꞰÑN (`${ _xp }${ loclñ }`) }
 					catch ( ɛ ) { throw ꞆƐ͢(l10n `الرشآء: PName expansion error. ${ px }`) } }
 			else throw ꞆƐ͢(l10n `الرشآء: PName syntax error. ${ ñ }`) }
-		, rm3Match = function removeTripleMatches ( subject, predicate, object ) {
-			if ( subject === null ) {
+		, rm3Match = function removeTripleMatches (
+			subject = null, predicate = null, object = null ) {
+			if ( subject == Ꝋ ) {
 				let ꝟꝵ = false
 				for ( const $sbj of this.values() ) {
 					ꝟꝵ = rm3Match.call(this, $sbj, predicate, object) || ꝟꝵ }
@@ -395,8 +401,8 @@ This is more exacting than ECMAScript’s definition of an arraylike object, bec
 					: S͢(nSbj(subject))
 				if ( this.has($sbj) ) {
 					const sbj = this.get($sbj)
-					if ( predicate === null ) {
-						if ( object === null ) return this.delete($sbj)
+					if ( predicate == Ꝋ ) {
+						if ( object == Ꝋ ) return this.delete($sbj)
 						else {
 							let ꝟꝵ = false
 							for ( const $p of sbj.predicates() ) {
@@ -404,14 +410,15 @@ This is more exacting than ECMAScript’s definition of an arraylike object, bec
 								if ( sbj.empty ) this.delete($sbj) }
 							return ꝟꝵ } }
 					else {
-						const ꝵ = object === null
+						const ꝵ = object == Ꝋ
 							? sbj[𝒫](predicate) && delete sbj[predicate]
 							: sbj.remove(predicate, object)
 						if ( sbj.empty ) this.delete($sbj)
 						return ꝵ } }
 				else return false } }
 		, rs = function *resources ( ) {  //  yield resources from this
-			for ( const r of this.values() ) { yield r } }
+			for ( const r of this.values() ) {
+				if ( !dſ𝒫(ꞰR[Ꝕ], `empty`).get.call(r) ) yield r } }
 		, turtify = $ => {  //  make RDF Turtle from object
 			//  TK: Resources
 			if ( $ instanceof WHATWG·URL || hasꞆ.call($, ꞰÑN) ) {
@@ -1299,8 +1306,8 @@ This is an ※extreme※ edge‐case which code is unlikely to ever encounter in
 				if ( !O͢.isExtensible(O) ) return Reflect.ownKeys(O)
 				else {
 					const ꝵ = [ ]
-					for ( const [ sbj, rsrc ] of this.resourceMap.entries() ) {
-						if ( !rsrc.empty ) ꝵ.push(sbj) }
+					for ( const [ sbj, r ] of this.resourceMap.entries() ) {
+						if ( !r.empty ) ꝵ.push(sbj) }
 					return Reflect.ownKeys(O).concat(ꝵ) } }
 			preventExtensions ( O ) {
 				if ( O͢.isExtensible(O) ) {
@@ -1308,9 +1315,9 @@ This is an ※extreme※ edge‐case which code is unlikely to ever encounter in
 						{ [ʃAd3]: { [Ꝯ]: 0, [Ꝟ]: Ꝋ }
 						, [ʃAdActn]: { [Ꝯ]: 0, [Ꝟ]: Ꝋ }
 						, [ʃRm3Match]: { [Ꝯ]: 0, [Ꝟ]: Ꝋ } })
-					for ( const [ sbj, rsrc ] of this.resourceMap.entries() ) {
-						O͢.preventExtensions(rsrc)
-						if ( !rsrc.empty ) $℘(O, sbj, { [Ꝯ]: 0, [ꝴ]: 1, get:
+					for ( const [ sbj, r ] of this.resourceMap.entries() ) {
+						O͢.preventExtensions(r)
+						if ( !r.empty ) $℘(O, sbj, { [Ꝯ]: 0, [ꝴ]: 1, get:
 							Map[Ꝕ].get.bind(this.resourceMap, sbj) }) } }
 				return Reflect.preventExtensions(O) }
 			set ( O, P, V, Receiver ) {
@@ -2159,9 +2166,10 @@ Subject is guaranteed (by the Resource constructor) to be a blank node; this is 
 						, [ʃActns]: { [Ꝟ]: actns.bind($actns) }
 						, [ʃAdActn]: { [Ꝯ]: 1, [Ꝟ]: adActn.bind($actns) }
 						, [ʃRm3Match]: { [Ꝯ]: 1, [Ꝟ]: rm3Match.bind(rM) }
-						, [ʃR]: { [Ꝟ]: Reflect.get.bind(Reflect, this) }
 						, [ʃRs]: { [Ꝟ]: rs.bind(rM) } }), new ꞰꝾPX (rM))
-					return $℘(ðˢ, ʃAd3, { [Ꝯ]: 1, [Ꝟ]: ad3.bind(rM, ðˢ) }) }
+					return $℘s(ðˢ,
+						{ [ʃAd3]: { [Ꝯ]: 1, [Ꝟ]: ad3.bind(rM, ðˢ) }
+						, [ʃR]: { [Ꝟ]: getR.bind(ðˢ) } }) }
 			get [Ʃ͢.toStringTag] ( ) { return ꞰꝾ.name }
 			get actions ( ) {
 				const $actns = this[ʃActns]
@@ -2253,14 +2261,10 @@ Subject is guaranteed (by the Resource constructor) to be a blank node; this is 
 				const $callback = O͢.freeze(new Ʞ3C (callback))
 				return nº1MethodOf.call(this, `toArray`, this, ꞰꝾ[Ꝕ])()
 					.forEach($3 => $callback.run($3, this)) }
-			getResource ( subject ) {
-				const sbj = nSbj(subject)
-				return sbj == Ꝋ ? Ꝋ : this[ʃR]?.(sbj) }
+			getResource ( subject ) { return sbj == Ꝋ ? Ꝋ : this[ʃR]?.(sbj) }
 			has ( triple ) { return this.matches(triple.subject, triple.predicate, triple.object) }
 			hasResource ( subject ) {
-				const sbj = nSbj(subject)
-				return sbj == Ꝋ ? false
-					: nº1MethodOf.call(this, `getResource`, this, ꞰꝾ[Ꝕ])(sbj) != Ꝋ }
+				return nº1MethodOf.call(this, `getResource`, this, ꞰꝾ[Ꝕ])(sbj) != Ꝋ }
 			intersection ( other ) {
 				return ꞰꝾ[Ꝕ].filter($3 => nº1MethodOf.call(other, `has`, other, ꞰꝾ[Ꝕ])($3)) }
 			lock ( ) { return O͢.preventExtensions(this) }
@@ -2289,17 +2293,17 @@ Subject is guaranteed (by the Resource constructor) to be a blank node; this is 
 				return ꝿ }
 			matches ( subject, predicate, object ) {
 				const
-					$r = nº1MethodOf.call(this, `getResource`, this, ꞰꝾ[Ꝕ])(subject)
+					$getR = this[ʃR]
 					, $rs = this[ʃRs]
-				if ( $r != Ꝋ )
-					if ( predicate == Ꝋ && object == Ꝋ ) return true
-					else return ꞰR[Ꝕ].matches.call($r, predicate, object)
-				else if ( $rs != Ꝋ ) {
+				if ( $getR !=  Ꝋ && subject != Ꝋ ) {
+					const r = $getR(subject)
+					if ( r != Ꝋ )
+						if ( predicate == Ꝋ && object == Ꝋ ) return true
+						else return ꞰR[Ꝕ].matches.call(r, predicate, object)
+					else return false }
+				else if ( $rs != Ꝋ && subject == Ꝋ ) {
 					for ( const r of $rs.call(this) ) {
-						if ( ꞰRDFN[Ꝕ].equals.call(r, subject) )
-							return ꞰR[Ꝕ].matches.call(r, predicate, object)
-						else if ( subject == null && ꞰR[Ꝕ].matches.call(r, predicate, object) )
-							return true }
+						if ( ꞰR[Ꝕ].matches.call(r, predicate, object) ) return true }
 					return false }
 				else return ꞰꝾ[Ꝕ].match.call(this, subject, predicate, object, 1).length > 0 }
 			merge ( graph ) { return ꞰꝾ[Ꝕ].addAll.call(ꞰꝾ[Ꝕ].clone.call(this), graph) }
