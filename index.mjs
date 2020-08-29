@@ -2346,8 +2346,8 @@ Subject is guaranteed (by the Resource constructor) to be a blank node; this is 
 				else {
 					const r = ꞰR[Ꝕ].clone.call(resource)
 					if ( r != Ꝋ ) {
-						ꞰꝾ[Ꝕ].removeMatches.call(this,
-							get𝒫.call(r, `nominalValue`, ꞰRDFN), null, null)
+						const _sbj = get𝒫.call(r, `nominalValue`, ꞰRDFN)
+						if ( _sbj != Ꝋ ) ꞰꝾ[Ꝕ].removeMatches.call(this, _sbj, null, null)
 						for ( const $3 of r.triples() ) { $ad3.call(this, $3) } }
 					return this } }
 			some ( callback ) {
