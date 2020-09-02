@@ -402,22 +402,7 @@ This is more exacting than ECMAScript’s definition of an arraylike object, bec
 				const $sbj = [ ꞰÑN, ꞰBN ].some(Ꞇ => hasꞆ.call(subject, Ꞇ))
 					? getꞆ.call(subject)[Ꝕ].toString.call(subject)
 					: S͢(nSbj(subject))
-				if ( this.has($sbj) ) {
-					const sbj = this.get($sbj)
-					if ( predicate == Ꝋ ) {
-						if ( object == Ꝋ ) return this.delete($sbj)
-						else {
-							let ꝟꝵ = false
-							for ( const $p of sbj.predicates() ) {
-								ꝟꝵ = sbj.remove($p, object) || ꝟꝵ
-								if ( sbj.empty ) this.delete($sbj) }
-							return ꝟꝵ } }
-					else {
-						const ꝵ = object == Ꝋ
-							? sbj[𝒫](predicate) && delete sbj[predicate]
-							: sbj.remove(predicate, object)
-						if ( sbj.empty ) this.delete($sbj)
-						return ꝵ } }
+				if ( this.has($sbj) ) return this.get($sbj).removeMatches(predicate, object)
 				else return false } }
 		, rs = function *resources ( ) {  //  yield resources from this
 			for ( const r of this.values() ) {
@@ -743,7 +728,7 @@ This is more exacting than ECMAScript’s definition of an arraylike object, bec
 		, ꞰTS = class TermSet extends Set {
 /*  ⁂  *\
 
-Not exposed.  Expects node values as provided by PredicateMap, except for .delete().
+Not exposed.  Expects node values as provided by PredicateMap, except for .remove().
 
 \*  ⁂  */
 			constructor ( terms ) {
@@ -763,19 +748,11 @@ Not exposed.  Expects node values as provided by PredicateMap, except for .del
 				this[`™`].clear()
 				return Set[Ꝕ].clear.call(this) }
 			delete ( value ) {
-				if ( typeof value == `function` || typeof value == `object` ) {
-					const n3 = S͢(ꞰRDFN[Ꝕ].toNT.call(value))
-					if ( n3 != Ꝋ ) {
-						this[`™`].delete(n3)
-						return Set[Ꝕ].delete.call(this, n3) } }
-				else {  //  literal values may match multiple terms
-					let ꝟ = false
-					for ( const entry of this[`™`].entries() ) {
-						if ( ꞰRDFN[Ꝕ].equals.call(entry[1], value) ) {
-							const n3 = entry[0]
-							this[`™`].delete(n3)
-							ꝟ = Set[Ꝕ].delete.call(this, n3) || ꝟ } }
-					return ꝟ } }
+				const n3 = S͢(ꞰRDFN[Ꝕ].toNT.call(value))
+				if ( n3 != Ꝋ ) {
+					this[`™`].delete(n3)
+					Set[Ꝕ].delete.call(this, n3)
+					return Set[Ꝕ].delete.call(this, n3) } }
 			entries ( ) {
 				const si = Set[Ꝕ].entries.call(this)
 				return O͢.create(ꝕ(si), { next: { [Ꝟ]: function next ( ) {
@@ -794,6 +771,24 @@ Not exposed.  Expects node values as provided by PredicateMap, except for .del
 				return O͢.create(ꝕ(si), { next: { [Ꝟ]: function next ( ) {
 					const { [Ꝟ]: nxꝞ, done } = si.next()
 					return { [Ꝟ]: nxꝞ == Ꝋ ? Ꝋ : this[`™`].get(nxꝞ), done } }.bind(this) } }) }
+			remove ( value = null ) {
+				if ( typeof value == `function` || typeof value == `object` && value != Ꝋ ) {
+					const n3 = S͢(ꞰRDFN[Ꝕ].toNT.call(value))
+					if ( n3 != Ꝋ ) {
+						this[`™`].delete(n3)
+						Set[Ꝕ].delete.call(this, n3)
+						return Set[Ꝕ].delete.call(this, n3) } }
+				else {  //  literal values may match multiple terms
+					let ꝟ = false
+					if ( value == Ꝋ ) {
+						ꝟ = !!this.size
+						this.clear() }
+					else for ( const entry of this[`™`].entries() ) {
+						if ( ꞰRDFN[Ꝕ].equals.call(entry[1], value) ) {
+							const n3 = entry[0]
+							this[`™`].delete(n3)
+							ꝟ = Set[Ꝕ].delete.call(this, n3) || ꝟ } }
+					return ꝟ } }
 			values ( ) {
 				const si = Set[Ꝕ].values.call(this)
 				return O͢.create(ꝕ(si), { next: { [Ꝟ]: function next ( ) {
@@ -802,7 +797,7 @@ Not exposed.  Expects node values as provided by PredicateMap, except for .del
 		, ꞰPM = class PredicateMap extends Map {
 /*  ⁂  *\
 
-Not exposed.  All methods expect a string predicate (as provided by ResourceProxy) except for .delete().
+Not exposed.  All methods expect a string predicate (as provided by ResourceProxy) except for .delete() and .remove().
 
 \*  ⁂  */
 			constructor ( ) { return super() }
@@ -850,10 +845,10 @@ Not exposed.  All methods expect a string predicate (as provided by ResourcePr
 						const existing = Map[Ꝕ].get.call(this, $p)
 						if ( object == Ꝋ ) return false
 						else if ( existing instanceof Set ) {
-							const deleted = existing.delete(object)  //  for the sake of iterators
+							const deleted = existing.remove(object)  //  for the sake of iterators
 							if ( existing.size < 1 ) Map[Ꝕ].delete.call(this, $p)
 							else if ( existing.size == 1 )
-								Map[Ꝕ].set.call(this, predicate, existing.values().next()[Ꝟ])
+								Map[Ꝕ].set.call(this, $p, existing.values().next()[Ꝟ])
 							return deleted }
 						else if ( ꞰRDFN[Ꝕ].equals.call(existing, object) )
 							return Map[Ꝕ].delete.call(this, $p)
@@ -913,17 +908,45 @@ This is an ※extreme※ edge‐case which code is unlikely to ever encounter in
 				return O͢.create(ꝕ(mi), { next: { [Ꝟ]: function next ( ) {
 					const { [Ꝟ]: nxKey, done } = mi.next()
 					return { [Ꝟ]: nxKey == Ꝋ ? nxKey : new ꞰÑN (nxKey), done } } } }) }
+			remove ( predicate = null, object = null ) {
+				let ꝟ = false
+				if ( predicate == Ꝋ )
+					for ( const $p of Map[Ꝕ].keys.call(this) ) {
+						if ( object == Ꝋ ) ꝟ = Map[Ꝕ].delete.call(this, $p) || ꝟ
+						else {
+							const existing = Map[Ꝕ].get.call(this, $p)
+							if ( existing instanceof Set ) {
+								ꝟ = existing.remove(object) || ꝟ  //  for the sake of iterators
+								if ( existing.size < 1 ) Map[Ꝕ].delete.call(this, $p)
+								else if ( existing.size == 1 )
+									Map[Ꝕ].set.call(this, $p, existing.values().next()[Ꝟ]) }
+								else if ( ꞰRDFN[Ꝕ].equals.call(existing, object) )
+									ꝟ = Map[Ꝕ].delete.call(this, $p) || ꝟ } }
+				else {
+					const $p = S͢(predicate)
+					if ( Map[Ꝕ].has.call(this, $p) ) {
+						if ( object == Ꝋ )  ꝟ = Map[Ꝕ].delete.call(this, $p) || ꝟ
+						else {
+							const existing = Map[Ꝕ].get.call(this, $p)
+							if ( existing instanceof Set ) {
+								ꝟ = existing.remove(object) || ꝟ  //  for the sake of iterators
+								if ( existing.size < 1 ) Map[Ꝕ].delete.call(this, $p)
+								else if ( existing.size == 1 )
+									Map[Ꝕ].set.call(this, $p, existing.values().next()[Ꝟ]) }
+								else if ( ꞰRDFN[Ꝕ].equals.call(existing, object) )
+									ꝟ = Map[Ꝕ].delete.call(this, $p) || ꝟ } } }
+				return ꝟ }
 			set ( predicate, object ) {
 				if ( object == Ꝋ ) return ꞰPM[Ꝕ].clear.call(this, predicate), this
 				else if ( !O͢.isExtensible(this) )
 					throw ꞆƐ͢(l10n `الرشآء: Nonextensible predicate addition error. `)
 				else {
-					const obj = nObj(object)
-					if ( obj instanceof Set ) {
-						const objs = new ꞰTS (obj)
+					const provided = nObj(object)
+					if ( provided instanceof Set ) {
+						const objs = new ꞰTS (provided)
 						Map[Ꝕ].set.call(this, predicate, objs.size > 1 ? objs
 							: objs.values().next()[Ꝟ]) }
-					else if ( obj != Ꝋ ) Map[Ꝕ].set.call(this, predicate, obj) }
+					else if ( provided != Ꝋ ) Map[Ꝕ].set.call(this, predicate, provided) }
 				return this }
 			values ( ) {
 				const mi = Map[Ꝕ].keys.call(this)
@@ -1928,7 +1951,8 @@ If you want to use this constructor to create objects which do not inherit from 
 						, members: { get: dſ𝒫(ꞰR[Ꝕ], `members`).get }
 						, size: { get: dſ𝒫(ꞰR[Ꝕ], `size`).get }
 						, predicates: { [Ꝟ]: ꞰPM[Ꝕ].keys.bind(pM) }  //  optimization
-						, remove: { [Ꝟ]: ꞰPM[Ꝕ].delete.bind(pM) } }),  //  optimization
+						, remove: { [Ꝟ]: ꞰPM[Ꝕ].delete.bind(pM) }  //  optimization
+						, removeMatches: { [Ꝟ]: ꞰPM[Ꝕ].remove.bind(pM) } }),  //  optimization
 						new ꞰRPX (Ꝋ, pM)) } }
 			static [Ʃ͢.hasInstance] ( instance ) {
 				return Function.prototype[Ʃ͢.hasInstance].call(this, instance) }
@@ -1946,7 +1970,7 @@ If you want to use this constructor to create objects which do not inherit from 
 			[Ʃ͢.iterator] ( ) { return ꞰR[Ꝕ].triples.call(this) }
 			a ( Ꞇ ) { return ꞰR[Ꝕ].matches.call(this, __RDF·type, nSbj(Ꞇ)) }
 			add ( predicate, object ) {
-				this[predicate] = object
+				this[new ꞰÑN (predicate)] = object
 				return this }
 			all ( predicate, test, thisArg ) {
 				if ( predicate == Ꝋ ) { return new Set }
@@ -2030,6 +2054,20 @@ If you want to use this constructor to create objects which do not inherit from 
 					else if ( ꞰRDFN[Ꝕ].equals.call(existing, object) ) return delete this[$p]
 					else return false }
 				else return false }
+			removeMatches ( predicate = null, object = null ) {
+				if ( predicate == Ꝋ ) {
+					let ꝟ = false
+					if ( object == Ꝋ ) {
+						ꝟ = dſ𝒫(ꞰR[Ꝕ], `size`).get.call(this) > 0
+						nº1MethodOf.call(this, `clear`, this, ꞰR[Ꝕ])() }
+					else for ( const $p of nº1MethodOf.call(this, `predicates`, this, ꞰR[Ꝕ])() ) {
+						ꝟ = ꞰR[Ꝕ].removeMatches.call(this, $p) | ꝟ }
+					return ꝟ }
+				else if ( object == Ꝋ ) {
+					const $p = S͢(new ꞰÑN (predicate))
+					if ( this[$p] == Ꝋ ) return false
+					else return delete this[$p] }
+				else return ꞰR[Ꝕ].remove(predicate, object) }
 			set ( predicate, object ) { return $℘(this, predicate, { [Ꝟ]: object }) }
 			toHTML ( document ) {
 				const doc = document == Ꝋ ? الرشآء.defaultDocument : document
@@ -2102,8 +2140,6 @@ If you want to use this constructor to create objects which do not inherit from 
 
 The object produced by this constructor will always have Resource.prototype as its prototype; see above.
 
-There are fewer optimizations for LinkedResource to ensure resource removal and revocation when all properties are deleted.
-
 \*  ⁂  */
 				const pM = new ꞰPM
 				return new Proxy($℘s(nSbj.call(ꞰR, subject),
@@ -2115,7 +2151,8 @@ There are fewer optimizations for LinkedResource to ensure resource removal and 
 					, members: { get: dſ𝒫(ꞰR[Ꝕ], `members`).get }
 					, size: { get: dſ𝒫(ꞰR[Ꝕ], `size`).get }
 					, predicates: { [Ꝟ]: ꞰPM[Ꝕ].keys.bind(pM) }  //  optimization
-					, remove: { [Ꝟ]: ꞰPM[Ꝕ].delete.bind(pM) } }),  //  optimization
+					, remove: { [Ꝟ]: ꞰPM[Ꝕ].delete.bind(pM) }  //  optimization
+					, removeMatches: { [Ꝟ]: ꞰPM[Ꝕ].remove.bind(pM) } }),  //  optimization
 					new ꞰRPX (rM, pM)) } }
 		, ꞰRC = class ResourceCollection extends ꞰR {
 			constructor ( subject ) {
@@ -2181,7 +2218,9 @@ Subject is guaranteed (by the Resource constructor) to be a blank node; this is 
 				if ( $actns ) return A͢($actns.call(this), ( { action, test } ) =>
 					new Ʞ3A (test, action))
 				else return [ ] }
-			get empty ( ) { return A͢.ɫ(nº1MethodOf.call(this, `toArray`, this, ꞰꝾ[Ꝕ])()) == 0 }
+			get empty ( ) {
+				const { value, done } = nº1MethodOf.call(this, Ʃ͢.iterator, this, ꞰꝾ[Ꝕ])().next()
+				return value == Ꝋ && done }
 			get length ( ) { return A͢.ɫ(nº1MethodOf.call(this, `toArray`, this, ꞰꝾ[Ꝕ])()) }
 			get size ( ) { return  A͢.ɫ(nº1MethodOf.call(this, `toArray`, this, ꞰꝾ[Ꝕ])()) }
 			[Ʃ͢.iterator] ( ) { return nº1MethodOf.call(this, `triples`, this, ꞰꝾ[Ꝕ])() }
@@ -2235,18 +2274,14 @@ Subject is guaranteed (by the Resource constructor) to be a blank node; this is 
 						, ꝿ = ꞰꝾ[Ꝕ].addAll.call(ꝯﬆʞ(ꞰꝾ, [ ], ꝯﬆʞr.call(this, ꞰꝾ)), this)
 					if ( $actns ) for ( const actn of $actns.call(this) ) { ꝿ.addAction(actn) }
 					return ꝿ } }
-			async contains ( other ) { throw ꞆƐ͢(l10n `الرشآء: Unsupported method. `) }
 			delete ( triple ) {
-				return ꞰꝾ[Ꝕ].removeMatches.call(this,
-					triple.subject, triple.predicate, triple.object) }
-			deleteMatches ( subject = null, predicate = null, object = null ) {
-				return ꞰꝾ[Ꝕ].removeMatches.call(this, subject, predicate, object) }
+				const $3 = Ʞ3[Ꝕ].clone.call(triple)
+				if ( $3 ==  Ꝋ ) return this
+				else return ꞰꝾ[Ꝕ].removeMatches.call(this,
+					$3.subject, $3.predicate, $3.object) }
 			deleteResource ( subject ) {
 				const sbj = nSbj(subject)
 				return ꞰꝾ[Ꝕ].removeMatches.call(this, sbj, null, null) }
-			difference ( other ) {
-				return ꞰꝾ[Ꝕ].filter($3 => !nº1MethodOf.call(other, `has`, other, ꞰꝾ[Ꝕ])($3)) }
-			async equals ( other ) { throw ꞆƐ͢(l10n `الرشآء: Unsupported method. `) }
 			every ( callback ) {
 				const $callback = O͢.freeze(new Ʞ3F (callback))
 				return nº1MethodOf.call(this, `toArray`, this, ꞰꝾ[Ꝕ])()
@@ -2268,29 +2303,22 @@ Subject is guaranteed (by the Resource constructor) to be a blank node; this is 
 					.forEach($3 => $callback.run($3, this)) }
 			getResource ( subject ) {
 				const $getR = this[ʃR]
-				if ( sbj == Ꝋ ) return Ꝋ
-				else if ( $getR != Ꝋ ) return this[ʃR](sbj)
+				if ( subject == Ꝋ ) return Ꝋ
+				else if ( $getR != Ꝋ ) {
+					const r =  $getR.call(this, subject)
+					return r == Ꝋ || dſ𝒫(ꞰR[Ꝕ], `empty`).get.call(r) ? Ꝋ : r }
 				else {
-					const r = new ꞰR (sbj)
-					for ( const { object, predicate } of ꞰꝾ[Ꝕ].match.call(this, sbj) ) {
+					const r = new ꞰR (subject)
+					for ( const { object, predicate } of ꞰꝾ[Ꝕ].match.call(this, subject) ) {
 						r.add(predicate, object) } }
-					return dſ𝒫(ꞰR, `empty`).get.call(r) ? Ꝋ : r }
-			has ( triple ) { return this.matches(triple.subject, triple.predicate, triple.object) }
+					return dſ𝒫(ꞰR[Ꝕ], `empty`).get.call(r) ? Ꝋ : r }
+			has ( triple ) {
+				const $3 = Ʞ3[Ꝕ].clone.call(triple)
+				if ( $3 ==  Ꝋ ) return false
+				else return ꞰꝾ[Ꝕ].matches.call(this, $3.subject, $3.predicate, $3.object) }
 			hasResource ( subject ) {
-				return nº1MethodOf.call(this, `getResource`, this, ꞰꝾ[Ꝕ])(sbj) != Ꝋ }
-			intersection ( other ) {
-				return ꞰꝾ[Ꝕ].filter($3 => nº1MethodOf.call(other, `has`, other, ꞰꝾ[Ꝕ])($3)) }
+				return nº1MethodOf.call(this, `getResource`, this, ꞰꝾ[Ꝕ])(subject) != Ꝋ }
 			lock ( ) { return O͢.preventExtensions(this) }
-			map ( map ) {
-				const
-					$actns = this[ʃActns]
-					, $map = O͢.freeze(new Ʞ3M (map))
-					, ꝿ = nº1MethodOf.call(this, `toArray`, this, ꞰꝾ[Ꝕ])().map($3 =>
-						$map.map($3, this)).reduce(
-							( ꝿ, $3 ) => nº1MethodOf.call(ꝿ, `add`, ꝿ, ꞰꝾ[Ꝕ])($3),
-							ꝯﬆʞ(ꞰꝾ, [ ], ꝯﬆʞr.call(this, ꞰꝾ)))
-				if ( $actns ) for ( const actn of $actns.call(this) ) { ꝿ.addAction(actn) }
-				return ꝿ }
 			match ( subject = null, predicate = null, object = null, limit = 0 ) {
 				const
 					$actns = this[ʃActns]
@@ -2320,18 +2348,12 @@ Subject is guaranteed (by the Resource constructor) to be a blank node; this is 
 					return false }
 				else return ꞰꝾ[Ꝕ].match.call(this, subject, predicate, object, 1).length > 0 }
 			merge ( graph ) { return ꞰꝾ[Ꝕ].addAll.call(ꞰꝾ[Ꝕ].clone.call(this), graph) }
-			async normalized ( ) { throw ꞆƐ͢(l10n `الرشآء: Unsupported method. `) }
-			reduce ( run, initialValue ) {
-				const $run = O͢.freeze(new Ʞ3R (run))
-				return nº1MethodOf.call(this, `toArray`, this, ꞰꝾ[Ꝕ])().reduce(( ꝵ, $3 ) =>
-						$run.run(ꝵ, $3, this), initialValue) }
 			remove ( triple ) {
-				const $rm3Match = this[ʃRm3Match]
-				if ( $rm3Match == Ꝋ ) throw ꞆƐ͢(l10n `الرشآء: Graph not deletable. `)
-				else {
-					$rm3Match.call(this, triple.subject, triple.predicate, triple.object)
-					return this } }
-			removeMatches ( subject, predicate, object ) {
+				const $3 = Ʞ3[Ꝕ].clone.call(triple)
+				if ( $3 ==  Ꝋ ) return this
+				else return ꞰꝾ[Ꝕ].removeMatches.call(this,
+					$3.subject, $3.predicate, $3.object) }
+			removeMatches ( subject = null, predicate = null, object = null ) {
 				const $rm3Match = this[ʃRm3Match]
 				if ( $rm3Match == Ꝋ ) throw ꞆƐ͢(l10n `الرشآء: Graph not deletable. `)
 				else {
@@ -2339,7 +2361,9 @@ Subject is guaranteed (by the Resource constructor) to be a blank node; this is 
 					return this } }
 			*resources ( ) {
 				const $rs = this[ʃRs]
-				if ( $rs != Ꝋ ) yield *$rs.call(this) }
+				if ( $rs != Ꝋ )
+					for ( const r of  $rs.call(this) ) {
+						if ( !dſ𝒫(ꞰR[Ꝕ], `empty`).get.call(r) ) yield r } }
 			setResource ( resource ) {
 				const $ad3 = this[ʃAd3]
 				if ( $ad3 == Ꝋ ) throw ꞆƐ͢(l10n `الرشآء: Graph not addable. `)
@@ -2359,7 +2383,6 @@ Subject is guaranteed (by the Resource constructor) to be a blank node; this is 
 				if ( $rs != Ꝋ ) return A͢($rs.call(this)).reduce(( ꝵ, r ) =>
 					ꝵ.concat(A͢(nº1MethodOf.call(r, `triples`, r, ꞰR[Ꝕ])())), [ ])
 				else return [ ] }
-			async toCanonical ( ) { throw ꞆƐ͢(l10n `الرشآء: Unsupported method. `) }
 			toHTML ( document ) {
 				const
 					$rs = this[ʃRs]
@@ -2382,7 +2405,6 @@ Subject is guaranteed (by the Resource constructor) to be a blank node; this is 
 			*triples ( ) {
 				const $rs = this[ʃRs]
 				if ( $rs != Ꝋ ) for ( const r of $rs.call(this) ) { yield *r.triples() } }
-			union ( graph ) { return ꞰꝾ[Ꝕ].addAll.call(ꞰꝾ[Ꝕ].clone.call(this), graph) }
 			valueOf ( ) { return new Set (nº1MethodOf.call(this, `toArray`, this, ꞰꝾ[Ꝕ])()
 				.map($3 => Ʞ3[Ꝕ].valueOf.call($3))) } }
 		, Ʞ3 = class Triple extends ꞰꝾ {  //  RDF/JS & RDF Interfaces
@@ -2466,28 +2488,13 @@ Subject is guaranteed (by the Resource constructor) to be a blank node; this is 
 					object: defaultMethodOf(`valueOf`, obj)()
 					, predicate: defaultMethodOf(`valueOf`, p)()
 					, subject: defaultMethodOf(`valueOf`, sbj)() } } }
-		, Ʞ3F = class TripleFilter {  //  RDF Interfaces TripleFilter; RDF/JS QuadFilterIteratee
+		, Ʞ3F = class TripleFilter {  //  RDF Interfaces TripleFilter
 			constructor ( test ) {
 				return $℘(this, `test`, { [ꝴ]: 1, [Ꝟ]: triple =>
 					!!(test.test ?? test)(Ʞ3[Ꝕ].clone.call(triple)) }) }
 			test ( triple ) {
 				const test = nº1𝒫Of.call(this, `test`)
 				return test == Ꝋ ? this(triple) : test.call(this, triple) } }
-		, Ʞ3M = class TripleMap {  //  RDF/JS QuadMapIteratee
-			constructor ( map ) {
-				return $℘(this, `map`, { [ꝴ]: 1, [Ꝟ]: ( triple, graph ) =>
-					(map.map ?? map)(Ʞ3[Ꝕ].clone.call(triple), graph) }) }
-			map ( triple, graph ) {
-				const map = nº1𝒫Of.call(this, `map`)
-				return map == Ꝋ ? this(triple, graph) : map.call(this, triple, graph) } }
-		, Ʞ3R = class TripleReduce {  //  RDF/JS QuadReduceIteratee
-			constructor ( run ) {
-				return $℘(this, `run`, { [ꝴ]: 1, [Ꝟ]: ( accumulator, triple, graph ) =>
-					!!(run.run ?? run)(accumulator, Ʞ3[Ꝕ].clone.call(triple), graph) }) }
-			run ( accumulator, triple, graph ) {
-				const run = nº1𝒫Of.call(this, `run`)
-				return run == Ꝋ ? this(accumulator, triple, graph)
-					: run.call(this, accumulator, triple, graph) } }
 		, Ʞ3C = class TripleCallback { //  RDF Interfaces TripleCallback
 			constructor ( run ) {
 				const $runner = run.run
@@ -2631,8 +2638,6 @@ Subject is guaranteed (by the Resource constructor) to be a blank node; this is 
 		, TripleAction: { [Ꝯ]: 1, [Ꝟ]: phony(Ʞ3A) }
 		, TripleCallback: { [Ꝯ]: 1, [Ꝟ]: phony(Ʞ3C) }
 		, TripleFilter: { [Ꝯ]: 1, [Ꝟ]: phony(Ʞ3F) }
-		, TripleMap: { [Ꝯ]: 1, [Ꝟ]: phony(Ʞ3M) }
-		, TripleReduce: { [Ꝯ]: 1, [Ꝟ]: phony(Ʞ3R) }
 		, baseIRI: { [Ꝯ]: 1, [ꝴ]: 1, [Ꝟ]: globalThis?.document?.baseURI, [ꝶ]: 1 }
 		, context: { [Ꝯ]: 1, [ꝴ]: 1, [Ꝟ]: _ꝯ }
 		, createGraph: { [Ꝯ]: 1, [Ꝟ]: ( ) => new ꞰꝾ }
@@ -2662,8 +2667,7 @@ Subject is guaranteed (by the Resource constructor) to be a blank node; this is 
 			, "الرشآء: Subject does not match.": `The nominal value of the given resource does not match.`
 			, "الرشآء: Turtle literal subject error.": `RDF Turtle parser received a literal for a subject at position $1.`
 			, "الرشآء: Turtle unnamed predicate error.": `RDF Turtle parser received a predicate at position $1 which is not a named node.`
-			, "الرشآء: Turtle missing term error.": `RDF Turtle parser expected a term at position $1, but none was found.`
-			, "الرشآء: Unsupported method.": `The current environment lacks the necessary APIs for this method.` } }
+			, "الرشآء: Turtle missing term error.": `RDF Turtle parser expected a term at position $1, but none was found.` } }
 		, symbols: { [Ꝯ]: 1, [Ꝟ]: O͢.create(O͢[Ꝕ],
 			{ actionIterator: { [Ꝟ]: ʃActns }
 			, addAction: { [Ꝟ]: ʃAdActn }

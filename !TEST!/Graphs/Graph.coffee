@@ -68,6 +68,8 @@ describe "Graphs", -> describe "Graph", ->
 			instance = do createGraph
 			expect instance.length
 				.does.equal 0
+			expect instance.size
+				.does.equal 0
 			instance.add
 				subject: "example:sbj"
 				predicate: "example:p"
@@ -81,6 +83,8 @@ describe "Graphs", -> describe "Graph", ->
 				predicate: "example:p"
 				object: "another example object"
 			expect instance.length
+				.does.equal 2
+			expect instance.size
 				.does.equal 2
 
 		describe "proxy", ->
@@ -202,6 +206,7 @@ describe "Graphs", -> describe "Graph", ->
 					subject: "example:sbj"
 					predicate: "example:p"
 					object: "example object"
+				instance["example:alsoNotSbj"]
 				descriptor = Object.getOwnPropertyDescriptor instance, "example:sbj"
 				expect descriptor
 					.does.have.property "configurable"
@@ -214,6 +219,8 @@ describe "Graphs", -> describe "Graph", ->
 					.a "function"
 				expect Object.getOwnPropertyDescriptor instance, "example:notSbj"
 					.is.undefined
+				expect Object.getOwnPropertyDescriptor instance, "example:alsoNotSbj"
+					.is.undefined
 
 			it "checks for presence of a resource with in", ->
 				instance = do createGraph
@@ -221,9 +228,12 @@ describe "Graphs", -> describe "Graph", ->
 					subject: "example:sbj"
 					predicate: "example:p"
 					object: "example object"
+				instance["example:alsoNotSbj"]
 				expect "example:sbj" of instance
 					.is.true
 				expect "example:notSbj" of instance
+					.is.false
+				expect "example:alsoNotSbj" of instance
 					.is.false
 
 			it "includes resources in own keys", ->
@@ -232,9 +242,12 @@ describe "Graphs", -> describe "Graph", ->
 					subject: "example:sbj"
 					predicate: "example:p"
 					object: "example object"
+				instance["example:alsoNotSbj"]
 				expect (Object.keys instance).includes "example:sbj"
 					.is.true
 				expect (Object.keys instance).includes "example:notSbj"
+					.is.false
+				expect (Object.keys instance).includes "example:alsoNotSbj"
 					.is.false
 
 			it "properly prevents extensions", ->
@@ -243,6 +256,7 @@ describe "Graphs", -> describe "Graph", ->
 					subject: "example:sbj"
 					predicate: "example:p"
 					object: "example object"
+				instance["example:alsoNotSbj"]
 				Object.preventExtensions instance
 				expect instance["example:sbj"]
 					.instanceof Resource
@@ -250,9 +264,13 @@ describe "Graphs", -> describe "Graph", ->
 					.does.have.property "nominalValue", "example object"
 				expect instance["example:notSbj"]
 					.is.undefined
+				expect instance["example:alsoNotSbj"]
+					.is.undefined
 				expect "example:sbj" of instance
 					.is.true
 				expect "example:notSbj" of instance
+					.is.false
+				expect "example:alsoNotSbj" of instance
 					.is.false
 				descriptor = Object.getOwnPropertyDescriptor instance, "example:sbj"
 				expect descriptor
@@ -265,6 +283,8 @@ describe "Graphs", -> describe "Graph", ->
 					.does.have.property "get"
 					.a "function"
 				expect Object.getOwnPropertyDescriptor instance, "example:notSbj"
+					.is.undefined
+				expect Object.getOwnPropertyDescriptor instance, "example:alsoNotSbj"
 					.is.undefined
 
 		describe "add()", ->
@@ -399,36 +419,6 @@ describe "Graphs", -> describe "Graph", ->
 						object: "example object"
 					.does.equal instance
 
-		describe "any()", ->
-
-			it "returns undefined when none match", ->
-				instance = do createGraph
-				expect instance.any -> true
-					.is.undefined
-				instance.add
-					subject: "example:sbj"
-					predicate: "example:p"
-					object: "example object"
-				expect instance.any -> false
-					.is.undefined
-
-			it "returns match when present", ->
-				instance = do createGraph
-				instance.add
-					subject: "example:sbj"
-					predicate: "example:p"
-					object: "example object"
-				expect instance.any -> true
-					.instanceof Resource
-					.which.has.property "nominalValue", "example:sbj"
-				instance.add
-					subject: "example:otherSbj"
-					predicate: "example:p"
-					object: "another example object"
-				expect instance.any ( $ ) -> $["example:p"].nominalValue isnt "example object"
-					.instanceof Resource
-					.which.has.property "nominalValue", "example:otherSbj"
-
 		describe "all()", ->
 
 			it "returns an empty set when none match", ->
@@ -468,6 +458,36 @@ describe "Graphs", -> describe "Graph", ->
 				expect instance.all ( $ ) -> $["example:p"].nominalValue is "example object"
 					.a "set"
 					.which.has.property "size", 1
+
+		describe "any()", ->
+
+			it "returns undefined when none match", ->
+				instance = do createGraph
+				expect instance.any -> true
+					.is.undefined
+				instance.add
+					subject: "example:sbj"
+					predicate: "example:p"
+					object: "example object"
+				expect instance.any -> false
+					.is.undefined
+
+			it "returns match when present", ->
+				instance = do createGraph
+				instance.add
+					subject: "example:sbj"
+					predicate: "example:p"
+					object: "example object"
+				expect instance.any -> true
+					.instanceof Resource
+					.which.has.property "nominalValue", "example:sbj"
+				instance.add
+					subject: "example:otherSbj"
+					predicate: "example:p"
+					object: "another example object"
+				expect instance.any ( $ ) -> $["example:p"].nominalValue isnt "example object"
+					.instanceof Resource
+					.which.has.property "nominalValue", "example:otherSbj"
 
 		describe "clear()", ->
 
@@ -556,6 +576,53 @@ describe "Graphs", -> describe "Graph", ->
 					.which.has.property "length", 1
 				expect clone.actions[0]
 					.instanceof TripleAction
+
+		describe "delete()", ->
+
+			it "removes", ->
+				instance = (do createGraph)
+					.add
+						subject: "example:sbj"
+						predicate: "example:p"
+						object: "example object"
+					.add
+						subject: "example:sbj"
+						predicate: "example:p"
+						object: "another example object"
+				instance.delete
+					subject: "example:sbj"
+					predicate: "example:p"
+					object: "another example object"
+				expect instance["example:sbj"]["example:p"]
+					.instanceof RDFNode
+					.which.has.property "nominalValue", "example object"
+
+			it "returns this", ->
+				instance = do createGraph
+				expect instance.delete
+						subject: "example:sbj"
+						predicate: "example:p"
+						object: "example object"
+					.does.equal instance
+
+		describe "deleteResource()", ->
+
+			it "deletes a resource", ->
+				instance = do createGraph
+				instance.add
+					subject: "example:sbj"
+					predicate: "example:p"
+					object: "example object"
+				instance.deleteResource "example:sbj"
+				expect instance["example:sbj"]
+					.instanceof Resource
+					.which.has.property "empty"
+					.which.is.true
+
+			it "returns this", ->
+				instance = do createGraph
+				expect instance.deleteResource "example:sbj"
+					.does.equal instance
 
 		describe "every()", ->
 
@@ -661,6 +728,99 @@ describe "Graphs", -> describe "Graph", ->
 				instance.forEach { run: -> result++ }
 				expect result
 					.equals 3
+
+		describe "getResource()", ->
+
+			it "gets a resource", ->
+				instance = do createGraph
+				instance.add
+					subject: "example:sbj"
+					predicate: "example:p"
+					object: "example object"
+				expect instance.getResource "example:sbj"
+					.instanceof Resource
+					.which.has.property "example:p"
+				expect (instance.getResource "example:sbj")["example:p"]
+					.does.have.property "nominalValue", "example object"
+
+			it "returns undefined for empty resources", ->
+				instance = do createGraph
+				instance.add
+					subject: "example:sbj"
+					predicate: "example:p"
+					object: "example object"
+				instance.add
+					subject: "example:notSbj"
+					predicate: "example:p"
+					object: "example object"
+				instance.remove
+					subject: "example:notSbj"
+					predicate: "example:p"
+					object: "example object"
+				expect instance.getResource "example:notSbj"
+					.is.undefined
+
+		describe "has()", ->
+
+			it "checks for presence of a triple", ->
+				instance = do createGraph
+				instance.add
+					subject: "example:sbj"
+					predicate: "example:p"
+					object: "example object"
+				expect instance.has
+						subject: "example:sbj"
+						predicate: "example:p"
+						object: "example object"
+					.is.true
+				expect instance.has
+						subject: "example:notSbj"
+						predicate: "example:p"
+						object: "example object"
+					.is.false
+				expect instance.has
+						subject: null
+						predicate: null
+						object: null
+					.is.false
+
+		describe "hasResource()", ->
+
+			it "checks for presence of a resource", ->
+				instance = do createGraph
+				instance.add
+					subject: "example:sbj"
+					predicate: "example:p"
+					object: "example object"
+				instance.add
+					subject: "example:notSbj"
+					predicate: "example:p"
+					object: "example object"
+				instance.remove
+					subject: "example:notSbj"
+					predicate: "example:p"
+					object: "example object"
+				expect instance.hasResource "example:sbj"
+					.is.true
+				expect instance.hasResource "example:notSbj"
+					.is.false
+				expect instance.hasResource "example:alsoNotSbj"
+					.is.false
+
+		describe "lock()", ->
+
+			it "locks", ->
+				instance = do createGraph
+				expect Object.isExtensible instance
+					.is.true
+				do instance.lock
+				expect Object.isExtensible instance
+					.is.false
+
+			it "returns this", ->
+				instance = do createGraph
+				expect do instance.lock
+					.does.equal instance
 
 		describe "match()", ->
 
@@ -938,6 +1098,14 @@ describe "Graphs", -> describe "Graph", ->
 						subject: "example:otherSbj"
 						predicate: "example:p"
 						object: "another example object"
+				instance.add
+					subject: "example:notSbj"
+					predicate: "example:p"
+					object: "example object"
+				instance.remove
+					subject: "example:notSbj"
+					predicate: "example:p"
+					object: "example object"
 				expect Array.from do instance.resources
 					.does.have.property "length", 2
 				for resource in instance.resources
@@ -1090,6 +1258,17 @@ describe "Graphs", -> describe "Graph", ->
 				expect do instance.toNT
 					.does.equal "<example:sbj> <example:p> \"example object\" ."
 
+		describe "toString()", ->
+
+			it "converts to N-Triples", ->
+				instance = do createGraph
+				instance.add
+					subject: "example:sbj"
+					predicate: "example:p"
+					object: "example object"
+				expect do instance.toString
+					.does.equal "<example:sbj> <example:p> \"example object\" ."
+
 		describe "toTurtle()", ->
 
 			it "converts to Turtle", ->
@@ -1098,7 +1277,7 @@ describe "Graphs", -> describe "Graph", ->
 					subject: "example:sbj"
 					predicate: "example:p"
 					object: "example object"
-				expect do instance.toNT
+				expect do instance.toTurtle
 					.does.equal "<example:sbj> <example:p> \"example object\" ."
 
 		describe "*tripleActions()", ->

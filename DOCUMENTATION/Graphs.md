@@ -4,7 +4,7 @@ Al·rishāʼ implements graphs and triples as `Al·rishāʼ.Graph` and `Al·rish
 The latter inherits from the former:
 Every triple is a graph.
 Al·rishāʼ graphs and triples implement the interfaces described in [<cite>RDF Interfaces</cite>](https://www.w3.org/TR/rdf-interfaces/) and [<cite>RDF/JS</cite>](https://rdf.js.org/data-model-spec/), respectively.
-Graphs implement *most* of the [<cite>RDF/JS</cite> `Dataset` interface](https://rdf.js.org/dataset-spec/#datasetcore-interface), although methods which rely on canonicalization are not supported.
+Graphs implement the [<cite>RDF/JS</cite> `DatasetCore` interface](https://rdf.js.org/dataset-spec/#datasetcore-interface), but not the `Dataset` interface (except where there is overlap with <cite>RDF Interfaces</cite>).
 
 Al·rishāʼ does not support named graphs or quads.
 
@@ -51,8 +51,8 @@ The triples leading away from a resource can be set at once using the `=` operat
 ```js
 const gr = Al·rishāʼ.createGraph()
 gr[`example:rsrc`] =
-	{ `example:p`: `example value`
-	, `example:p2`: `another example value` }
+	{ "example:p": `example value`
+	, "example:p2": `another example value` }
 ```
 
 This will remove any existing triples with `example:rsrc` as the subject and then add the new ones.
