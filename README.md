@@ -43,6 +43,8 @@ See [DOCUMENTATION](./DOCUMENTATION/README.md) for more.
     Does not require DOM to run, only ECMAScript 2020.
     Designed to interface well with ECMAScript 2020 code.
 
+ +  Supports Turtle and N‐Triples I/O.
+
  +  Public domain.
 
 
@@ -69,6 +71,7 @@ See [DOCUMENTATION](./DOCUMENTATION/README.md) for more.
 
 ##  Versioning
 
-The current default branch is the latest recommended version for usage.
-Previous versions are kept as older branches.
-The latest version may be patched at any time.
+✨ fuck around and find out ✨
+
+(The current default branch provides the latest recommended version for usage.
+Notable points in development may be “tagged” but there will be no named patch releases.)
