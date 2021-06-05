@@ -1,4 +1,4 @@
-# Al·rishāʼ
+#  Al·rishāʼ
 <b>♓️🌟 An ECMAScript library for walking RDF graphs.</b>
 
 <dfn>Al·rishāʼ</dfn> is a JavaScript (handcoded ECMAScript 2020) library for walking RDF graphs.
@@ -6,11 +6,11 @@ Do not use if phrases like <i>**currently a very slow operation in every browser
 This library is designed for flexibility, not performance.
 
 
-## Nomenclature
+##  Nomenclature
 
 The ASCII name for this library is <i>Alrescha</i>, the International Astronomical Union–approved name for <i>α Piscium</i>, the binary star which links together the Pisces constellation.
 It derives from the Arabic <i lang="ar">الرشآء</i>, which is used internally.
-The preferred romanization is <i>Al·rishāʼ</i> in contexts where Unicode is supported; that’s
+The preferred romanization is <i>Al·rishāʼ</i> in contexts where Unicode is supported; that is
 
 |   | A | l | · | r | i | s | h | ā | ʼ |
 | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: |
@@ -19,16 +19,16 @@ The preferred romanization is <i>Al·rishāʼ</i> in contexts where Unicode is s
 which, yes, is a valid ECMAScript identifier.
 
 
-## Usage
+##  Usage
 
 ```js
-import Al·rishāʼ from "./index.mjs"  //  call it whatever you want
+import Al·rishāʼ from "https://raw.githubusercontent.com/marrus-sh/Pisces/[[HASH]]/mod.js"  //  call it whatever you want
 ```
 
 See [DOCUMENTATION](./DOCUMENTATION/README.md) for more.
 
 
-## Features
+##  Features
 
  +  Passes all [RDF 1.1 Test Cases](https://www.w3.org/TR/rdf11-testcases/) for [RDF 1.1 N‐Triples](http://www.w3.org/2013/N-TriplesTests/) and [RDF 1.1 Turtle](http://www.w3.org/2013/TurtleTests/).
 
@@ -48,7 +48,7 @@ See [DOCUMENTATION](./DOCUMENTATION/README.md) for more.
  +  Public domain.
 
 
-## Limitations
+##  Limitations
 
  +  Does not validate datatypes.
     Operations on literals with invalid datatypes (e.g., `"1.2"^^xsd:integer`) may be somewhat unpredictable.
@@ -71,7 +71,7 @@ See [DOCUMENTATION](./DOCUMENTATION/README.md) for more.
 
 ##  Versioning
 
-✨ fuck around and find out ✨
+✨ fuck around and find out ✨🛹
 
 (The current default branch provides the latest recommended version for usage.
 Notable points in development may be “tagged” but there will be no named patch releases.)
